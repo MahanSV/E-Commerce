@@ -9,7 +9,7 @@
 // *********************
 
 "use client";
-import { useWishlistStore } from "@/apps/frontend/app/_zustand/wishlistStore";
+import { useWishlistStore } from "@/app/_zustand/wishlistStore";
 import Link from "next/link";
 import React from "react";
 import { FaHeart } from "react-icons/fa6";
