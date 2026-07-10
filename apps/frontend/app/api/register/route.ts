@@ -1,10 +1,10 @@
-import prisma from "@/apps/frontend/utils/db";
+import prisma from "@/utils/db";
 import bcrypt from "bcryptjs";
 import { nanoid } from "nanoid";
 import { NextResponse } from "next/server";
-import { registrationSchema } from "@/apps/frontend/utils/schema";
-import { sanitizeInput, commonValidations } from "@/apps/frontend/utils/validation";
-import { handleApiError, AppError } from "@/apps/frontend/utils/errorHandler";
+import { registrationSchema } from "@/utils/schema";
+import { sanitizeInput, commonValidations } from "@/utils/validation";
+import { handleApiError, AppError } from "@/utils/errorHandler";
 
 export const POST = async (request: Request) => {
   try {

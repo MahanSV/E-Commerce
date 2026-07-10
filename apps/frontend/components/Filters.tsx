@@ -12,8 +12,8 @@
 import React, { useEffect, useState } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
-import { useSortStore } from "@/apps/frontend/app/_zustand/sortStore";
-import { usePaginationStore } from "@/apps/frontend/app/_zustand/paginationStore";
+import { useSortStore } from "@/app/_zustand/sortStore";
+import { usePaginationStore } from "@/app/_zustand/paginationStore";
 
 interface InputCategory {
   inStock: { text: string, isChecked: boolean },

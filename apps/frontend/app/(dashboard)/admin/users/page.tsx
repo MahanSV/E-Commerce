@@ -1,6 +1,6 @@
 "use client";
 import { CustomButton, DashboardSidebar } from "../../../../components";
-import apiClient from "@/apps/frontend/lib/api";
+import apiClient from "@/lib/api";
 import { nanoid } from "nanoid";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";

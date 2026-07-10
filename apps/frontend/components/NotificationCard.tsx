@@ -1,5 +1,5 @@
 import React from 'react';
-import { Notification, NotificationType, NotificationPriority } from '@/apps/frontend/types/notification';
+import { Notification, NotificationType, NotificationPriority } from '@/types/notification';
 // Simple date formatter function
 const formatTimeAgo = (date: string) => {
   const now = new Date();

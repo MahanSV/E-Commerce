@@ -3,8 +3,8 @@ import { DashboardSidebar } from "../../../../../components";
 import React, { useEffect, useState, use } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import { isValidEmailAddressFormat } from "@/apps/frontend/lib/utils";
-import apiClient from "@/apps/frontend/lib/api";
+import { isValidEmailAddressFormat } from "@/lib/utils";
+import apiClient from "@/lib/api";
 
 interface DashboardUserDetailsProps {
   params: Promise<{ id: string }>;

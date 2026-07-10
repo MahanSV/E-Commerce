@@ -3,10 +3,10 @@
 import React, { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { useNotifications } from '@/apps/frontend/hooks/useNotifications';
-import { NotificationType } from '@/apps/frontend/types/notification';
-import NotificationCard from '@/apps/frontend/components/NotificationCard';
-import { useNotificationStore } from '@/apps/frontend/app/_zustand/notificationStore';
+import { useNotifications } from '@/hooks/useNotifications';
+import { NotificationType } from '@/types/notification';
+import NotificationCard from '@/components/NotificationCard';
+import { useNotificationStore } from '@/app/_zustand/notificationStore';
 import { 
   FaSearch, 
   FaFilter, 

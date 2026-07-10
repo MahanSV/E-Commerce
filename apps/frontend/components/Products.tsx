@@ -10,7 +10,7 @@
 
 import React from "react";
 import ProductItem from "./ProductItem";
-import apiClient from "@/apps/frontend/lib/api";
+import apiClient from "@/lib/api";
 
 const Products = async ({ params, searchParams }: { params: { slug?: string[] }, searchParams: { [key: string]: string | string[] | undefined } }) => {
   // getting all data from URL slug and preparing everything for sending GET request

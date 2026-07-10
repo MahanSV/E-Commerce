@@ -12,7 +12,7 @@
 
 
 import React from "react";
-import { useProductStore } from "@/apps/frontend/app/_zustand/store";
+import { useProductStore } from "@/app/_zustand/store";
 import toast from "react-hot-toast";
 
 

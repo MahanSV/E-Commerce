@@ -2,8 +2,8 @@
 import {
   SectionTitle
 } from "../../components";
-import { Loader } from "@/apps/frontend/components/Loader";
-import { CartModule } from "@/apps/frontend/components/modules/cart";
+import { Loader } from "@/components/Loader";
+import { CartModule } from "@/components/modules/cart";
 import { Suspense } from "react";
 
 const CartPage = () => {

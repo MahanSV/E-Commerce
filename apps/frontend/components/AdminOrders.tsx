@@ -12,7 +12,7 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import apiClient from "@/apps/frontend/lib/api";
+import apiClient from "@/lib/api";
 
 const AdminOrders = () => {
   const [orders, setOrders] = useState<Order[]>([]);

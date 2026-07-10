@@ -3,8 +3,8 @@ import { CustomButton, DashboardSidebar } from "../../../../components";
 import { nanoid } from "nanoid";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { formatCategoryName } from "@/apps/frontend/utils/categoryFormating";
-import apiClient from "@/apps/frontend/lib/api";
+import { formatCategoryName } from "@/utils/categoryFormating";
+import apiClient from "@/lib/api";
 
 const DashboardCategory = () => {
   const [categories, setCategories] = useState<Category[]>([]);

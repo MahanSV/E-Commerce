@@ -8,7 +8,7 @@
 // Output: Footer component
 // *********************
 
-import { navigation } from "@/apps/frontend/lib/utils";
+import { navigation } from "@/lib/utils";
 import Image from "next/image";
 import React from "react";
 

@@ -9,7 +9,7 @@
 // *********************
 
 "use client";
-import { usePaginationStore } from "@/apps/frontend/app/_zustand/paginationStore";
+import { usePaginationStore } from "@/app/_zustand/paginationStore";
 import React from "react";
 
 const Pagination = () => {

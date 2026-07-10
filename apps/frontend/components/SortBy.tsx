@@ -10,7 +10,7 @@
 
 "use client";
 import React from "react";
-import { useSortStore } from "@/apps/frontend/app/_zustand/sortStore";
+import { useSortStore } from "@/app/_zustand/sortStore";
 
 const SortBy = () => {
   // getting values from Zustand sort store

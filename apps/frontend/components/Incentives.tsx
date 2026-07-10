@@ -8,7 +8,7 @@
 // Output: Incentives section
 // *********************
 
-import { incentives } from '@/apps/frontend/lib/utils'
+import { incentives } from '@/lib/utils'
 import Image from 'next/image'
 import React from 'react'
 

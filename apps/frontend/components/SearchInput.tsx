@@ -11,7 +11,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
-import { sanitize } from "@/apps/frontend/lib/sanitize";
+import { sanitize } from "@/lib/sanitize";
 
 const SearchInput = () => {
   const [searchInput, setSearchInput] = useState<string>("");

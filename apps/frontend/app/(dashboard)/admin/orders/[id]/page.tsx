@@ -1,7 +1,7 @@
 "use client";
 import { DashboardSidebar } from "../../../../../components";
-import apiClient from "@/apps/frontend/lib/api";
-import { isValidEmailAddressFormat, isValidNameOrLastname } from "@/apps/frontend/lib/utils";
+import apiClient from "@/lib/api";
+import { isValidEmailAddressFormat, isValidNameOrLastname } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";

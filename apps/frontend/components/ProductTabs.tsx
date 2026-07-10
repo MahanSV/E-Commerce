@@ -13,8 +13,8 @@
 import React, { useState } from "react";
 import RatingPercentElement from "./RatingPercentElement";
 import SingleReview from "./SingleReview";
-import { formatCategoryName } from "@/apps/frontend/utils/categoryFormating";
-import { sanitize, sanitizeHtml } from "@/apps/frontend/lib/sanitize";
+import { formatCategoryName } from "@/utils/categoryFormating";
+import { sanitize, sanitizeHtml } from "@/lib/sanitize";
 
 const ProductTabs = ({ product }: { product: Product }) => {
   const [currentProductTab, setCurrentProductTab] = useState<number>(0);

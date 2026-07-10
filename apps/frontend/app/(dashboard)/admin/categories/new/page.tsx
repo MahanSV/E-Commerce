@@ -2,8 +2,8 @@
 import { DashboardSidebar } from "../../../../../components";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
-import { convertCategoryNameToURLFriendly } from "@/apps/frontend/utils/categoryFormating";
-import apiClient from "@/apps/frontend/lib/api";
+import { convertCategoryNameToURLFriendly } from "@/utils/categoryFormating";
+import apiClient from "@/lib/api";
 
 const DashboardNewCategoryPage = () => {
   const [categoryInput, setCategoryInput] = useState({

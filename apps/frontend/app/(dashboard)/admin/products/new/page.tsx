@@ -1,8 +1,8 @@
 "use client";
 import { DashboardSidebar } from "../../../../../components";
-import apiClient from "@/apps/frontend/lib/api";
-import { convertCategoryNameToURLFriendly as convertSlugToURLFriendly } from "@/apps/frontend/utils/categoryFormating";
-import { sanitizeFormData } from "@/apps/frontend/lib/form-sanitize";
+import apiClient from "@/lib/api";
+import { convertCategoryNameToURLFriendly as convertSlugToURLFriendly } from "@/utils/categoryFormating";
+import { sanitizeFormData } from "@/lib/form-sanitize";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";

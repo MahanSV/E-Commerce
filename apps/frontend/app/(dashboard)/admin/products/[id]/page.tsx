@@ -7,9 +7,9 @@ import toast from "react-hot-toast";
 import {
   convertCategoryNameToURLFriendly as convertSlugToURLFriendly,
   formatCategoryName,
-} from "@/apps/frontend/utils/categoryFormating";
+} from "@/utils/categoryFormating";
 import { nanoid } from "nanoid";
-import apiClient from "@/apps/frontend/lib/api";
+import apiClient from "@/lib/api";
 
 interface DashboardProductDetailsProps {
   params: Promise<{ id: string }>;

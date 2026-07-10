@@ -1,9 +1,9 @@
 "use client";
 import { DashboardSidebar } from "../../../../../components";
-import { isValidEmailAddressFormat } from "@/apps/frontend/lib/utils";
+import { isValidEmailAddressFormat } from "@/lib/utils";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
-import { sanitizeFormData } from "@/apps/frontend/lib/form-sanitize";
+import { sanitizeFormData } from "@/lib/form-sanitize";
 
 const DashboardCreateNewUser = () => {
   const [userInput, setUserInput] = useState<{

@@ -22,8 +22,8 @@ import NotificationBell from "./NotificationBell";
 import HeartElement from "./HeartElement";
 import { signOut, useSession } from "next-auth/react";
 import toast from "react-hot-toast";
-import { useWishlistStore } from "@/apps/frontend/app/_zustand/wishlistStore";
-import apiClient from "@/apps/frontend/lib/api";
+import { useWishlistStore } from "@/app/_zustand/wishlistStore";
+import apiClient from "@/lib/api";
 
 const Header = () => {
   const { data: session, status } = useSession();

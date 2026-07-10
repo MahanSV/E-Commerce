@@ -1,9 +1,9 @@
 "use client";
 import React, { useEffect, useState, use } from "react";
-import DashboardSidebar from "@/apps/frontend/components/DashboardSidebar";
+import DashboardSidebar from "@/components/DashboardSidebar";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import apiClient from "@/apps/frontend/lib/api";
+import apiClient from "@/lib/api";
 import { toast } from "react-hot-toast";
 
 interface Product {

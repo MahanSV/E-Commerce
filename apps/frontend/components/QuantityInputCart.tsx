@@ -9,7 +9,7 @@
 // *********************
 
 "use client";
-import { ProductInCart, useProductStore } from "@/apps/frontend/app/_zustand/store";
+import { ProductInCart, useProductStore } from "@/app/_zustand/store";
 import React, { useState } from "react";
 import { FaPlus } from "react-icons/fa6";
 import { FaMinus } from "react-icons/fa6";

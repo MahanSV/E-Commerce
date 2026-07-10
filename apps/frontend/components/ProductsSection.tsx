@@ -11,7 +11,7 @@
 import React from "react";
 import ProductItem from "./ProductItem";
 import Heading from "./Heading";
-import apiClient from "@/apps/frontend/lib/api";
+import apiClient from "@/lib/api";
 
 const ProductsSection = async () => {
   let products = [];

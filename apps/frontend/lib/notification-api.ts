@@ -1,10 +1,10 @@
-import apiClient from '@/apps/frontend/lib/api';
+import apiClient from '@/lib/api';
 import { 
   NotificationFilters, 
   NotificationResponse, 
   NotificationCreateInput,
   BulkActionPayload 
-} from '@/apps/frontend/types/notification';
+} from '@/types/notification';
 
 export const notificationApi = {
   /**

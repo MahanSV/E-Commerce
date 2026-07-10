@@ -1,6 +1,6 @@
 "use client";
 
-import { useSessionTimeout } from "@/apps/frontend/hooks/useSessionTimeout";
+import { useSessionTimeout } from "@/hooks/useSessionTimeout";
 
 export default function SessionTimeoutWrapper() {
   useSessionTimeout();

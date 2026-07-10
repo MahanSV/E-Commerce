@@ -14,8 +14,8 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import CustomButton from "./CustomButton";
-import apiClient from "@/apps/frontend/lib/api";
-import { sanitize } from "@/apps/frontend/lib/sanitize";
+import apiClient from "@/lib/api";
+import { sanitize } from "@/lib/sanitize";
 
 const DashboardProductTable = () => {
   const [products, setProducts] = useState<Product[]>([]);

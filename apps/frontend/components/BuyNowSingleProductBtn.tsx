@@ -9,7 +9,7 @@
 // *********************
 
 "use client";
-import { useProductStore } from "@/apps/frontend/app/_zustand/store";
+import { useProductStore } from "@/app/_zustand/store";
 import React from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";

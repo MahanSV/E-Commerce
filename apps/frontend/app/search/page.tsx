@@ -1,7 +1,7 @@
 import { ProductItem, SectionTitle } from "../../components";
-import apiClient from "@/apps/frontend/lib/api";
+import apiClient from "@/lib/api";
 import React from "react";
-import { sanitize } from "@/apps/frontend/lib/sanitize";
+import { sanitize } from "@/lib/sanitize";
 
 interface Props {
   searchParams: { search: string };

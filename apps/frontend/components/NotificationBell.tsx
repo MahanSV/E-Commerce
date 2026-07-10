@@ -3,7 +3,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { FaBell } from 'react-icons/fa6';
-import { useUnreadCount } from '@/apps/frontend/hooks/useNotifications';
+import { useUnreadCount } from '@/hooks/useNotifications';
 import { useSession } from 'next-auth/react';
 
 interface NotificationBellProps {

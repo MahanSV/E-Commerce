@@ -1,5 +1,5 @@
-import { notificationApi } from '@/apps/frontend/lib/notification-api';
-import { NotificationType, NotificationPriority } from '@/apps/frontend/types/notification';
+import { notificationApi } from '@/lib/notification-api';
+import { NotificationType, NotificationPriority } from '@/types/notification';
 
 /**
  * Helper functions for creating notifications

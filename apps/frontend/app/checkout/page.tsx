@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import apiClient from "@/apps/frontend/lib/api";
+import apiClient from "@/lib/api";
 
 const CheckoutPage = () => {
   const { data: session } = useSession();

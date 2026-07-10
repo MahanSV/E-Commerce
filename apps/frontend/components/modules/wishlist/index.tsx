@@ -1,7 +1,7 @@
 "use client"
-import { useWishlistStore } from "@/apps/frontend/app/_zustand/wishlistStore";
-import WishItem from "@/apps/frontend/components/WishItem";
-import apiClient from "@/apps/frontend/lib/api";
+import { useWishlistStore } from "@/app/_zustand/wishlistStore";
+import WishItem from "@/components/WishItem";
+import apiClient from "@/lib/api";
 import { nanoid } from "nanoid";
 import { useSession } from "next-auth/react";
 import { useEffect } from "react";

@@ -9,7 +9,7 @@ import {
   SortBy,
 } from "../../../components";
 import React from "react";
-import { sanitize } from "@/apps/frontend/lib/sanitize";
+import { sanitize } from "@/lib/sanitize";
 
 // improve readabillity of category text, for example category text "smart-watches" will be "smart watches"
 const improveCategoryText = (text: string): string => {

@@ -1,12 +1,12 @@
 "use client"
 
-import { useProductStore } from "@/apps/frontend/app/_zustand/store";
+import { useProductStore } from "@/app/_zustand/store";
 import toast from "react-hot-toast";
 import Image from "next/image"
 import Link from "next/link";
 import { FaCheck, FaCircleQuestion, FaClock, FaXmark } from "react-icons/fa6";
-import QuantityInputCart from "@/apps/frontend/components/QuantityInputCart";
-import { sanitize } from "@/apps/frontend/lib/sanitize";
+import QuantityInputCart from "@/components/QuantityInputCart";
+import { sanitize } from "@/lib/sanitize";
 
 export const CartModule = () => {
 

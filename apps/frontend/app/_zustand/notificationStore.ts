@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { Notification, NotificationFilters, NotificationResponse } from '@/apps/frontend/types/notification';
+import { Notification, NotificationFilters, NotificationResponse } from '@/types/notification';
 
 interface NotificationState {
   notifications: Notification[];

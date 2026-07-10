@@ -1,6 +1,6 @@
 "use client";
 import { CustomButton, SectionTitle } from "../../components";
-import { isValidEmailAddressFormat } from "@/apps/frontend/lib/utils";
+import { isValidEmailAddressFormat } from "@/lib/utils";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";

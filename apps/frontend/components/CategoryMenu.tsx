@@ -11,7 +11,7 @@
 import React from "react";
 import CategoryItem from "./CategoryItem";
 import Image from "next/image";
-import { categoryMenuList } from "@/apps/frontend/lib/utils";
+import { categoryMenuList } from "@/lib/utils";
 import Heading from "./Heading";
 
 const CategoryMenu = () => {

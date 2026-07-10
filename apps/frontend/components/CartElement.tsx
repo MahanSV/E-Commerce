@@ -12,7 +12,7 @@
 import Link from 'next/link'
 import React from 'react'
 import { FaCartShopping } from 'react-icons/fa6'
-import { useProductStore } from "@/apps/frontend/app/_zustand/store";
+import { useProductStore } from "@/app/_zustand/store";
 
 const CartElement = () => {
     const { allQuantity } = useProductStore();

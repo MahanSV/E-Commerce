@@ -12,7 +12,7 @@ import Image from "next/image";
 import React from "react";
 import Link from "next/link";
 
-import { sanitize } from "@/apps/frontend/lib/sanitize";
+import { sanitize } from "@/lib/sanitize";
 
 const ProductItem = ({
   product,
