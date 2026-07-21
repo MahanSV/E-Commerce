@@ -90,7 +90,7 @@ app.use((req, res, next) => {
 app.use(hpp());
 
 // Limit repeated failed login requests in production environment
-if (env.env === 'production') {
+if (env.environment === 'production') {
   app.use('/v1/users/login', authLimiter);
 }
 
