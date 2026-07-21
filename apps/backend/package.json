@@ -1,5 +1,5 @@
 {
-  "name": "Beneficiary-Authentication",
+  "name": "EC-ommerce",
   "version": "1.0.0",
   "description": "",
   "main": "index.ts",
@@ -49,6 +49,8 @@
     "prisma-extension-pagination": "^0.7.5",
     "qs": "^6.14.0",
     "redis": "^5.0.1",
+    "swagger-jsdoc": "^6.3.0",
+    "swagger-ui-express": "^5.0.1",
     "validator": "^13.15.0",
     "yup": "^1.6.1"
   },

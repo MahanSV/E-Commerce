@@ -1,12 +1,16 @@
 model User {
-  id         String   @id @unique
-  username   String?
-  password   String?
-  firstName  String?
-  lastName   String?
-  nationalId String   @unique
-  mobile     String?
-  type       String
-  gender     String?
-  createdAt  DateTime @default(now())
+  id        String   @id @unique
+  name      String
+  lastName  String
+  email     String
+  password  String
+  role      String
+  mobile    String
+  status    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  orders        Order[]
+  notifications Notification[]
+  wishlists     WishList[]
 }

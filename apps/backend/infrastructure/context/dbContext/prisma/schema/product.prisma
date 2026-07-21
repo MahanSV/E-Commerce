@@ -1,0 +1,20 @@
+model Product {
+  id          String   @id @unique
+  categoryId  String
+  name        String
+  slug        String
+  manufacturer String
+  photo        String
+  inStock      Boolean @default(false)
+  price        String
+  rate         String?
+  quantity     Int
+  SKU          String?
+  socialLink   String?
+  description  String?
+  information  String?
+
+  wishlists  WishList[]
+  merchantProducts   MerchantProduct[]
+  category  Category @relation(fields: [categoryId], references: [id])
+}
