@@ -1,32 +1,20 @@
 import express from 'express';
-import validate from '#middlewares/validation.ts';
-import {
-    userDetailSchema,
-    getUserByNationalIdSchema, addUserSchema,
-} from '#application/services/userServices/commandSchemas/index.ts';
-import authenticate from '#middlewares/authenticityMiddlewares/authentication.ts';
-import {
-    addUser,
-    getUserById,
-    getUserByNationalId,
-    getUsers,
-    login,
-    logout
-} from '#webhost/controllers/user.ts';
+import authenticate from "#middlewares/authenticityMiddlewares/authentication.ts";
+import {createUser, deleteUser, getAllUsers, getUser, getUserByEmail, updateUser} from "#webhost/controllers/user.ts";
 
 
 const router = express.Router();
 
-router.get('/', authenticate, getUsers);
+router.get('/', authenticate, getAllUsers);
 
-router.get('/:id', authenticate, validate(userDetailSchema), getUserById);
+router.post('/', authenticate, createUser);
 
-router.get('/:nationalId', authenticate, validate(getUserByNationalIdSchema), getUserByNationalId);
+router.get('/:id', authenticate, getUser);
 
-router.post('/', validate(addUserSchema), addUser);
+router.put('/:id', authenticate, updateUser);
 
-router.post('/login', login);
+router.delete('/:id', authenticate, deleteUser);
 
-router.get('/logout', logout);
+router.get('/email/:email', authenticate, getUserByEmail);
 
 export default router;

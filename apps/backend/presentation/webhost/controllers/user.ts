@@ -1,121 +1,44 @@
-import httpStatus from 'http-status';
 import type { Request, Response } from 'express';
-import env from '#substructure/env.ts';
-import { decryptJWSToken } from '#application/services/userServices/token.service.ts';
+import httpStatus from 'http-status';
 import UserService from '#application/services/userServices/user.service.ts';
-import type { AddUserCommand } from '#application/types/user/command.ts';
 
 
 class UserController {
-  private userService: UserService;
+    private userService: UserService;
 
-  constructor(userService = new UserService()) {
-    this.userService = userService;
-  }
+    constructor(userService = new UserService()) {
+        this.userService = userService;
+    };
 
+    public async getAllUsers(req: Request, res: Response): Promise<any> {};
 
-  public async login(req: Request, res: Response): Promise<any> {
-    const receivedToken = req.cookies?.TaxpayerToken;
+    public async createUser(req: Request, res: Response): Promise<any> {
+        const { email, password, role } = req.body;
+    };
 
-    const { token, userInfo } = await this.userService.login(receivedToken);
+    public async getUser(req: Request, res: Response): Promise<any> {
+        const { id } = req.params;
+    };
 
-    res.cookie('AccessToken', token, {
-      maxAge: env.tokenExpirationTime * 1000,
-      path: '/',
-      domain: env.cookieDomain,
-      secure: true,
-      httpOnly: true,
-      sameSite: 'lax',
+    public async updateUser(req: Request, res: Response): Promise<any> {
+        const { id } = req.params;
+        const { email, password, role } = req.body;
+    };
 
-    });
+    public async deleteUser(req: Request, res: Response): Promise<any> {
+        const { id } = req.params;
+    };
 
-    res.status(httpStatus.OK).send({
-      message: 'ورود با موفقیت انجام شد.',
-      userInfo
-    });
-  };
-
-   public async logout(req: Request, res: Response): Promise<any> {
-    const { callbackUrl } = req.query;
-    const accessToken = req.cookies.AccessToken;
-
-    if (accessToken) {
-      let claims = JSON.parse(await decryptJWSToken(accessToken));
-
-      if (claims && (new Date) <= new Date(claims.tokenExpireAt)) {
-
-        const command = {
-          token: accessToken,
-          ...claims,
-        };
-
-        await this.userService.userLogout(command);
-      }
-    }
-
-    res.clearCookie('AccessToken', {
-      path: '/',
-      domain: env.cookieDomain,
-
-    });
-
-    res.clearCookie('Role', {
-      path: '/',
-      domain: env.cookieDomain,
-    });
-
-    return res.status(301).redirect(String(callbackUrl));
-  };
-
-  public async getUserById(req: Request, res: Response): Promise<any> {
-    const userId= req.params.id;
-
-    const user = await this.userService.getUserById(userId);
-
-    res.status(httpStatus.OK).send({
-      message: 'اطلاعات کاربر با موفقیت دریافت شد.',
-      user
-    });
-  };
-
-  public async getUsers(req: Request, res: Response): Promise<any> {
-    const users = await this.userService.getUsers();
-
-    res.status(httpStatus.OK).send({
-      message: 'اطلاعات کاربران با موفقیت دریافت شد.',
-      users
-    });
-  };
-
-  public async getUserByNationalId(req: Request, res: Response): Promise<any> {
-    const nationalId = req.params.nationalId;
-
-    const user = await this.userService.getUserByNationalId(nationalId);
-
-    res.status(httpStatus.OK).send({
-      message: 'اطلاعات کاربر با موفقیت دریافت شد.',
-      user
-    });
-  };
-
-  public async addUser(req: Request, res: Response): Promise<any> {
-
-    const command: AddUserCommand = req.body;
-
-    const user = await this.userService.addUser(command);
-
-    res.status(httpStatus.OK).send({
-      message: 'اطلاعات کاربر با موفقیت ثبت شد.',
-      user
-    });
-  };
+    public async getUserByEmail(req: Request, res: Response): Promise<any> {
+        const { email } = req.params;
+    };
 }
 
 const userController = new UserController();
 
-export const login = userController.login.bind(userController);
-export const logout = userController.logout.bind(userController);
-export const getUserById = userController.getUserById.bind(userController);
-export const getUsers = userController.getUsers.bind(userController);
-export const getUserByNationalId = userController.getUserByNationalId.bind(userController);
-export const addUser = userController.addUser.bind(userController);
+export const getAllUsers = userController.getAllUsers.bind(userController);
+export const createUser = userController.createUser.bind(userController);
+export const getUser = userController.getUser.bind(userController);
+export const updateUser = userController.updateUser.bind(userController);
+export const deleteUser = userController.deleteUser.bind(userController);
+export const getUserByEmail = userController.getUserByEmail.bind(userController);
