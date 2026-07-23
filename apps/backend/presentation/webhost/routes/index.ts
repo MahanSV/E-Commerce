@@ -4,11 +4,14 @@ import productRouter from '#routes/products.ts';
 import mainImageRouter from '#routes/productImages.ts';
 import searchRouter from '#routes/search.ts';
 import orderRouter from '#routes/customer_orders.ts';
-import orderProductRouter from '#routes/customer_order_product.js';
+import orderProductRouter from '#routes/customer_order_product.ts';
 import slugRouter from '#routes/slugs.ts';
 import wishlistRouter from '#routes/wishlist.ts';
 import notificationsRouter from '#routes/notifications.ts';
 import merchantRouter from '#routes/merchant.ts';
+import productImagesRouter from '#routes/productImages.ts';
+import bulkUploadRouter from '#routes/bulkUpload.ts';
+import categoryRouter from '#routes/category.ts';
 
 
 const router = express.Router();
@@ -18,14 +21,14 @@ const routes = [
         path: "/api/products",
         source: productRouter
     },
-    /*{
+    {
         path: "/api/categories",
-        source:
-    },*/
-    // {
-    //     path: "/api/images",
-    //     source:
-    // },
+        source: categoryRouter
+    },
+    {
+        path: "/api/images",
+        source: productImagesRouter
+    },
     {
         path: "/api/main-image",
         source: mainImageRouter
@@ -62,10 +65,10 @@ const routes = [
         path: "/api/merchants",
         source: merchantRouter
     },
-    /*{
+    {
         path: "/api/bulk-upload",
-        source:
-    },*/
+        source: bulkUploadRouter
+    },
 ];
 
 routes.forEach((route) => {
