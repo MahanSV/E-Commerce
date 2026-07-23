@@ -1,23 +1,17 @@
 import express from 'express';
 import authenticate from '#middlewares/authenticityMiddlewares/authentication.ts';
-import {
-    createProduct,
-    deleteProduct,
-    getAllProducts,
-    getProductById,
-    updateProduct
-} from "#webhost/controllers/products.ts";
+import ProductController from '#webhost/controllers/products.ts';
 
 const router = express.Router();
 
-router.get('/', authenticate, getAllProducts);
+router.get('/', authenticate, ProductController.getAllProducts);
 
-router.post('/', authenticate, createProduct);
+router.post('/', authenticate, ProductController.createProduct);
 
-router.get('/:id', authenticate, getProductById);
+router.get('/:id', authenticate, ProductController.getProductById);
 
-router.put('/:id', authenticate, updateProduct);
+router.put('/:id', authenticate, ProductController.updateProduct);
 
-router.delete('/:id', authenticate, deleteProduct);
+router.delete('/:id', authenticate, ProductController.deleteProduct);
 
 export default router;

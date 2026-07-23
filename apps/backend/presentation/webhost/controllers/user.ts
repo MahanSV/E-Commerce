@@ -34,11 +34,4 @@ class UserController {
     };
 }
 
-const userController = new UserController();
-
-export const getAllUsers = userController.getAllUsers.bind(userController);
-export const createUser = userController.createUser.bind(userController);
-export const getUser = userController.getUser.bind(userController);
-export const updateUser = userController.updateUser.bind(userController);
-export const deleteUser = userController.deleteUser.bind(userController);
-export const getUserByEmail = userController.getUserByEmail.bind(userController);
+export default new UserController();

@@ -1,20 +1,20 @@
 import express from 'express';
 import authenticate from "#middlewares/authenticityMiddlewares/authentication.ts";
-import {createUser, deleteUser, getAllUsers, getUser, getUserByEmail, updateUser} from "#webhost/controllers/user.ts";
+import UserController from '#webhost/controllers/user.ts';
 
 
 const router = express.Router();
 
-router.get('/', authenticate, getAllUsers);
+router.get('/', authenticate, UserController.getAllUsers);
 
-router.post('/', authenticate, createUser);
+router.post('/', authenticate, UserController.createUser);
 
-router.get('/:id', authenticate, getUser);
+router.get('/:id', authenticate, UserController.getUser);
 
-router.put('/:id', authenticate, updateUser);
+router.put('/:id', authenticate, UserController.updateUser);
 
-router.delete('/:id', authenticate, deleteUser);
+router.delete('/:id', authenticate, UserController.deleteUser);
 
-router.get('/email/:email', authenticate, getUserByEmail);
+router.get('/email/:email', authenticate, UserController.getUserByEmail);
 
 export default router;

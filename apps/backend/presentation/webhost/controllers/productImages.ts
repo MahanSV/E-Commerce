@@ -23,9 +23,4 @@ class ProductImageController {
     };
 }
 
-const productImageController = new ProductImageController();
-
-export const getSingleProductImages = productImageController.getSingleProductImages.bind(productImageController);
-export const createImage = productImageController.createImage.bind(productImageController);
-export const updateImage = productImageController.updateImage.bind(productImageController);
-export const deleteImage = productImageController.deleteImage.bind(productImageController);
+export default new ProductImageController();

@@ -23,10 +23,4 @@ class CustomerOrdersController {
     };
 }
 
-const customerOrdersController = new CustomerOrdersController();
-
-export const createCustomerOrder = customerOrdersController.createCustomerOrder.bind(customerOrdersController);
-export const updateCustomerOrder = customerOrdersController.updateCustomerOrder.bind(customerOrdersController);
-export const deleteCustomerOrder = customerOrdersController.deleteCustomerOrder.bind(customerOrdersController);
-export const getCustomerOrder = customerOrdersController.getCustomerOrder.bind(customerOrdersController);
-export const getAllOrders = customerOrdersController.getAllOrders.bind(customerOrdersController);
+export default new CustomerOrdersController();

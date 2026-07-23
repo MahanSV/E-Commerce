@@ -25,10 +25,4 @@ class MerchantController {
     };
 }
 
-const merchantController = new MerchantController();
-
-export const getAllMerchants = merchantController.getAllMerchants.bind(merchantController);
-export const getMerchantById = merchantController.getMerchantById.bind(merchantController);
-export const createMerchant = merchantController.createMerchant.bind(merchantController);
-export const updateMerchant = merchantController.updateMerchant.bind(merchantController);
-export const deleteMerchant = merchantController.deleteMerchant.bind(merchantController);
+export default new MerchantController();

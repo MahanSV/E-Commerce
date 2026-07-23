@@ -2,7 +2,7 @@ import type { Request, Response } from 'express';
 import httpStatus from 'http-status';
 
 
-class Product {
+class ProductController {
     constructor() {};
 
     public async getAllProducts(req: Request, res: Response): Promise<any> {
@@ -46,10 +46,4 @@ class Product {
     };
 }
 
-const product = new Product();
-
-export const getAllProducts = product.getAllProducts.bind(product);
-export const createProduct = product.createProduct.bind(product);
-export const getProductById = product.getProductById.bind(product);
-export const updateProduct = product.updateProduct.bind(product);
-export const deleteProduct = product.deleteProduct.bind(product);
+export default new ProductController();

@@ -37,12 +37,4 @@ class NotificationsController {
     };
 }
 
-const notificationController = new NotificationsController();
-
-export const getUnreadCount = notificationController.getUnreadCount.bind(notificationController);
-export const getUserNotifications = notificationController.getUserNotifications.bind(notificationController);
-export const createNotification = notificationController.createNotification.bind(notificationController);
-export const bulkMarkAsRead = notificationController.bulkMarkAsRead.bind(notificationController);
-export const bulkDeleteNotifications = notificationController.bulkDeleteNotifications.bind(notificationController);
-export const updateNotification = notificationController.updateNotification.bind(notificationController);
-export const deleteNotification = notificationController.deleteNotification.bind(notificationController);
+export default new NotificationsController();

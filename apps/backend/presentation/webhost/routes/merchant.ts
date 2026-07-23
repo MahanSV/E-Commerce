@@ -1,28 +1,22 @@
 import express from 'express';
 import authenticate from '#middlewares/authenticityMiddlewares/authentication.ts';
-import {
-    createMerchant,
-    deleteMerchant,
-    getAllMerchants,
-    getMerchantById,
-    updateMerchant
-} from "#webhost/controllers/merchant.ts";
+import MerchantController from '#webhost/controllers/merchant.ts'
 
 const router = express.Router();
 
 // Get all merchants
-router.get("/", authenticate, getAllMerchants);
+router.get("/", authenticate, MerchantController.getAllMerchants);
 
 // Get a specific merchant by ID
-router.get("/:id", authenticate, getMerchantById);
+router.get("/:id", authenticate, MerchantController.getMerchantById);
 
 // Create a new merchant
-router.post("/", authenticate, createMerchant);
+router.post("/", authenticate, MerchantController.createMerchant);
 
 // Update a merchant
-router.put("/:id", authenticate, updateMerchant);
+router.put("/:id", authenticate, MerchantController.updateMerchant);
 
 // Delete a merchant
-router.delete("/:id", authenticate, deleteMerchant);
+router.delete("/:id", authenticate, MerchantController.deleteMerchant);
 
 export default router;

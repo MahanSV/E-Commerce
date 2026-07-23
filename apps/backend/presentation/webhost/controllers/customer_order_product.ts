@@ -24,10 +24,4 @@ class CustomerOrderProductController {
     public async getAllProductOrders(req: Request, res: Response): Promise<any> {};
 }
 
-const customerOrderProductController = new CustomerOrderProductController();
-
-export const createOrderProduct = customerOrderProductController.createOrderProduct.bind(customerOrderProductController);
-export const updateProductOrder = customerOrderProductController.updateProductOrder.bind(customerOrderProductController);
-export const deleteProductOrder = customerOrderProductController.deleteProductOrder.bind(customerOrderProductController);
-export const getProductOrder = customerOrderProductController.getProductOrder.bind(customerOrderProductController);
-export const getAllProductOrders = customerOrderProductController.getAllProductOrders.bind(customerOrderProductController);
+export default new CustomerOrderProductController();

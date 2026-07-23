@@ -1,22 +1,17 @@
 import express from 'express';
 import authenticate from "#middlewares/authenticityMiddlewares/authentication.ts";
-import {
-    createWishItem, deleteWishItem,
-    getAllWishlist,
-    getAllWishlistByUserId,
-    getSingleProductFromWishlist
-} from "#webhost/controllers/wishlist.ts";
+import Wishlist from "#webhost/controllers/wishlist.js";
 
 const router = express.Router();
 
-router.get('/', authenticate, getAllWishlist);
+router.get('/', authenticate, Wishlist.getAllWishlist);
 
-router.post('/', authenticate, createWishItem);
+router.post('/', authenticate, Wishlist.createWishItem);
 
-router.get('/:userId', authenticate, getAllWishlistByUserId);
+router.get('/:userId', authenticate, Wishlist.getAllWishlistByUserId);
 
-router.get('/:userId/:productId', authenticate, getSingleProductFromWishlist);
+router.get('/:userId/:productId', authenticate, Wishlist.getSingleProductFromWishlist);
 
-router.delete('/:userId/:productId', authenticate, deleteWishItem);
+router.delete('/:userId/:productId', authenticate, Wishlist.deleteWishItem);
 
 export default router;

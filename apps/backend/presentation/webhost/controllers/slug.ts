@@ -10,6 +10,4 @@ class SlugController {
     };
 }
 
-const slugController = new SlugController();
-
-export const getProductBySlug = slugController.getProductBySlug.bind(slugController);
+export default new SlugController();

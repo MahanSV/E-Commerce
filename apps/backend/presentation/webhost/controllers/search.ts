@@ -9,6 +9,4 @@ class SearchController {
     };
 }
 
-const searchController = new SearchController();
-
-export const searchProducts = searchController.searchProducts.bind(searchController);
+export default new SearchController();
