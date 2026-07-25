@@ -1,0 +1,12 @@
+import type {Request, Response} from "express";
+import httpStatus from 'http-status';
+
+class SearchController {
+    constructor() {};
+
+    public async searchProducts(req: Request, res: Response): Promise<any> {
+        const { query } = req.query;
+    };
+}
+
+export default new SearchController();

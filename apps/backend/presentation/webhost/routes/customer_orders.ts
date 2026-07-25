@@ -1,22 +1,17 @@
 import express from 'express';
 import authenticate from '#middlewares/authenticityMiddlewares/authentication.ts';
-import {
-    createCustomerOrder, deleteCustomerOrder,
-    getAllOrders,
-    getCustomerOrder,
-    updateCustomerOrder
-} from "#webhost/controllers/customer_orders.js";
+import CustomerOrdersController from '#webhost/controllers/customer_orders.ts'
 
 const router = express.Router();
 
-router.get('/', authenticate, getAllOrders);
+router.get('/', authenticate, CustomerOrdersController.getAllOrders);
 
-router.post('/', authenticate, createCustomerOrder);
+router.post('/', authenticate, CustomerOrdersController.createCustomerOrder);
 
-router.get('/:id', authenticate, getCustomerOrder);
+router.get('/:id', authenticate, CustomerOrdersController.getCustomerOrder);
 
-router.put('/:id', authenticate, updateCustomerOrder);
+router.put('/:id', authenticate, CustomerOrdersController.updateCustomerOrder);
 
-router.delete('/:id', authenticate, deleteCustomerOrder);
+router.delete('/:id', authenticate, CustomerOrdersController.deleteCustomerOrder);
 
 export default router;
