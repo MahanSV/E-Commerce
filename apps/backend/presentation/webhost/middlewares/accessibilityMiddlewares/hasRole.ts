@@ -1,5 +1,5 @@
 import httpStatus from 'http-status';
-import { decryptJWSToken } from '#application/services/userServices/token.service.ts';
+import { decryptJWSToken } from '#application/services/userServices/TokenService.ts';
 import ApiError from '#webhost/errors/apiError.ts';
 import { Request, Response, NextFunction } from 'express';
 
