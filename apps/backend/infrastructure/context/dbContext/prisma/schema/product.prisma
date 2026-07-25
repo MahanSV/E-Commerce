@@ -1,20 +1,29 @@
+model Category {
+  id   String  @id @default(uuid())
+  name String
+  icon String?
+
+  products Product[]
+}
+
 model Product {
-  id          String   @id @unique
-  categoryId  String
-  name        String
-  slug        String
+  id           String  @id @default(uuid())
+  categoryId   String
+  name         String
+  slug         String
   manufacturer String
   photo        String
   inStock      Boolean @default(false)
-  price        String
-  rate         String?
+  price        Int     @default(0)
+  rating       Int     @default(0)
   quantity     Int
   SKU          String?
   socialLink   String?
   description  String?
   information  String?
 
-  wishlists  WishList[]
-  merchantProducts   MerchantProduct[]
-  category  Category @relation(fields: [categoryId], references: [id])
+  wishlists        WishList[]
+  merchantProducts MerchantProduct[]
+  category         Category          @relation(fields: [categoryId], references: [id])
+  orderItems       OrderItem[]
 }

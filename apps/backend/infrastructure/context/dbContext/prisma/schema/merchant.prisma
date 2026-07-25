@@ -1,14 +1,29 @@
 model Merchant {
-  id          String   @id @unique
-  name        String
-  desciption  String?
-  email       String?
-  mobile      String?
-  address     String?
-  status      String   @default("Active")
-  password    String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id         String   @id @default(uuid())
+  name       String
+  desciption String?
+  email      String?
+  mobile     String?
+  address    String?
+  status     String   @default("ACTIVE")
+  password   String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
-  merchantProducts   MerchantProduct[]
+  merchantProducts MerchantProduct[]
+
+  @@index([email])
+}
+
+model MerchantProduct {
+  id         String @id @default(uuid())
+  merchantId String
+  productId  String
+
+  merchant Merchant @relation(fields: [merchantId], references: [id])
+  product  Product  @relation(fields: [productId], references: [id])
+
+  @@unique([merchantId, productId])
+  @@index([merchantId])
+  @@index([productId])
 }

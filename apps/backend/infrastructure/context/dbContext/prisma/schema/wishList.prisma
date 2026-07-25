@@ -1,9 +1,0 @@
-model WishList {
-  id          String   @id @unique
-  userId      String
-  productId   String
-
-
-  user User @relation(fields: [userId], references: [id])
-  product     Product  @relation(fields: [productId], references: [id])
-}

@@ -1,10 +1,10 @@
 model User {
-  id        String   @id @unique
+  id        String   @id @default(uuid())
   name      String
   lastName  String
   email     String
   password  String
-  role      String
+  role      UserRole
   mobile    String
   status    String
   createdAt DateTime @default(now())
@@ -13,4 +13,60 @@ model User {
   orders        Order[]
   notifications Notification[]
   wishlists     WishList[]
+
+  @@index([email])
+  @@index([mobile])
+  @@index([status])
+}
+
+model Notification {
+  id         String               @id @default(uuid())
+  userId     String
+  title      String
+  desciption String?
+  isRead     Boolean              @default(false)
+  priority   NotificationPriority
+  type       NotificationType
+  createdAt  DateTime             @default(now())
+  updatedAt  DateTime             @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([userId, isRead])
+  @@index([userId, type])
+  @@index([createdAt])
+}
+
+model WishList {
+  id        String @id @default(uuid())
+  userId    String
+  productId String
+
+  user    User    @relation(fields: [userId], references: [id])
+  product Product @relation(fields: [productId], references: [id])
+
+  @@unique([userId, productId])
+  @@index([userId])
+  @@index([productId])
+}
+
+enum NotificationType {
+  ORDER_UPDATE
+  PAYMENT_STATUS
+  PROMOTION
+  SYSTEM_ALERT
+}
+
+enum NotificationPriority {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
+}
+
+enum UserRole {
+  admin
+  user
+  merchant
 }
