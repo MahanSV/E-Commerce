@@ -1,22 +1,22 @@
 import yup from 'yup';
 
-const createCustomerOrder = yup.object({});
+const createCustomerOrderSchema = yup.object({});
 
-const updateCustomerOrder = yup.object({
+const updateCustomerOrderSchema = yup.object({
     id: yup.string().required("id is required."),
 });
 
-const deleteCustomerOrder = yup.object({
+const deleteCustomerOrderSchema = yup.object({
     id: yup.string().required("id is required."),
 });
 
-const getCustomerOrder = yup.object({
+const getCustomerOrderSchema = yup.object({
     id: yup.string().required("id is required."),
 });
 
 export {
-    createCustomerOrder,
-    updateCustomerOrder,
-    deleteCustomerOrder,
-    getCustomerOrder,
+    createCustomerOrderSchema,
+    updateCustomerOrderSchema,
+    deleteCustomerOrderSchema,
+    getCustomerOrderSchema,
 };
