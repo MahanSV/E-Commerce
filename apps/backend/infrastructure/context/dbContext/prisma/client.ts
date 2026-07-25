@@ -19,7 +19,6 @@ export default prisma;*/
 /**
  * Let's try this version with pagination.
  */
-
 import { PrismaClient } from '@prisma/client';
 import { pagination } from "prisma-extension-pagination";
 import env from '#substructure/env.ts';
