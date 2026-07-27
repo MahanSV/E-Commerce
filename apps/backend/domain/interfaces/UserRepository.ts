@@ -1,4 +1,4 @@
-import User from "#domain/models/userModel/user.ts";
+import User from "#models/User.ts";
 
 export interface UserRepositoryInterface {
     checkUserExistenceByNationalId(nationalId: string | null): Promise<User | null>;

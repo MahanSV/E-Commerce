@@ -2,7 +2,7 @@ import ApiError from '#webhost/errors/apiError.ts';
 import httpStatus from 'http-status';
 import UserRepository from '#repositories/UserRepository.ts';
 import type { UserRepositoryInterface } from '#domain/interfaces/UserRepository.ts';
-import User from '#models/userModel/user.ts';
+import User from '#models/User.ts';
 import env from '#substructure/env.ts';
 import UserTokenDto from '#application/services/userServices/UserTokenDto.ts';
 import { add } from 'date-fns';

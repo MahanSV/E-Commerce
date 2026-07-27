@@ -1,5 +1,5 @@
 import prisma from '#context/dbContext/prisma/client.ts';
-import User from '#models/userModel/user.ts';
+import User from '#models/User.ts';
 import type { UserRepositoryInterface } from '#domain/interfaces/UserRepository.ts';
 import {BaseRepository} from "#repositories/BaseRepository.ts";
 
