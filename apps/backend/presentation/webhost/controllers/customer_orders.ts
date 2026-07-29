@@ -7,15 +7,18 @@ class CustomerOrdersController {
     public async createCustomerOrder(req: Request, res: Response): Promise<any> {};
 
     public async updateCustomerOrder(req: Request, res: Response): Promise<any> {
-        const { id } = req.params;
+        /*const { id } = req.params;*/
+        const id = req.params.id;
     };
 
     public async deleteCustomerOrder(req: Request, res: Response): Promise<any> {
-        const { id } = req.params;
+        /*const { id } = req.params;*/
+        const id = req.params.id;
     };
 
     public async getCustomerOrder(req: Request, res: Response): Promise<any> {
-        const { id } = req.params;
+        /*const { id } = req.params;*/
+        const id = req.params.id;
     };
 
     public async getAllOrders(req: Request, res: Response): Promise<any> {

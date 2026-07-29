@@ -5,7 +5,8 @@ class SearchController {
     constructor() {};
 
     public async searchProducts(req: Request, res: Response): Promise<any> {
-        const { query } = req.query;
+        /*const { query } = req.query;*/
+        const query = req.query.query;
     };
 }
 
