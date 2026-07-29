@@ -1,7 +1,7 @@
 model Merchant {
   id         String   @id @default(uuid())
   name       String
-  desciption String?
+  description String?
   email      String?
   mobile     String?
   address    String?

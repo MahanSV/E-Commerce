@@ -1,12 +1,13 @@
 import BaseModel from '#models/base/baseModel.ts';
+import {UserType} from "#domain/enums/userType.ts";
 
-interface UserConstructorParams {
+export interface UserConstructorParams {
     id: string;
     name: string;
     lastName: string;
     email: string;
     password: string;
-    role: string;
+    role: UserType;
     mobile: string;
     status: string;
     createdAt?: Date;
@@ -16,13 +17,13 @@ interface UserConstructorParams {
     wishlists?: WishListConstructorParams[];*/
 }
 
-interface UserSnapshotParams {
+export interface UserSnapshotParams {
     id: string;
     name: string;
     lastName: string;
     email: string;
     password: string;
-    role: string;
+    role: UserType;
     mobile: string;
     status: string;
     createdAt?: Date;
@@ -37,7 +38,7 @@ class User extends BaseModel {
     private _lastName!: string;
     private _email!: string;
     private _password!: string;
-    private _role!: string;
+    private _role!: UserType;
     private _mobile!: string;
     private _status!: string;
     private _createdAt?: Date;
@@ -115,10 +116,10 @@ class User extends BaseModel {
         this._password = value;
     };
 
-    public get role(): string {
+    public get role(): UserType {
         return this._role;
     };
-    public set role(value: string) {
+    public set role(value: UserType) {
         this._role = value;
     };
 
