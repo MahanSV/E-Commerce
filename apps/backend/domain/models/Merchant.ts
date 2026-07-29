@@ -63,6 +63,7 @@ class Merchant extends BaseModel {
     static createFromSnapshot(snapshot: MerchantSnapshotParams): Merchant {
         const merchant = new Merchant();
 
+        merchant.id = snapshot.id;
         merchant.name = snapshot.name;
         merchant.description = snapshot.description;
         merchant.email = snapshot.email;

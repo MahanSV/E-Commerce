@@ -88,6 +88,7 @@ class Order extends BaseModel {
     static createFromSnapshot(snapshot: OrderSnapshotParams): Order {
         const order = new Order();
 
+        order.id = snapshot.id;
         order.userId = snapshot.userId;
         order.status = snapshot.status;
         order.isActive = snapshot.isActive;

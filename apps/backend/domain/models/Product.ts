@@ -95,6 +95,7 @@ class Product extends BaseModel {
     static createFromSnapshot(snapshot: ProductSnapshotParams): Product {
         const product = new Product();
 
+        product.id = snapshot.id;
         product.categoryId = snapshot.categoryId;
         product.name = snapshot.name;
         product.slug = snapshot.slug;
