@@ -147,7 +147,6 @@ class Merchant extends BaseModel {
     public set merchantProducts(value) {
         this._merchantProducts = value;
     }
-
 }
 
 export default Merchant;

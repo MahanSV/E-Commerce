@@ -79,7 +79,6 @@ class WishList extends BaseModel {
     public set product(value: Product) {
         this._product = value;
     }
-
 }
 
 export default WishList;

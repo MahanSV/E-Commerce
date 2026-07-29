@@ -103,7 +103,6 @@ class OrderItem extends BaseModel {
     public set product(value) {
         this._product = value;
     }
-
 }
 
 export default OrderItem;

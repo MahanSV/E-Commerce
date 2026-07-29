@@ -220,7 +220,6 @@ class Order extends BaseModel {
     public set orderItems(value) {
         this._orderItems = value;
     }
-
 }
 
 export default Order;

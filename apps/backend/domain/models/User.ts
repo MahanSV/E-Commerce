@@ -174,7 +174,6 @@ class User extends BaseModel {
     public set wishlists(value) {
         this._wishlists = value;
     }
-
 }
 
 export default User;
