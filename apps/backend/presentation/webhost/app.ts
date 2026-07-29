@@ -120,7 +120,7 @@ app.use('/v1', routes);
 
 // Handle 404
 app.use((req, res, next) => {
-  next(new ApiError(httpStatus.NOT_FOUND, 'Not found'));
+  next(new ApiError(httpStatus.NOT_FOUND, 'Not found', 'Error'));
 });
 
 // Convert error to ApiError
