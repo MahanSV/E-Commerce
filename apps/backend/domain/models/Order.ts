@@ -1,5 +1,6 @@
 import BaseModel from '#models/base/baseModel.ts';
 import User, {UserSnapshotParams} from "#models/User.ts";
+import OrderItem, {OrderItemSnapshotParams} from "#models/OrderItem.ts";
 
 export interface OrderConstructorParams {
     id: string;
@@ -35,6 +36,7 @@ export interface OrderSnapshotParams {
     createdAt: Date;
     updatedAt: Date;
     user: UserSnapshotParams;
+    orderItems?: OrderItemSnapshotParams[];
 }
 
 class Order extends BaseModel {
@@ -52,6 +54,8 @@ class Order extends BaseModel {
     private _deliversAt!: Date;
     private _createdAt!: Date;
     private _updatedAt!: Date;
+    private _user!: User;
+    private _orderItems?: OrderItem[]
 
     constructor() {
         super();
@@ -60,7 +64,7 @@ class Order extends BaseModel {
     static create(params: OrderConstructorParams): Order {
         const order = new Order();
 
-        if(params?.id){
+        if(params?.id) {
             order.id = params?.id
         }
 
@@ -99,6 +103,7 @@ class Order extends BaseModel {
         order.createdAt = snapshot.createdAt;
         order.updatedAt = snapshot.updatedAt;
         order.user = snapshot.user && User.createFromSnapshot(snapshot.user);
+        order.orderItems = snapshot.orderItems ? snapshot.orderItems.map(data => OrderItem.createFromSnapshot(data)) : [];
 
         return order;
     }
@@ -199,6 +204,20 @@ class Order extends BaseModel {
     }
     public set updatedAt(value) {
         this._updatedAt = value;
+    }
+
+    public get user() {
+        return this._user;
+    }
+    public set user(value) {
+        this._user = value;
+    }
+
+    public get orderItems() {
+        return this._orderItems;
+    }
+    public set orderItems(value) {
+        this._orderItems = value;
     }
 
 }

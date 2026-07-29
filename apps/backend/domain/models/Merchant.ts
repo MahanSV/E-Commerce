@@ -1,4 +1,5 @@
 import BaseModel from "#models/base/baseModel.ts";
+import MerchantProduct, { MerchantProductSnapshotParams} from "#models/MerchantProduct.ts";
 
 export interface MerchantConstructorParams {
     id: string;
@@ -11,7 +12,6 @@ export interface MerchantConstructorParams {
     password: string;
     createdAt: Date;
     updatedAt: Date;
-    merchantProducts?: MerchantProductConstructorParams[];
 }
 
 export interface MerchantSnapshotParams {
@@ -43,7 +43,7 @@ class Merchant extends BaseModel {
     static create(params: MerchantConstructorParams): Merchant {
         const merchant = new Merchant();
 
-        if(params?.id){
+        if(params?.id) {
             merchant.id = params?.id
         }
 
@@ -72,7 +72,7 @@ class Merchant extends BaseModel {
         merchant.password = snapshot.password;
         merchant.createdAt = snapshot.createdAt;
         merchant.updatedAt = snapshot.updatedAt;
-        /*merchant.merchantProducts = snapshot.merchantProducts;*/
+        merchant.merchantProducts = snapshot.merchantProducts ? snapshot.merchantProducts.map(data => MerchantProduct.createFromSnapshot(data)) : [];
 
         return merchant;
     }

@@ -36,6 +36,7 @@ class Notification extends BaseModel {
     private _type!: string;
     private _createdAt!: Date;
     private _updatedAt!: Date;
+    private _user!: User;
 
     constructor() {
         super();
@@ -44,7 +45,7 @@ class Notification extends BaseModel {
     static create(params: NotificationConstructorParams): Notification {
         const notification = new Notification();
 
-        if(params?.id){
+        if(params?.id) {
             notification.id = params?.id;
         }
 
@@ -131,6 +132,13 @@ class Notification extends BaseModel {
     }
     public set updatedAt(value) {
         this._updatedAt = value;
+    }
+
+    public get user() {
+        return this._user;
+    }
+    public set user(value: User) {
+        this._user = value;
     }
 }
 

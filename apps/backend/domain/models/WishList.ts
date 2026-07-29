@@ -30,7 +30,7 @@ class WishList extends BaseModel {
     static create(params: WishListConstructorParams): WishList {
         const wishList = new WishList();
 
-        if(params?.id){
+        if(params?.id) {
             wishList.id = params?.id
         }
 
@@ -46,8 +46,8 @@ class WishList extends BaseModel {
         wishList.id = snapshot.id;
         wishList.userId = snapshot.userId;
         wishList.productId = snapshot.productId;
-        wishList.user = snapshot.user;
-        wishList.product = snapshot.product;
+        wishList.user = snapshot.user && User.createFromSnapshot(snapshot.user);
+        wishList.product = snapshot.product && Product.createFromSnapshot(snapshot.product);
 
         return wishList;
     }

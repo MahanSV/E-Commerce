@@ -1,10 +1,11 @@
 import BaseModel from "#models/base/baseModel.ts";
+import {ProductSnapshotParams} from "#models/Product.ts";
+import Product from "#models/Product.ts";
 
 export interface CategoryConstructorParams {
     id: string;
     name: string;
     icon?: string;
-    products: ProductConstructorParams[];
 }
 
 export interface CategorySnapshotParams {
@@ -27,7 +28,7 @@ class Category extends BaseModel {
     static create(params: CategoryConstructorParams): Category {
         const category = new Category();
 
-        if(params?.id){
+        if(params?.id) {
             category.id = params?.id;
         }
 
@@ -43,7 +44,7 @@ class Category extends BaseModel {
         category.id = snapshot.id;
         category.name = snapshot.name;
         category.icon = snapshot.icon;
-        category.products = snapshot.products ? snapshot.products.map(data => Product.createFromSnapshot(data)) : null;
+        category.products = snapshot.products ? snapshot.products.map(data => Product.createFromSnapshot(data)) : [];
 
         return category;
     }

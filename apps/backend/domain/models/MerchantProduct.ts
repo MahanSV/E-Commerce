@@ -1,5 +1,6 @@
 import BaseModel from "#models/base/baseModel.ts";
 import Merchant, {MerchantSnapshotParams} from "#models/Merchant.ts";
+import Product, {ProductSnapshotParams} from "#models/Product.ts";
 
 export interface MerchantProductConstructorParams {
     id: string;
@@ -28,7 +29,7 @@ class MerchantProduct extends BaseModel {
     static create(params: MerchantProductConstructorParams): MerchantProduct {
         const merchantProduct = new MerchantProduct();
 
-        if(params?.id){
+        if(params?.id) {
             merchantProduct.id = params?.id;
         }
 

@@ -1,5 +1,8 @@
 import BaseModel from '#models/base/baseModel.ts';
 import {UserType} from "#domain/enums/userType.ts";
+import Order, {OrderSnapshotParams} from "#models/Order.ts";
+import Notification, {NotificationSnapshotParams} from "#models/Notification.ts";
+import WishList, {WishListSnapshotParams} from "#models/WishList.ts";
 
 export interface UserConstructorParams {
     id: string;
@@ -12,9 +15,6 @@ export interface UserConstructorParams {
     status: string;
     createdAt?: Date;
     updatedAt?: Date;
-    /*orders?: OrderConstructorParams[];
-    notifications?: NotificationConstructorParams[];
-    wishlists?: WishListConstructorParams[];*/
 }
 
 export interface UserSnapshotParams {
@@ -28,9 +28,9 @@ export interface UserSnapshotParams {
     status: string;
     createdAt?: Date;
     updatedAt?: Date;
-    /*orders?: OrderSnapshotParams[];
+    orders?: OrderSnapshotParams[];
     notifications?: NotificationSnapshotParams[];
-    wishlists?: WishListSnapshotParams[];*/
+    wishlists?: WishListSnapshotParams[];
 }
 
 class User extends BaseModel {
@@ -43,6 +43,9 @@ class User extends BaseModel {
     private _status!: string;
     private _createdAt?: Date;
     private _updatedAt?: Date;
+    private _orders?: Order[];
+    private _notifications?: Notification[];
+    private _wishlists?: WishList[];
 
     constructor() {
         super();
@@ -81,9 +84,9 @@ class User extends BaseModel {
         user.status = snapshot.status;
         user.createdAt = snapshot.createdAt;
         user.updatedAt = snapshot.updatedAt;
-        // user.orders = snapshot.orders ? snapshot.orders.map(data => Order.createFromSnapshot(data)) ? [];
-        // user.notifications = snapshot.notifications ? snapshot.notifications.map(data => Notification.createFromSnapshot(data)) ? [];
-        // user.wishlists = snapshot.wishlists ? snapshot.wishlists.map(data => WishList.createFromSnapshot(data)) ? [];
+        user.orders = snapshot.orders ? snapshot.orders.map(data => Order.createFromSnapshot(data)) : [];
+        user.notifications = snapshot.notifications ? snapshot.notifications.map(data => Notification.createFromSnapshot(data)) : [];
+        user.wishlists = snapshot.wishlists ? snapshot.wishlists.map(data => WishList.createFromSnapshot(data)) : [];
 
         return user;
     };
@@ -150,6 +153,27 @@ class User extends BaseModel {
     public set updatedAt(value: Date | undefined) {
         this._updatedAt = value;
     };
+
+    public get orders() {
+        return this._orders;
+    }
+    public set orders(value) {
+        this._orders = value;
+    }
+
+    public get notifications() {
+        return this._notifications;
+    }
+    public set notifications(value) {
+        this._notifications = value;
+    }
+
+    public get wishlists() {
+        return this._wishlists;
+    }
+    public set wishlists(value) {
+        this._wishlists = value;
+    }
 
 }
 

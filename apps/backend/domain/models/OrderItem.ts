@@ -26,6 +26,8 @@ class OrderItem extends BaseModel {
     private _productId!: string
     private _quantity!: number;
     private _price!: number;
+    private _order!: Order
+    private _product!: Product;
 
     constructor() {
         super();
@@ -33,6 +35,10 @@ class OrderItem extends BaseModel {
 
     static create(params: OrderItemConstructorParams): OrderItem {
         const orderItem = new OrderItem();
+
+        if(params?.id) {
+            orderItem.id = params?.id
+        }
 
         orderItem.orderId = params.orderId;
         orderItem.productId = params.productId;
@@ -82,6 +88,20 @@ class OrderItem extends BaseModel {
     }
     public set price(value) {
         this._price = value;
+    }
+
+    public get order() {
+        return this._order;
+    }
+    public set order(value) {
+        this._order = value;
+    }
+
+    public get product() {
+        return this._product;
+    }
+    public set product(value) {
+        this._product = value;
     }
 
 }

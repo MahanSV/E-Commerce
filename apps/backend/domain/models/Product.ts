@@ -1,6 +1,10 @@
 import BaseModel from '#models/base/baseModel.ts';
-import MerchantProduct from "#models/MerchantProduct.ts";
-import WishList from "#models/WishList.ts";
+import MerchantProduct, {
+    MerchantProductSnapshotParams
+} from "#models/MerchantProduct.ts";
+import WishList, { WishListSnapshotParams} from "#models/WishList.ts";
+import OrderItem, {OrderItemSnapshotParams} from "#models/OrderItem.ts";
+import Category, {CategorySnapshotParams} from "#models/Category.ts";
 
 export interface ProductConstructorParams {
     id: string;
@@ -34,6 +38,10 @@ export interface ProductSnapshotParams {
     socialLink?: string;
     description?: string;
     information?: string;
+    wishlists: WishListSnapshotParams[];
+    merchantProducts: MerchantProductSnapshotParams[];
+    category: CategorySnapshotParams;
+    orderItems: OrderItemSnapshotParams[];
 }
 
 
@@ -53,6 +61,7 @@ class Product extends BaseModel {
     private _information?: string;
     private _wishlists?: WishList[];
     private _merchantProducts?: MerchantProduct[];
+    private _category!: Category;
     private _orderItems?: OrderItem[];
 
     constructor() {
@@ -62,7 +71,7 @@ class Product extends BaseModel {
     static create(params: ProductConstructorParams): Product {
         const product = new Product();
 
-        if(params?.id){
+        if(params?.id) {
             product.id = params?.id
         }
 
@@ -99,6 +108,7 @@ class Product extends BaseModel {
         product.socialLink = snapshot.socialLink;
         product.description = snapshot.description;
         product.information = snapshot.information;
+        product.category = snapshot.category && Category.createFromSnapshot(snapshot.category);
         product.wishlists = snapshot.wishlists ? snapshot.wishlists.map(data => WishList.createFromSnapshot(data)) : [];
         product.merchantProducts = snapshot.merchantProducts ? snapshot.merchantProducts.map(data => MerchantProduct.createFromSnapshot(data)): [];
         product.orderItems = snapshot.orderItems ? snapshot.orderItems.map(data => OrderItem.createFromSnapshot(data)) : [];
@@ -188,6 +198,13 @@ class Product extends BaseModel {
     }
     public set description(value) {
         this._description = value;
+    }
+
+    public get category() {
+        return this._category;
+    }
+    public set category(value) {
+        this._category = value;
     }
 
     public get information() {
