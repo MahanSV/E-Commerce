@@ -11,7 +11,7 @@ import RedisDataModel from '#context/dbContext/redis/dataModel/redisDataModel.ts
 import { redisDel, redisSet } from '#context/dbContext/redis/redis.ts';
 import { tokenKeyStructure } from '#context/dbContext/redis/redisStrcuture/userStructures.ts';
 import axios from 'axios';
-import type {UserServiceInterface} from '#application/interfaces/userServiceInterface.ts';
+import type {UserServiceInterface} from '#application/interfaces/UserServiceInterface.ts';
 import type { AddUserCommand, UserLogoutCommand } from '#application/types/user/command.ts';
 import {getUserByIdDTO, UserDTO, UserLoginDTO} from "#application/dto/UserDTO.js";
 
