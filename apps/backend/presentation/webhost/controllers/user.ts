@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express';
 import httpStatus from 'http-status';
-import UserService from '#application/services/userServices/UserService.ts';
+import UserService from '#application/services/UserService.ts';
 
 
 class UserController {
