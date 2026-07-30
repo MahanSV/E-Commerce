@@ -1,6 +1,6 @@
 import prisma from '#context/dbContext/prisma/client.ts';
 import {BaseRepository} from "#repositories/BaseRepository.ts";
-import {OrderItemRepositoryInterface} from "#domain/interfaces/OrderItemInterface.ts";
+import {OrderItemRepositoryInterface} from "#domain/interfaces/OrderItemRepository.ts";
 import OrderItem from "#models/OrderItem.ts";
 
 
