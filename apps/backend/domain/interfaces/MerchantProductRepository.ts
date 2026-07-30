@@ -1,3 +1,3 @@
 
 
-export interface MerchantProductRepository {}
+export interface MerchantProductRepositoryInterface {}

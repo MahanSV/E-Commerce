@@ -1,3 +1,3 @@
 
 
-export interface OrderRepository {}
+export interface OrderRepositoryInterface {}
