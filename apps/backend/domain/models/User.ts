@@ -3,6 +3,7 @@ import {UserType} from "#domain/enums/userType.ts";
 import Order, {OrderSnapshotParams} from "#models/Order.ts";
 import Notification, {NotificationSnapshotParams} from "#models/Notification.ts";
 import WishList, {WishListSnapshotParams} from "#models/WishList.ts";
+import {encrypt} from "#substructure/utils/encryption.ts";
 
 export interface UserConstructorParams {
     id: string;
@@ -61,7 +62,7 @@ class User extends BaseModel {
         user.name = params.name;
         user.lastName = params.lastName;
         user.email = params.email;
-        user.password = params.password;
+        user.password = encrypt(params.password);
         user.role = params.role;
         user.mobile = params.mobile;
         user.status = params.status;
