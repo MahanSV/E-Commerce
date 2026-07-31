@@ -1,33 +1,18 @@
+import {UserType} from "#domain/enums/userType.js";
+
+
 export interface UserDTO {
     id: string;
-    username?: string;
-    password?: string;
-    firstName?: string;
-    lastName?: string;
-    nationalId: string;
-    type: string;
-    mobile?: string;
-    gender?: string;
+    name: string;
+    lastName: string;
+    email: string;
+    // password: string;
+    role: UserType;
+    mobile: string;
+    status: string;
     createdAt?: Date;
-}
-
-export interface UserLoginDTO {
-    token: string;
-    userInfo: {
-        id: string;
-        firstName?: string;
-        lastName?: string;
-        type: string;
-    },
-}
-
-export interface getUserByIdDTO {
-    id: string;
-    username?: string;
-    firstName?: string;
-    lastName?: string;
-    nationalId: string;
-    type: string;
-    mobile?: string;
-    gender?: string;
+    updatedAt?: Date;
+    orders?: OrderDTO[];
+    notifications?: NotificationDTO[];
+    wishlists?: WishListDTO[];
 }

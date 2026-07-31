@@ -2,18 +2,11 @@ import ApiError from '#webhost/errors/apiError.ts';
 import httpStatus from 'http-status';
 import UserRepository from '#repositories/UserRepository.ts';
 import type { UserRepositoryInterface } from '#domain/interfaces/UserRepository.ts';
-import User from '#models/User.ts';
-import env from '#substructure/env.ts';
-import UserTokenDto from '#application/services/UserTokenDto.ts';
-import { add } from 'date-fns';
-import { generateJWSToken } from '#application/services/TokenService.ts';
-import RedisDataModel from '#context/dbContext/redis/dataModel/redisDataModel.ts';
-import { redisDel, redisSet } from '#context/dbContext/redis/redis.ts';
-import { tokenKeyStructure } from '#context/dbContext/redis/redisStrcuture/userStructures.ts';
-import axios from 'axios';
 import type {UserServiceInterface} from '#application/interfaces/UserServiceInterface.ts';
-import type { AddUserCommand, UserLogoutCommand } from '#application/types/user/command.ts';
-import {getUserByIdDTO, UserDTO, UserLoginDTO} from "#application/dto/UserDTO.js";
+import {UserMapper} from "#application/mappers/UserMapper.ts";
+import {UserDTO} from "#application/dto/UserDTO.ts";
+import {createUserCommand, updateUserCommand} from "#application/types/user/command.ts";
+import {UserFactory} from "#domain/factories/UserFactory.ts";
 
 export default class UserService implements UserServiceInterface {
     private userRepository: UserRepositoryInterface;
@@ -22,187 +15,59 @@ export default class UserService implements UserServiceInterface {
         this.userRepository = userRepository;
     };
 
-    async login(receivedToken: string | null): Promise<UserLoginDTO> {
-        let user;
-        let userData;
+    async getAllUsers() {
+        const allUsers = await this.userRepository.getAllUsers();
 
-        const data = {
-            ServiceID: 583858,
-            ServiceUsername: 'mdjvEVV47hnFReVY',
-            ServicePassword: 'qzXAHner44yTzBBb',
-        };
-
-        const headers = {
-            Authorization: receivedToken,
-            'Content-Type': 'application/json',
-        }
-
-
-        if(env.environment==='production'){
-
-            if (!receivedToken)
-                throw new ApiError(httpStatus.UNAUTHORIZED, 'توکن دریافت نشد.', 'Error');
-
-            try {
-                const url = env.foreignApi;
-
-                const responseSso = await axios.post(
-                    url,
-                    data,
-                    { headers }
-                );
-
-                userData = responseSso.data[0];
-
-
-            } catch (error: any) {
-                throw new ApiError(error.response.status || httpStatus.BAD_REQUEST, error.response.statusText || 'مشکلی در واکشی اطلاعات رخ داده است', 'Error');
-            }
-
-        }else{
-
-            const url = env.mockPath;
-
-            const responseSso = await axios.post(
-                url,
-                data,
-                { headers }
-            );
-
-            userData = responseSso.data[0];
-        }
-
-        userData = {
-            nationalId: userData.NationalID,
-            mobile: userData.Mobile,
-            firstName: userData.FName,
-            lastName: userData.LName,
-            gender: userData.Gender === 0 ? 'MALE' : 'FEMALE',
-            type: "User",
-        };
-
-        const existingUser = await this.userRepository.checkUserExistenceByNationalId(userData.nationalId);
-
-        if (existingUser) {
-
-            user = existingUser;
-
-        } else {
-
-            const newUser = User.create(userData);
-
-            user = await this.userRepository.createUser(newUser);
-
-            try {
-                const data ={
-                    id:user.id,
-                    firstName:user.firstName,
-                    lastName:user.lastName,
-                    nationalId:user.nationalId,
-                }
-                await axios.post(`${env.reportPath}report/user`,
-                    {...data},
-                    {
-                        timeout: 5000,
-                        headers: {
-                            'x-api-token': env.toolAccessToken,
-                            'Content-Type': 'application/json',
-                        }
-                    }
-                )
-            } catch (error: any) {
-
-                throw new Error("ارتباط بین سرویس ها انجام نشد.");
-            }
-        }
-
-        const now = new Date();
-
-        const userTokenDto = new UserTokenDto(
-            user.id,
-            user.nationalId,
-            user.type,
-            now,
-            add(now, { seconds: env.tokenExpirationTime }),
-        );
-
-        const token = await generateJWSToken(userTokenDto.export());
-
-        const tokenDataModel = RedisDataModel.create(token, tokenKeyStructure(user._nationalId));
-        await redisSet(tokenDataModel);
-
-        return {
-            token: token,
-            userInfo: {
-                id: user.id,
-                firstName: user.firstName,
-                lastName: user.lastName,
-                type: user.type,
-            },
-        };
+        return UserMapper.toDTOList(allUsers);
     };
 
+    async createUser(command: createUserCommand): Promise<UserDTO> {
+        const userExistEmail = await this.userRepository.getUserByEmail(command.email);
 
-    async userLogout(command: UserLogoutCommand): Promise<string> {
-        const tokenDataModel = RedisDataModel.create(command.token, tokenKeyStructure(command.nationalId));
-        await redisDel(tokenDataModel);
+        if (userExistEmail) throw new ApiError(httpStatus.BAD_REQUEST, "Email already exist.", "Error");
 
-        return command.id;
+        const entity = UserFactory.create(command.email, command.password, command.role);
+
+        const createUser = await this.userRepository.createUser(entity);
+
+        if (createUser) throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, "Failed to create user.", "Error");
+
+        return UserMapper.toDTO(createUser);
     };
 
-    async getUserById(userId: string): Promise<getUserByIdDTO> {
-        const user = await this.userRepository.getUserById(userId);
+    async getUser(id: string): Promise<UserDTO> {
+        const user = await this.userRepository.getUser(id);
 
-        if (!user)
-            throw new ApiError(httpStatus.BAD_REQUEST,'کاربر مورد نظر یافت نشد.', 'Error');
+        if (!user) throw new ApiError(httpStatus.NOT_FOUND, "Failed to get user.", "Error");
 
-        return {
-            id: user.id,
-            username: user?.username,
-            firstName: user?.firstName,
-            lastName: user?.lastName,
-            nationalId: user.nationalId,
-            type: user.type,
-            mobile: user?.mobile,
-            gender: user?.gender
-        };
+        return UserMapper.toDTO(user);
     };
 
-    async getUsers(): Promise<UserDTO[]> {
-        let users=  await this.userRepository.getUsers();
+    async updateUser(command: updateUserCommand): Promise<UserDTO> {
+        const checkUserExist = await this.userRepository.getUser(command.id);
 
-        users = users.map((user: any) => ({
-            id: user.id,
-            username: user?.username,
-            firstName: user?.firstName,
-            lastName: user?.lastName,
-            nationalId: user.nationalId,
-            type: user.type,
-            mobile: user?.mobile,
-            gender: user?.gender,
-            createdAt: user.createdAt
-        }));
+        if (!checkUserExist) throw new ApiError(httpStatus.BAD_REQUEST, "User doesn't exist", "Error");
 
-        return users;
+        const updatedUser = await this.userRepository.updateUser(command);
+
+        return UserMapper.toDTO(updatedUser);
     };
 
-    async getUserByNationalId(nationalId: string): Promise<UserDTO> {
-        const user = await this.userRepository.getUserByNationalId(nationalId);
+    async deleteUser(id: string): Promise<UserDTO> {
+        const checkUserExist = await this.userRepository.getUser(id);
 
-        if (!user)
-            throw new ApiError(httpStatus.BAD_REQUEST,'کاربر مورد نظر یافت نشد.', 'Error');
+        if (!checkUserExist) throw new ApiError(httpStatus.BAD_REQUEST, "User doesn't exist", "Error");
 
-        return user;
+        const deleteUser = await this.userRepository.deleteUser(id);
+
+        return UserMapper.toDTO(deleteUser);
     };
 
-    async addUser(command: AddUserCommand): Promise<UserDTO> {
-        const user = await this.userRepository.getUserByNationalId(command.nationalId);
+    async getUserByEmail(email: string): Promise<UserDTO | null> {
+        const user = await this.userRepository.getUserByEmail(email);
 
-        if (user)
-            throw new ApiError(httpStatus.BAD_REQUEST,'کاربر مورد نظر وجود دارد.', 'Error');
+        if (!user) return null;
 
-        const newUser = User.create({...command,type:'User'})
-
-        return await this.userRepository.createUser(newUser);
+        return UserMapper.toDTO(user);
     };
 };

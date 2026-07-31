@@ -1,10 +1,12 @@
-import type { AddUserCommand, UserLogoutCommand } from '#application/types/user/command.ts';
+import {UserDTO} from "#application/dto/UserDTO.js";
+import {createUserCommand, updateUserCommand} from "#application/types/user/command.ts";
+
 
 export interface UserServiceInterface {
-    login(receivedToken: string | null): Promise<any>;
-    userLogout(command: UserLogoutCommand): Promise<any>;
-    getUserById(userId: string): Promise<any>;
-    getUsers(): Promise<any>;
-    getUserByNationalId(nationalId: string | null): Promise<any>;
-    addUser(command: AddUserCommand): Promise<any>;
+    getAllUsers(): Promise<UserDTO[]>;
+    createUser(command: createUserCommand): Promise<UserDTO>;
+    getUser(id: string): Promise<UserDTO>;
+    updateUser(command: updateUserCommand): Promise<UserDTO>;
+    deleteUser(id: string): Promise<UserDTO>;
+    getUserByEmail(email: string): Promise<UserDTO | null>;
 }
