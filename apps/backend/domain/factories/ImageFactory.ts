@@ -11,7 +11,7 @@ export class ImageFactory {
         };
     };
 
-    public static async createImage(images: string[]) {
+    public static async createImageLists(images: string[]) {
         return images.map((image) => ImageFactory.create(image));
     };
 }

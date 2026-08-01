@@ -36,3 +36,9 @@ export type createImageCommand = {
         imageID: string, image: string
     }>
 };
+
+export type updateProductImageCommand = {
+    id: string;
+    productID: string;
+    image: string;
+};

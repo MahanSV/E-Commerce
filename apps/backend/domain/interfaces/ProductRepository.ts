@@ -10,5 +10,6 @@ export interface ProductRepositoryInterface {
     getProductById(id: string): Promise<Product | null>
     updateProduct(command: updateProductCommand): Promise<Product>
     deleteProduct(id: string): Promise<Product>
-    createImage(command: createImageCommand): Promise<Product>
+    updateProductImage(command: createImageCommand): Promise<Product>
+    deleteProductImage(id: string): Promise<Product>
 }

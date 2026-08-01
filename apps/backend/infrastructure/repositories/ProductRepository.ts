@@ -115,7 +115,7 @@ export default class ProductRepository extends BaseRepository<Product> implement
         return dataModel && Product.createFromSnapshot(dataModel);
     };
 
-    async createImage(command: createImageCommand): Promise<Product> {
+    async updateProductImage(command: createImageCommand): Promise<Product> {
         const dataModel = await prisma.product.update({
             where: {
                 id: command.id
@@ -126,5 +126,18 @@ export default class ProductRepository extends BaseRepository<Product> implement
         });
 
         return dataModel && Product.createFromSnapshot(dataModel);
-    }
+    };
+
+    async deleteProductImage(id: string): Promise<Product> {
+        const dataModel = await prisma.product.update({
+            where: {
+                id: id
+            },
+            data: {
+                photo: undefined,
+            }
+        });
+
+        return dataModel && Product.createFromSnapshot(dataModel);
+    };
 };

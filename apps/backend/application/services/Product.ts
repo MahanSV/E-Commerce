@@ -6,10 +6,9 @@ import {ProductDTO, ProductImageDTO} from "#application/dto/ProductDTO.ts";
 import ApiError from "#webhost/errors/apiError.ts";
 import {ProductMapper} from "#application/mappers/ProductMapper.ts";
 import {
-    createImageCommand,
     createProductCommand,
     createProductImageCommand,
-    updateProductCommand
+    updateProductCommand, updateProductImageCommand
 } from "#application/types/product/command.ts";
 import {ProductFactory} from "#domain/factories/ProductFactory.ts";
 import {MerchantProductFactory} from "#domain/factories/MerchantProductFactory.ts";
@@ -92,7 +91,7 @@ export class ProductService implements ProductServiceInterface {
         return ProductMapper.toDTO(deletedProduct);
     };
 
-    async getSingleProductImages(id: string): Promise<ProductImageDTO> {
+    async getSingleProductImages(id: string): Promise<ProductImageDTO[] | undefined> {
         const product = await this.productRepository.getProductById(id);
 
         if (!product) throw new ApiError(httpStatus.BAD_REQUEST, `productId: ${id} doesn't exist.`, "Error");
@@ -106,17 +105,51 @@ export class ProductService implements ProductServiceInterface {
 
         if (!product) throw new ApiError(httpStatus.BAD_REQUEST, `productId: ${command.id} doesn't exist.`, "Error");
 
-        const photos = [];
+        const photos: Array<{imageID: string, image: string}> = [];
 
         photos.push(ImageFactory.create(command.photo));
 
         const newCommand = {
             id: command.id,
             photo: photos
-        }
+        };
 
-        const createdProductImage = await this.productRepository.createImage(newCommand);
+        const createdProductImage = await this.productRepository.updateProductImage(newCommand);
 
         return ProductMapper.toProductImageDTO(createdProductImage);
+    };
+
+    async updateImage(command:updateProductImageCommand): Promise<ProductImageDTO[] | undefined> {
+        const product = await this.productRepository.getProductById(command.id);
+
+        if (!product) throw new ApiError(httpStatus.BAD_REQUEST, `productId: ${command.id} doesn't exist.`, "Error");
+
+        if (!product.photo) throw new ApiError(httpStatus.NOT_FOUND, `productId: ${command.id} doesn't have any image.`, "Error");
+
+        const updatedPhoto = product.photo.map(item => {
+            return {
+                imageID: item.imageID,
+                image: command.image,
+            };
+        });
+
+        const newCommand = {
+            id: command.id,
+            photo: updatedPhoto
+        };
+
+        const updatedProductImage = await this.productRepository.updateProductImage(newCommand);
+
+        return ProductMapper.toProductImageDTO(updatedProductImage);
+    };
+
+    async deleteImage(id: string): Promise<ProductImageDTO[] | undefined> {
+        const product = await this.productRepository.getProductById(id);
+
+        if (!product) throw new ApiError(httpStatus.BAD_REQUEST, `productId: ${id} doesn't exist.`, "Error");
+
+        const deletedProductImage = await this.productRepository.deleteProductImage(id);
+
+        return ProductMapper.toProductImageDTO(deletedProductImage);
     };
 }
