@@ -14,7 +14,8 @@
     "typecheck": "tsc --noEmit",
     "test": "jest",
     "seed:permissions": "node seeds/seedPermissions.js",
-    "prisma:generate": "prisma generate"
+    "prisma:generate": "prisma generate",
+    "prisma:clean": "pm2 kill && rimraf node_modules/.prisma && npx prisma generate"
   },
   "keywords": [],
   "author": "",
