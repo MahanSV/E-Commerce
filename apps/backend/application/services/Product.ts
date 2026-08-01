@@ -14,6 +14,7 @@ import {ProductFactory} from "#domain/factories/ProductFactory.ts";
 import {MerchantProductFactory} from "#domain/factories/MerchantProductFactory.ts";
 import {MerchantProductRepositoryInterface} from "#domain/interfaces/MerchantProductRepository.ts";
 import {ImageFactory} from "#domain/factories/ImageFactory.ts";
+import MerchantProductRepository from "#repositories/MerchantProductRepository.ts";
 
 
 export class ProductService implements ProductServiceInterface {
