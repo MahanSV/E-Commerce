@@ -1,12 +1,14 @@
-export type AddUserCommand = {
-    firstName: string;
-    lastName: string;
-    nationalId: string;
-    mobile: string;
-    gender: string;
+import {UserType} from "#domain/enums/userType.ts";
+
+export type createUserCommand = {
+    email: string;
+    password: string;
+    role: UserType;
 };
 
-export type UserLogoutCommand = {
-    token: string;
-    [key: string]: any;
+export type updateUserCommand = {
+    id: string;
+    email: string;
+    password: string;
+    role: UserType;
 };

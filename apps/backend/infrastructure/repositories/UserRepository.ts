@@ -2,74 +2,81 @@ import prisma from '#context/dbContext/prisma/client.ts';
 import User from '#models/User.ts';
 import type { UserRepositoryInterface } from '#domain/interfaces/UserRepository.ts';
 import {BaseRepository} from "#repositories/BaseRepository.ts";
+import {updateUserCommand} from "#application/types/user/command.ts";
 
 export default class UserRepository extends BaseRepository<User> implements UserRepositoryInterface {
   constructor() {
     super(User.createFromSnapshot);
-  }
+  };
 
-  async checkUserExistenceByNationalId(nationalId: string | null): Promise<User | null> {
-    if (!nationalId) {
-      return null;
-    }
+  async getAllUsers() {
+    const dataModel = await prisma.user.findMany();
 
-    const user = await prisma.user.findFirst({
+    return dataModel.map(data => User.createFromSnapshot(data));
+  };
+
+  async getUser(id: string): Promise<User | null> {
+    const dataModel = await prisma.user.findUnique({
       where: {
-        nationalId
+        id
       }
     });
 
-    return user&&User.createFromSnapshot(user);
+    return dataModel && User.createFromSnapshot(dataModel);
   };
 
-  async getUserById(userId: string): Promise<User | null> {
-    const user = await prisma.user.findFirst({
+  async getUserByEmail(email: string): Promise<User | null> {
+    const dataModel = await prisma.user.findFirst({
       where: {
-        id: userId
+        email
       }
     });
 
-    return user&&User.createFromSnapshot(user);
+    return dataModel && User.createFromSnapshot(dataModel);
   };
-
-  async getUserByNationalId(nationalId: string): Promise<User | null> {
-    const user = await prisma.user.findFirst({
-      where: {
-        nationalId,
+  
+  async createUser(user: User): Promise<User> {
+    const dataModel = await prisma.user.create({
+      data: {
+        id: user.id,
+        name: user.name,
+        lastName: user.lastName,
+        email: user.email,
+        password: user.password,
+        role: user.role,
+        mobile: user.mobile,
+        status: user.status,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
       }
     });
 
-    return user&&User.createFromSnapshot(user);
+    return dataModel && User.createFromSnapshot(dataModel);
   };
 
-  async getUsers(): Promise<User[]> {
-    const dataModels = await prisma.user.findMany();
-    return dataModels&&dataModels.map((data: any) => User.createFromSnapshot(data));
+  async updateUser(command: updateUserCommand): Promise<User> {
+    const dataModel = await prisma.user.update({
+      where: {
+        id: command.id,
+      },
+      data: {
+        id: command.id,
+        email: command.email,
+        password: command.password,
+        role: command.role,
+      }
+    });
+
+    return dataModel && User.createFromSnapshot(dataModel);
   };
 
-  async createUser(userModel: User): Promise<User> {
-    try {
-      return await prisma.user.create({
-        data: this.createSchemaFromUserModel(userModel)
-      });
-    } catch (error) {
-      console.log(error);
-      throw error;
-    }
-  }
+  async deleteUser(id: string): Promise<User> {
+    const dataModel = await prisma.user.delete({
+      where: {
+        id
+      }
+    });
 
-
-  createSchemaFromUserModel(userModel: User) {
-    return {
-      id: userModel.id,
-      username: userModel.username,
-      password: userModel.password,
-      firstName: userModel.firstName,
-      lastName:userModel.lastName,
-      nationalId: userModel.nationalId,
-      mobile: userModel.mobile,
-      type: userModel.type,
-      gender: userModel.gender,
-    };
-  }
+    return dataModel && User.createFromSnapshot(dataModel);
+  };
 }

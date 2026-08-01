@@ -9,7 +9,7 @@ model Category {
 model Product {
   id           String  @id @default(uuid())
   categoryId   String
-  name         String
+  title         String
   slug         String
   manufacturer String
   photo        String

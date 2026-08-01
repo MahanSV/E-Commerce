@@ -9,7 +9,7 @@ import Category, {CategorySnapshotParams} from "#models/Category.ts";
 export interface ProductConstructorParams {
     id: string;
     categoryId: string;
-    name: string;
+    title: string;
     slug: string;
     manufacturer: string;
     photo: string;
@@ -26,7 +26,7 @@ export interface ProductConstructorParams {
 export interface ProductSnapshotParams {
     id: string;
     categoryId: string;
-    name: string;
+    title: string;
     slug: string;
     manufacturer: string;
     photo: string;
@@ -47,7 +47,7 @@ export interface ProductSnapshotParams {
 
 class Product extends BaseModel {
     private _categoryId!: string;
-    private _name!: string;
+    private _title!: string;
     private _slug!: string;
     private _manufacturer!: string;
     private _photo!: string;
@@ -76,7 +76,7 @@ class Product extends BaseModel {
         }
 
         product.categoryId = params.categoryId;
-        product.name = params.name;
+        product.title = params.title;
         product.slug = params.slug;
         product.manufacturer = params.manufacturer;
         product.photo = params.photo;
@@ -97,7 +97,7 @@ class Product extends BaseModel {
 
         product.id = snapshot.id;
         product.categoryId = snapshot.categoryId;
-        product.name = snapshot.name;
+        product.title = snapshot.title;
         product.slug = snapshot.slug;
         product.manufacturer = snapshot.manufacturer;
         product.photo = snapshot.photo;
@@ -124,11 +124,11 @@ class Product extends BaseModel {
         this._categoryId = value;
     }
 
-    public get name() {
-        return this._name;
+    public get title() {
+        return this._title;
     }
-    public set name(value) {
-        this._name = value;
+    public set title(value) {
+        this._title = value;
     }
 
     public get slug() {

@@ -1,3 +1,3 @@
 
 
-export interface CategoryRepository {}
+export interface CategoryRepositoryInterface {}

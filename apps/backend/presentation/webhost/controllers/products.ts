@@ -1,12 +1,25 @@
 import type { Request, Response } from 'express';
-import httpStatus from 'http-status';
+import {ProductService} from "#application/services/Product.ts";
+import ApiError from "#webhost/errors/apiError.ts";
 
 
 class ProductController {
-    constructor() {};
+    private productService: ProductService;
+
+    constructor(productService = new ProductService()) {
+        this.productService = productService;
+    };
 
     public async getAllProducts(req: Request, res: Response): Promise<any> {
-        const mode = req.query.mode || "";
+        try {
+            const mode = req.query.mode || "";
+
+            const allProducts = await this.productService.getAllProducts(mode);
+
+            res.json(allProducts);
+        } catch (error) {
+            if (error instanceof ApiError) throw error;
+        }
     };
 
     public async createProduct(req: Request, res: Response): Promise<any> {
@@ -21,23 +34,38 @@ class ProductController {
             categoryId,
             inStock,
         } = req.body;*/
+        try {
+            const command = {
+                merchantId: req.body.merchantId,
+                slug: req.body.slug,
+                title: req.body.title,
+                photo: req.body.mainImage, // Note: Changed mainImage to photo
+                price: req.body.price,
+                description: req.body.description,
+                manufacturer: req.body.manufacturer,
+                categoryId: req.body.categoryId,
+                inStock: req.body.inStock,
+            };
 
-        const command = {
-            merchantId: req.body.merchantId,
-            slug: req.body.slug,
-            title: req.body.title,
-            mainImage: req.body.mainImage,
-            price: req.body.price,
-            description: req.body.description,
-            manufacturer: req.body.manufacturer,
-            categoryId: req.body.categoryId,
-            inStock: req.body.inStock,
-        };
+            const product = await this.productService.createProduct(command);
+
+            res.json(product);
+        } catch (error) {
+            if (error instanceof ApiError) throw error;
+        }
     };
 
     public async getProductById(req: Request, res: Response): Promise<any> {
         /*const { id } = req.params;*/
-        const id = req.params.id;
+        try {
+            const id = req.params.id;
+
+            const product = await this.productService.getProductById(id);
+
+            res.json(product);
+        } catch (error) {
+            if (error instanceof ApiError) throw error;
+        }
     };
     public async updateProduct(req: Request, res: Response): Promise<any> {
         /*const { id } = req.params;
@@ -53,23 +81,40 @@ class ProductController {
             categoryId,
             inStock,
         } = req.body;*/
-        const command = {
-            id: req.params.id,
-            merchantId: req.body.merchantId,
-            slug: req.body.slug,
-            title: req.body.title,
-            mainImage: req.body.mainImage,
-            price: req.body.price,
-            description: req.body.description,
-            manufacturer: req.body.manufacturer,
-            categoryId: req.body.categoryId,
-            inStock: req.body.inStock,
-        };
+        try {
+            const command = {
+                id: req.params.id,
+                merchantId: req.body.merchantId,
+                slug: req.body.slug,
+                title: req.body.title,
+                photo: req.body.mainImage,
+                price: req.body.price,
+                description: req.body.description,
+                manufacturer: req.body.manufacturer,
+                categoryId: req.body.categoryId,
+                inStock: req.body.inStock,
+            };
+
+            const product = await this.productService.updateProduct(command);
+
+            res.json(product);
+        } catch (error) {
+            if (error instanceof ApiError) throw error;
+        }
     };
     public async deleteProduct(req: Request, res: Response): Promise<any> {
         /*const { id } = req.params;*/
-        const id = req.params.id;
+        try {
+            const id = req.params.id;
+
+            const deletedProduct = await this.productService.deleteProduct(id);
+
+            res.json(deletedProduct);
+        } catch (error) {
+            if (error instanceof ApiError) throw error;
+        }
     };
+
 }
 
 export default new ProductController();
