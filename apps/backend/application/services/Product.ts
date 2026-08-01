@@ -110,10 +110,12 @@ export class ProductService implements ProductServiceInterface {
 
         photos.push(ImageFactory.create(command.photo));
 
-        // @ts-ignore
-        command.photo = photos;
+        const newCommand = {
+            id: command.id,
+            photo: photos
+        }
 
-        const createdProductImage = await this.productRepository.createImage(command);
+        const createdProductImage = await this.productRepository.createImage(newCommand);
 
         return ProductMapper.toProductImageDTO(createdProductImage);
     };
