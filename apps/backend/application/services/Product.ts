@@ -2,13 +2,19 @@ import httpStatus from "http-status";
 import {ProductServiceInterface} from "#application/interfaces/ProductInterface.ts";
 import {ProductRepositoryInterface} from "#domain/interfaces/ProductRepository.ts";
 import ProductRepository from "#repositories/ProductRepository.ts";
-import {ProductDTO} from "#application/dto/ProductDTO.ts";
+import {ProductDTO, ProductImageDTO} from "#application/dto/ProductDTO.ts";
 import ApiError from "#webhost/errors/apiError.ts";
 import {ProductMapper} from "#application/mappers/ProductMapper.ts";
-import {createProductCommand, updateProductCommand} from "#application/types/product/command.ts";
+import {
+    createImageCommand,
+    createProductCommand,
+    createProductImageCommand,
+    updateProductCommand
+} from "#application/types/product/command.ts";
 import {ProductFactory} from "#domain/factories/ProductFactory.ts";
 import {MerchantProductFactory} from "#domain/factories/MerchantProductFactory.ts";
 import {MerchantProductRepositoryInterface} from "#domain/interfaces/MerchantProductRepository.ts";
+import {ImageFactory} from "#domain/factories/ImageFactory.ts";
 
 
 export class ProductService implements ProductServiceInterface {
@@ -84,5 +90,31 @@ export class ProductService implements ProductServiceInterface {
         const deletedProduct = await this.productRepository.deleteProduct(id);
 
         return ProductMapper.toDTO(deletedProduct);
+    };
+
+    async getSingleProductImages(id: string): Promise<ProductImageDTO> {
+        const product = await this.productRepository.getProductById(id);
+
+        if (!product) throw new ApiError(httpStatus.BAD_REQUEST, `productId: ${id} doesn't exist.`, "Error");
+
+        return ProductMapper.toProductImageDTO(product);
+    };
+
+
+    async createImage(command: createProductImageCommand): Promise<ProductImageDTO[] | undefined> {
+        const product = await this.productRepository.getProductById(command.id);
+
+        if (!product) throw new ApiError(httpStatus.BAD_REQUEST, `productId: ${command.id} doesn't exist.`, "Error");
+
+        const photos = [];
+
+        photos.push(ImageFactory.create(command.photo));
+
+        // @ts-ignore
+        command.photo = photos;
+
+        const createdProductImage = await this.productRepository.createImage(command);
+
+        return ProductMapper.toProductImageDTO(createdProductImage);
     };
 }

@@ -5,7 +5,7 @@ export interface ProductDTO {
     title: string;
     slug: string;
     manufacturer: string;
-    photo: string;
+    photo?: any[];
     inStock: boolean;
     price: number;
     rating: number;
@@ -18,4 +18,10 @@ export interface ProductDTO {
     merchantProducts?: MerchantProductDTO[];
     category: CategoryDTO;
     orderItems?: OrderItemDTO[];
+}
+
+export interface ProductImageDTO {
+    productID: string;
+    imageID: string;
+    image: string;
 }

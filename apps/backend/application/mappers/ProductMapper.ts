@@ -1,5 +1,5 @@
 import Product from "#domain/models/Product.ts";
-import {ProductDTO} from "#application/dto/ProductDTO.ts";
+import {ProductDTO, ProductImageDTO} from "#application/dto/ProductDTO.ts";
 
 export class ProductMapper {
         /**
@@ -31,5 +31,16 @@ export class ProductMapper {
          */
         public static toDTOList(entities: Product[]): ProductDTO[] {
                 return entities.map(entity => this.toDTO(entity));
+        };
+
+
+        public static toProductImageDTO(entity: Product): ProductImageDTO[] | undefined {
+            return entity?.photo?.map((image) => {
+                return {
+                    productID: entity.id,
+                    imageID: image.imageID,
+                    image: image.image,
+                }
+            });
         };
 }

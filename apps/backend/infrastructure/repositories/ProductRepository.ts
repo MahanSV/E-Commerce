@@ -2,7 +2,7 @@ import prisma from '#context/dbContext/prisma/client.ts';
 import Product from '#models/Product.ts';
 import {BaseRepository} from "#repositories/BaseRepository.ts";
 import {ProductRepositoryInterface} from "#domain/interfaces/ProductRepository.ts";
-import {updateProductCommand} from "#application/types/product/command.ts";
+import {createImageCommand, updateProductCommand} from "#application/types/product/command.ts";
 
 
 export default class ProductRepository extends BaseRepository<Product> implements ProductRepositoryInterface {
@@ -114,4 +114,17 @@ export default class ProductRepository extends BaseRepository<Product> implement
 
         return dataModel && Product.createFromSnapshot(dataModel);
     };
+
+    async createImage(command: createImageCommand): Promise<Product> {
+        const dataModel = await prisma.product.update({
+            where: {
+                id: command.id
+            },
+            data: {
+                photo: command.photo,
+            }
+        });
+
+        return dataModel && Product.createFromSnapshot(dataModel);
+    }
 };

@@ -1,5 +1,5 @@
-import {ProductDTO} from "#application/dto/ProductDTO.ts";
-import {createProductCommand, updateProductCommand} from "#application/types/product/command.ts";
+import {ProductDTO, ProductImageDTO} from "#application/dto/ProductDTO.ts";
+import {createImageCommand, createProductCommand, updateProductCommand} from "#application/types/product/command.ts";
 
 
 export interface ProductServiceInterface {
@@ -10,4 +10,6 @@ export interface ProductServiceInterface {
     getProductById(id: string): Promise<ProductDTO>
     updateProduct(command: updateProductCommand): Promise<ProductDTO>
     deleteProduct(id: string): Promise<ProductDTO>
+    getSingleProductImages(id: string): Promise<ProductImageDTO>
+    createImage(command: createImageCommand): Promise<ProductImageDTO>
 }

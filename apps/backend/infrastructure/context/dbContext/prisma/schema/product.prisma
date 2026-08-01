@@ -9,10 +9,10 @@ model Category {
 model Product {
   id           String  @id @default(uuid())
   categoryId   String
-  title         String
+  title        String
   slug         String
   manufacturer String
-  photo        String
+  photo        Json?
   inStock      Boolean @default(false)
   price        Int     @default(0)
   rating       Int     @default(0)

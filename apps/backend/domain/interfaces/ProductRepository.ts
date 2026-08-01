@@ -1,5 +1,5 @@
 import Product from "#models/Product.ts";
-import {updateProductCommand} from "#application/types/product/command.ts";
+import {createImageCommand, updateProductCommand} from "#application/types/product/command.ts";
 
 
 export interface ProductRepositoryInterface {
@@ -10,4 +10,5 @@ export interface ProductRepositoryInterface {
     getProductById(id: string): Promise<Product | null>
     updateProduct(command: updateProductCommand): Promise<Product>
     deleteProduct(id: string): Promise<Product>
+    createImage(command: createImageCommand): Promise<Product>
 }

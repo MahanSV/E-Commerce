@@ -12,7 +12,7 @@ export interface ProductConstructorParams {
     title: string;
     slug: string;
     manufacturer: string;
-    photo: string;
+    photo?: Array<{imageID: string, image: string}>;
     inStock: boolean;
     price: number;
     rating: number;
@@ -29,7 +29,7 @@ export interface ProductSnapshotParams {
     title: string;
     slug: string;
     manufacturer: string;
-    photo: string;
+    photo?: Array<{imageID: string, image: string}>;
     inStock: boolean;
     price: number;
     rating: number;
@@ -50,7 +50,7 @@ class Product extends BaseModel {
     private _title!: string;
     private _slug!: string;
     private _manufacturer!: string;
-    private _photo!: string;
+    private _photo?: Array<{imageID: string, image: string}>;
     private _inStock!: boolean;
     private _price!: number;
     private _rating!: number;
