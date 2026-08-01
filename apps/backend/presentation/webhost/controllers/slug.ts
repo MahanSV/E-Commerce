@@ -1,13 +1,26 @@
 import type {Request, Response} from "express";
-import httpStatus from 'http-status';
+import ApiError from "#webhost/errors/apiError.ts";
+import {ProductService} from "#application/services/Product.ts";
 
 
 class SlugController {
-    constructor() {};
+    private productService: ProductService;
+
+    constructor(productService = new ProductService()) {
+        this.productService = productService;
+    };
 
     public async getProductBySlug(req: Request, res: Response): Promise<any> {
         /*const { slug } = req.params;*/
-        const slug = req.params.slug;
+        try {
+            const slug = req.params.slug;
+
+            const productSlug = await this.productService.getProductBySlug(slug);
+
+            res.json(productSlug);
+        } catch (error) {
+            if (error instanceof ApiError) throw error;
+        }
     };
 }
 
