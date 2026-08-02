@@ -37,7 +37,6 @@ apps/frontend/next-env.d.ts
 
 # Database backups
 /backups/
-*.sql
 *.dump
 *.backup
 

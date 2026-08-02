@@ -23,10 +23,11 @@ model Notification {
   id         String               @id @default(uuid())
   userId     String
   title      String
-  description String?
+  description String
+  type       NotificationType
   isRead     Boolean              @default(false)
   priority   NotificationPriority
-  type       NotificationType
+  metadata  Json?
   createdAt  DateTime             @default(now())
   updatedAt  DateTime             @updatedAt
 
