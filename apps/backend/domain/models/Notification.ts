@@ -6,10 +6,11 @@ export interface NotificationConstructorParams {
     id: string;
     userId: string;
     title: string;
-    description?: string;
+    description: string;
     isRead: boolean;
     priority: string;
     type: string;
+    metadata?: any;
     createdAt: Date;
     updatedAt: Date;
 }
@@ -18,10 +19,11 @@ export interface NotificationSnapshotParams {
     id: string;
     userId: string;
     title: string;
-    description?: string;
+    description: string;
     isRead: boolean;
     priority: string;
     type: string;
+    metadata?: any;
     createdAt: Date;
     updatedAt: Date;
     user: UserSnapshotParams;
@@ -30,10 +32,11 @@ export interface NotificationSnapshotParams {
 class Notification extends BaseModel {
     private _userId!: string;
     private _title!: string;
-    private _description?: string;
+    private _description!: string;
     private _isRead!: boolean;
     private _priority!: string;
     private _type!: string;
+    private _metadata?: any;
     private _createdAt!: Date;
     private _updatedAt!: Date;
     private _user!: User;
@@ -55,6 +58,7 @@ class Notification extends BaseModel {
         notification.isRead = params.isRead;
         notification.priority = params.priority;
         notification.type = params.type;
+        notification.metadata = params.metadata;
         notification.createdAt = params.createdAt;
         notification.updatedAt = params.updatedAt;
 
@@ -71,6 +75,7 @@ class Notification extends BaseModel {
         notification.isRead = snapshot.isRead;
         notification.priority = snapshot.priority;
         notification.type = snapshot.type;
+        notification.metadata = snapshot.metadata;
         notification.createdAt = snapshot.createdAt;
         notification.updatedAt = snapshot.updatedAt;
         notification.user = snapshot.user && User.createFromSnapshot(snapshot.user);
@@ -118,6 +123,13 @@ class Notification extends BaseModel {
     }
     public set type(value) {
         this._type = value;
+    }
+
+    public get metadata() {
+        return this._metadata;
+    }
+    public set metadata(value) {
+        this._metadata = value;
     }
 
     public get createdAt() {
