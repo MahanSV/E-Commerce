@@ -1,3 +1,4 @@
+import {NotificationPriority, NotificationType } from '#domain/enums/notification.ts';
 import BaseModel from '#models/base/baseModel.ts';
 import User, {UserSnapshotParams} from "#models/User.ts";
 
@@ -8,8 +9,8 @@ export interface NotificationConstructorParams {
     title: string;
     description: string;
     isRead: boolean;
-    priority: string;
-    type: string;
+    priority: NotificationPriority;
+    type: NotificationType;
     metadata?: any;
     createdAt: Date;
     updatedAt: Date;
@@ -21,8 +22,8 @@ export interface NotificationSnapshotParams {
     title: string;
     description: string;
     isRead: boolean;
-    priority: string;
-    type: string;
+    priority: NotificationPriority;
+    type: NotificationType;
     metadata?: any;
     createdAt: Date;
     updatedAt: Date;
@@ -34,8 +35,8 @@ class Notification extends BaseModel {
     private _title!: string;
     private _description!: string;
     private _isRead!: boolean;
-    private _priority!: string;
-    private _type!: string;
+    private _priority!: NotificationPriority;
+    private _type!: NotificationType;
     private _metadata?: any;
     private _createdAt!: Date;
     private _updatedAt!: Date;

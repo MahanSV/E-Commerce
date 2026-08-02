@@ -1,11 +1,11 @@
-enum NotificationType {
+export enum NotificationType {
     ORDER_UPDATE = "ORDER_UPDATE",
     PAYMENT_STATUS = "PAYMENT_STATUS",
     PROMOTION = "PROMOTION",
     SYSTEM_ALERT = "SYSTEM_ALERT",
 }
 
-enum NotificationPriority {
+export enum NotificationPriority {
     LOW = "LOW",
     NORMAL = "NORMAL",
     HIGH = "HIGH",
