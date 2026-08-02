@@ -1,5 +1,5 @@
 import {UserType} from "#domain/enums/userType.js";
-import {NotificationDTO} from "#application/dto/NotificationDTO.js";
+import {NotificationDTO} from "#application/dto/NotificationDTO.ts";
 
 
 export interface UserDTO {
