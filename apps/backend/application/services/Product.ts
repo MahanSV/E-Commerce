@@ -52,6 +52,8 @@ export class ProductService implements ProductServiceInterface {
 
         if (!addProduct) throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, "Failed to create product.", "Error");
 
+        // TODO: Need's To check Merchant exist!
+
         const merchantProductEntity = MerchantProductFactory.create(command.merchantId, entity.id);
 
         const addMerchantProduct = await this.merchantProductRepository.createMerchantProduct(
