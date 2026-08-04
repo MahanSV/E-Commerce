@@ -12,3 +12,10 @@ export type updateUserCommand = {
     password: string;
     role: UserType;
 };
+
+export type createCustomerCommand = {
+    name: string;
+    lastName: string;
+    email: string;
+    mobile: string;
+};
