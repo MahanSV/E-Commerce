@@ -25,6 +25,7 @@ export class OrderFactory {
             description: command.description,
             quantity: 0,
             // Next Month calculated for deliversAt
+            // TODO: Use date package instead.
             deliversAt: (d => (x => (d.setMonth(d.getMonth() + 1), d.getDate() !== x && d.setDate(0), d))(d.getDate()))(new Date()),
             createdAt: new Date(),
             updatedAt: new Date()
