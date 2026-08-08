@@ -16,7 +16,7 @@ export class OrderItemFactory {
             orderId: command.orderId,
             productId: command.productId,
             quantity: command.quantity,
-            price: command.price,
+            price: command.price || 0,
         });
     };
 }
