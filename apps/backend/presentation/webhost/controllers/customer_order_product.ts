@@ -1,5 +1,5 @@
 import type { Request, Response } from 'express';
-import ApiError from "#webhost/errors/apiError.js";
+import ApiError from "#webhost/errors/apiError.ts";
 import {OrderItemService} from "#application/services/OrderItem.ts";
 
 class CustomerOrderProductController {
