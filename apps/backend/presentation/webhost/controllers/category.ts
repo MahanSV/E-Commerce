@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express';
 import CategoryService from "#application/services/Category.ts";
-import ApiError from "#webhost/errors/apiError.js";
+import ApiError from "#webhost/errors/apiError.ts";
 
 
 class CategoryController {

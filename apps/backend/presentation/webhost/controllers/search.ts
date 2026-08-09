@@ -1,7 +1,7 @@
 import type {Request, Response} from "express";
 import httpStatus from 'http-status';
-import {ProductService} from "#application/services/Product.js";
-import ApiError from "#webhost/errors/apiError.js";
+import {ProductService} from "#application/services/Product.ts";
+import ApiError from "#webhost/errors/apiError.ts";
 
 class SearchController {
     private productService: ProductService;

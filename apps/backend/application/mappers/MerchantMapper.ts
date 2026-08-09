@@ -1,6 +1,6 @@
 import {MerchantDTO} from "#application/dto/MerchantDTO.ts";
 import Merchant from "#models/Merchant.ts";
-import {ProductMapper} from "#application/mappers/ProductMapper.js";
+import {ProductMapper} from "#application/mappers/ProductMapper.ts";
 
 export class MerchantMapper {
     /**

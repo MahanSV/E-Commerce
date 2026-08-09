@@ -1,10 +1,10 @@
 import { BulkUploadRepositoryInterface } from "#domain/interfaces/BulkUploadRepository.ts";
 import {BaseRepository} from "#repositories/BaseRepository.ts";
 
-export default class BulkUploadRepository extends BaseRepository<BulkUpload> implements BulkUploadRepositoryInterface {
-    constructor() {
+export default class BulkUploadRepository /*extends BaseRepository<BulkUpload> implements BulkUploadRepositoryInterface*/ {
+    /*constructor() {
       super(BulkUpload.createFromSnapshot);
-    };
+    };*/
 
     async uploadCsvAndCreateBatch(csvFile: any): Promise<any> {};
 
