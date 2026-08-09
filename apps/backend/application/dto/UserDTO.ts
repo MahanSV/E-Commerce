@@ -1,5 +1,6 @@
-import {UserType} from "#domain/enums/userType.js";
+import {UserType} from "#domain/enums/userType.ts";
 import {NotificationDTO} from "#application/dto/NotificationDTO.ts";
+import {CustomerOrderDTO} from "#application/dto/CustomerOrderDTO.ts";
 
 
 export interface UserDTO {
@@ -13,7 +14,7 @@ export interface UserDTO {
     status: string;
     createdAt?: Date;
     updatedAt?: Date;
-    orders?: OrderDTO[];
+    orders?: CustomerOrderDTO[];
     notifications?: NotificationDTO[];
     wishlists?: WishListDTO[];
 }

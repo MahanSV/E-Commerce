@@ -1,3 +1,5 @@
+import {CategoryDTO} from "#application/dto/CategoryDTO.ts";
+import {OrderItemDTO} from "#application/dto/OrderItemDTO.ts";
 
 export interface ProductDTO {
     id: string;
