@@ -1,6 +1,7 @@
 import {CategoryDTO} from "#application/dto/CategoryDTO.ts";
 import {OrderItemDTO} from "#application/dto/OrderItemDTO.ts";
 import {WishlistDTO} from "#application/dto/WishListDTO.ts";
+import {MerchantProductDTO} from "#application/dto/MerchantProductDTO.ts";
 
 export interface ProductDTO {
     id: string;
