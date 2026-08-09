@@ -1,6 +1,6 @@
 import BaseModel from "#models/base/baseModel.ts";
 import MerchantProduct, { MerchantProductSnapshotParams} from "#models/MerchantProduct.ts";
-import {encrypt} from "#substructure/utils/encryption.js";
+import {encrypt} from "#substructure/utils/encryption.ts";
 
 export interface MerchantConstructorParams {
     id: string;
@@ -37,8 +37,8 @@ class Merchant extends BaseModel {
     private _address?: string;
     private _status!: string;
     private _password!: string;
-    private _createdAt?: Date;
-    private _updatedAt?: Date;
+    private _createdAt!: Date;
+    private _updatedAt!: Date;
     private _merchantProducts?: MerchantProduct[];
 
     static create(params: MerchantConstructorParams): Merchant {
