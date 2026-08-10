@@ -12,7 +12,7 @@ export class OrderItemMapper {
         return {
             id: entity.id,
             quantity: entity.quantity,
-            order: OrderMapper.toCustomerOrderDTO(entity.order),
+            customerOrder: OrderMapper.toCustomerOrderDTO(entity.order),
             price: entity.price,
             products: ProductMapper.toDTO(entity.product),
         };
