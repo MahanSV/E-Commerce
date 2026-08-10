@@ -1,5 +1,6 @@
 import Product from "#domain/models/Product.ts";
 import {ProductDTO, ProductImageDTO} from "#application/dto/ProductDTO.ts";
+import {CategoryMapper} from "#application/mappers/CategoryMapper.js";
 
 export class ProductMapper {
         /**
@@ -7,23 +8,26 @@ export class ProductMapper {
          */
         public static toDTO(entity: Product): ProductDTO {
                 return {
-                        id: entity.id,
-                        categoryId: entity.categoryId,
-                        title: entity.title,
-                        slug: entity.slug,
-                        manufacturer: entity.manufacturer,
-                        photo: entity.photo,
-                        inStock: entity.inStock,
-                        price: entity.price,
-                        rating: entity.rating,
-                        quantity: entity.quantity,
-                        SKU: entity.SKU,
-                        socialLink: entity.socialLink,
-                        description: entity.description,
-                        information: entity.information,
-                        category: CategoryDTO,
-                        /*merchantProducts?: [],
-                        orderItems?: [],*/
+
+                    id: entity.id,
+                    title: entity.title,
+                    slug: entity.slug,
+                    mainImage: entity.mainImage,
+                    manufacturer: entity.manufacturer,
+                    photo: entity.photo,
+                    inStock: entity.inStock,
+                    price: entity.price,
+                    rating: entity.rating,
+                    quantity: entity.quantity,
+                    categoryId: entity.categoryId,
+                    merchantId: entity.merchantProducts?.map(item => item.merchantId)[0],
+                    SKU: entity.SKU,
+                    socialLink: entity.socialLink,
+                    description: entity.description,
+                    information: entity.information,
+                    category: CategoryMapper.toDTO(entity.category),
+                    /*merchantProducts?: [],
+                    orderItems?: [],*/
                 };
         };
         /**

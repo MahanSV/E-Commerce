@@ -17,6 +17,7 @@ export default class ProductRepository extends BaseRepository<Product> implement
             },
             include: {
                 category: true,
+                merchantProducts: true,
             }
         });
 
@@ -38,6 +39,9 @@ export default class ProductRepository extends BaseRepository<Product> implement
                         }
                     }
                 ]
+            },
+            include: {
+                merchantProducts: true,
             }
         });
 
@@ -45,7 +49,11 @@ export default class ProductRepository extends BaseRepository<Product> implement
     };
 
     async getAllProducts(): Promise<Product[]> {
-        const dataModels = await prisma.product.findMany();
+        const dataModels = await prisma.product.findMany({
+            include: {
+            merchantProducts: true,
+        }
+        });
 
         return dataModels?.map(data => Product.createFromSnapshot(data));
     };
@@ -58,6 +66,7 @@ export default class ProductRepository extends BaseRepository<Product> implement
                 categoryId: productModel?.categoryId,
                 title: productModel?.title,
                 slug: productModel?.slug,
+                mainImage: productModel?.mainImage,
                 manufacturer: productModel?.manufacturer,
                 photo: productModel?.photo,
                 inStock: productModel?.inStock,
@@ -77,6 +86,7 @@ export default class ProductRepository extends BaseRepository<Product> implement
             },
             include: {
                 category: true,
+                merchantProducts: true,
             }
         });
 

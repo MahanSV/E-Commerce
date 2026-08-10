@@ -39,7 +39,7 @@ class ProductController {
                 merchantId: req.body.merchantId,
                 slug: req.body.slug,
                 title: req.body.title,
-                photo: req.body.mainImage, // Note: Changed mainImage to photo
+                mainImage: req.body.mainImage,
                 price: req.body.price,
                 description: req.body.description,
                 manufacturer: req.body.manufacturer,
@@ -87,7 +87,7 @@ class ProductController {
                 merchantId: req.body.merchantId,
                 slug: req.body.slug,
                 title: req.body.title,
-                photo: req.body.mainImage,
+                mainImage: req.body.mainImage,
                 price: req.body.price,
                 description: req.body.description,
                 manufacturer: req.body.manufacturer,

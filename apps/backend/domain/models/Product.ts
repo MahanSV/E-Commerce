@@ -11,9 +11,10 @@ export interface ProductConstructorParams {
     categoryId: string;
     title: string;
     slug: string;
+    mainImage: string;
     manufacturer: string;
     photo?: Array<{imageID: string, image: string}>;
-    inStock: boolean;
+    inStock: number;
     price: number;
     rating: number;
     quantity: number;
@@ -28,9 +29,10 @@ export interface ProductSnapshotParams {
     categoryId: string;
     title: string;
     slug: string;
+    mainImage: string;
     manufacturer: string;
     photo?: Array<{imageID: string, image: string}>;
-    inStock: boolean;
+    inStock: number;
     price: number;
     rating: number;
     quantity: number;
@@ -49,9 +51,10 @@ class Product extends BaseModel {
     private _categoryId!: string;
     private _title!: string;
     private _slug!: string;
+    private _mainImage!: string;
     private _manufacturer!: string;
     private _photo?: Array<{imageID: string, image: string}>;
-    private _inStock!: boolean;
+    private _inStock!: number;
     private _price!: number;
     private _rating!: number;
     private _quantity!: number;
@@ -78,6 +81,7 @@ class Product extends BaseModel {
         product.categoryId = params.categoryId;
         product.title = params.title;
         product.slug = params.slug;
+        product.mainImage = params.mainImage;
         product.manufacturer = params.manufacturer;
         product.photo = params.photo;
         product.inStock = params.inStock;
@@ -99,6 +103,7 @@ class Product extends BaseModel {
         product.categoryId = snapshot.categoryId;
         product.title = snapshot.title;
         product.slug = snapshot.slug;
+        product.mainImage = snapshot.mainImage;
         product.manufacturer = snapshot.manufacturer;
         product.photo = snapshot.photo;
         product.inStock = snapshot.inStock;
@@ -136,6 +141,13 @@ class Product extends BaseModel {
     }
     public set slug(value) {
         this._slug = value;
+    }
+
+    public get mainImage() {
+        return this._mainImage;
+    }
+    public set mainImage(value) {
+        this._mainImage = value;
     }
 
     public get manufacturer() {
