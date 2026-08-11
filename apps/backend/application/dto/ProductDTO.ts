@@ -5,18 +5,20 @@ import {MerchantProductDTO} from "#application/dto/MerchantProductDTO.ts";
 
 export interface ProductDTO {
     id: string;
-    categoryId: string;
-    title: string;
     slug: string;
-    manufacturer: string;
-    photo?: any[];
-    inStock: boolean;
+    title: string;
+    mainImage: string;
     price: number;
     rating: number;
+    description?: string;
+    manufacturer: string;
+    inStock: number;
+    photo?: any[];
+    merchantId?: string;
+    categoryId: string;
     quantity: number;
     SKU?: string;
     socialLink?: string;
-    description?: string;
     information?: string;
     wishlists?: WishlistDTO[];
     merchantProducts?: MerchantProductDTO[];

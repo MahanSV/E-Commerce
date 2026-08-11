@@ -6,6 +6,6 @@ export interface OrderItemDTO {
     id: string;
     quantity: number;
     price: number;
-    order: CustomerOrderDTO;
+    customerOrder: CustomerOrderDTO;
     products: ProductDTO;
 }

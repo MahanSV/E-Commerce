@@ -4,12 +4,13 @@ export type createProductCommand = {
     merchantId: string;
     slug: string;
     title: string;
+    mainImage: string;
     photo?: Array<{imageID: string, image: string}>;
     price: number;
     description: string;
     manufacturer: string;
     categoryId: string;
-    inStock?: boolean;
+    inStock?: number;
 };
 
 export type updateProductCommand = {
@@ -17,12 +18,13 @@ export type updateProductCommand = {
     merchantId: string;
     slug: string;
     title: string;
+    mainImage: string;
     photo?: Array<{imageID: string, image: string}>;
     price: number;
     description: string;
     manufacturer: string;
     categoryId: string;
-    inStock?: boolean;
+    inStock?: number;
 };
 
 export type createProductImageCommand = {

@@ -11,9 +11,10 @@ model Product {
   categoryId   String
   title        String
   slug         String
+  mainImage    String
   manufacturer String
   photo        Json?
-  inStock      Boolean @default(false)
+  inStock      Int     @default(1)
   price        Int     @default(0)
   rating       Int     @default(0)
   quantity     Int
