@@ -33,7 +33,7 @@ export interface BulkUploadItemSnapshotParams {
     inStock: number;
     status: string;
     error?: string;
-    batch?: BulkUploadBatchSnapshotParams;
+    batch: BulkUploadBatchSnapshotParams;
     product?: ProductSnapshotParams;
 }
 
@@ -50,7 +50,7 @@ class BulkUploadItem extends BaseModel {
     private _inStock!: number;
     private _status!: string;
     private _error?: string;
-    private _batch?: BulkUploadBatch;
+    private _batch!: BulkUploadBatch;
     private _product?: Product;
 
     constructor() {

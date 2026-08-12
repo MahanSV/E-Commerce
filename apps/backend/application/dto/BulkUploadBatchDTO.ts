@@ -9,6 +9,6 @@ export interface BulkUploadBatchDTO {
     itemCount: number;
     errorCount: number;
     userId?: string;
-    items?: BulkUploadItemDTO;
+    items?: BulkUploadItemDTO[];
     user?: UserDTO;
 }
