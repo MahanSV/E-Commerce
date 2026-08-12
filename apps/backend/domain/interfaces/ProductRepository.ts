@@ -8,6 +8,7 @@ export interface ProductRepositoryInterface {
     getAllProducts(): Promise<Product[]>
     createProduct(product: Product): Promise<Product>
     getProductById(id: string): Promise<Product | null>
+    getAllProductsByCategoryId(categoryId: string): Promise<Product[]>
     updateProduct(command: updateProductCommand): Promise<Product>
     deleteProduct(id: string): Promise<Product>
     updateProductImage(command: createImageCommand): Promise<Product>

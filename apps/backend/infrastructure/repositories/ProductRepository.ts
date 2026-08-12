@@ -58,6 +58,16 @@ export default class ProductRepository extends BaseRepository<Product> implement
         return dataModels?.map(data => Product.createFromSnapshot(data));
     };
 
+    async getAllProductsByCategoryId(categoryId: string): Promise<Product[]> {
+        const dataModels = await prisma.product.findMany({
+            where: {
+                categoryId
+            }
+        });
+
+        return dataModels?.map(data => Product.createFromSnapshot(data));
+    };
+
 
     async createProduct(productModel: Product): Promise<Product> {
         const dataModel = await prisma.product.create({

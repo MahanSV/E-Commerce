@@ -5,12 +5,16 @@ import ApiError from '#webhost/errors/apiError.ts';
 import httpStatus from 'http-status';
 import {CategoryDTO} from "#application/dto/CategoryDTO.ts";
 import {CategoryMapper} from "#application/mappers/CategoryMapper.ts";
+import { ProductRepositoryInterface } from "#domain/interfaces/ProductRepository.ts";
+import ProductRepository from "#repositories/ProductRepository.ts";
 
 export default class CategoryService implements CategoryServiceInterface {
     private categoryRepository: CategoryRepositoryInterface;
+    private productRepository: ProductRepositoryInterface;
 
-    constructor(categoryRepository: CategoryRepositoryInterface = new CategoryRepository()) {
+    constructor(categoryRepository: CategoryRepositoryInterface = new CategoryRepository(), productRepository: ProductRepositoryInterface = new ProductRepository()) {
         this.categoryRepository = categoryRepository;
+        this.productRepository = productRepository;
     };
 
     async getAllCategories(): Promise<CategoryDTO[]> {
@@ -54,7 +58,9 @@ export default class CategoryService implements CategoryServiceInterface {
 
         if (!category) throw new ApiError(httpStatus.BAD_REQUEST, "Category doesn't exist.", "Error");
 
-        // TODO: If Product exist for category avoid to delete category.
+        const matchedProducts = await this.productRepository.getAllProductsByCategoryId(id);
+
+        if (matchedProducts.length > 0) throw new ApiError(httpStatus.BAD_REQUEST, "Unable to delete category with products.", "Error");
 
         const deleteCategory = await this.categoryRepository.deleteCategory(id);
 
