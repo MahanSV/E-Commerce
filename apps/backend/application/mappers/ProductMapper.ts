@@ -1,6 +1,10 @@
 import Product from "#domain/models/Product.ts";
 import {ProductDTO, ProductImageDTO} from "#application/dto/ProductDTO.ts";
-import {CategoryMapper} from "#application/mappers/CategoryMapper.js";
+import {CategoryMapper} from "#application/mappers/CategoryMapper.ts";
+import {OrderItemMapper} from "#application/mappers/OrderItemMapper.ts";
+import {BulkUploadItemMapper} from "#application/mappers/BulkUploadItemMapper.ts";
+import {WishlistMapper} from "#application/mappers/WishlistMapper.ts";
+import {MerchantProductMapper} from "#application/mappers/MerchantProductMapper.ts";
 
 export class ProductMapper {
         /**
@@ -8,29 +12,28 @@ export class ProductMapper {
          */
         public static toDTO(entity: Product): ProductDTO {
                 return {
-
                     id: entity.id,
-                    title: entity.title,
                     slug: entity.slug,
+                    title: entity.title,
                     mainImage: entity.mainImage,
-                    manufacturer: entity.manufacturer,
-                    photo: entity.photo,
-                    inStock: entity.inStock,
                     price: entity.price,
                     rating: entity.rating,
-                    quantity: entity.quantity,
+                    description: entity.description,
+                    manufacturer: entity.manufacturer,
+                    inStock: entity.inStock,
+                    photo: entity.photo,
+                    merchantId: entity.merchantProducts?.map(mp => mp.merchantId)[0],
                     categoryId: entity.categoryId,
-                    merchantId: entity.merchantProducts?.map(item => item.merchantId)[0],
+                    quantity: entity.quantity,
                     SKU: entity.SKU,
                     socialLink: entity.socialLink,
-                    description: entity.description,
                     information: entity.information,
+                    wishlists: entity.wishlists ? WishlistMapper.toDTOList(entity.wishlists) : [],
+                    merchantProducts: entity.merchantProducts ? MerchantProductMapper.toDTOList(entity.merchantProducts) : [],
                     category: CategoryMapper.toDTO(entity.category),
-                    /*merchantProducts?: [],
-                    orderItems?: [],*/
-                    // bulkUploadItems: entity.bulkUploadItems,
+                    orderItems: entity.orderItems ? OrderItemMapper.toOrderItemDTOList(entity.orderItems) : [],
+                    bulkUploadItems: entity.bulkUploadItems ? BulkUploadItemMapper.toDTOList(entity.bulkUploadItems) : [],
                 };
-                // TODO: Need's to complete
         };
         /**
          * Maps a list of domain entities to DTOs
