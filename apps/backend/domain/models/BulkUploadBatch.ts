@@ -1,12 +1,13 @@
 import BaseModel from "#models/base/baseModel.ts";
 import User, {UserSnapshotParams} from "#models/User.ts";
 import BulkUploadItem, {BulkUploadItemSnapshotParams} from "#models/BulkUploadItem.ts";
+import {BulkUploadBatchStatus} from "#domain/enums/bulkUploadBatchStatus.ts";
 
 export interface BulkUploadBatchConstructorParams {
     id: string;
     fileName?: string;
     createdAt: Date;
-    status: string;
+    status: BulkUploadBatchStatus;
     itemCount: number;
     errorCount: number;
     userId?: string;
@@ -16,7 +17,7 @@ export interface BulkUploadBatchSnapshotParams {
     id: string;
     fileName?: string;
     createdAt: Date;
-    status: string;
+    status: BulkUploadBatchStatus;
     itemCount: number;
     errorCount: number;
     userId?: string;
@@ -28,7 +29,7 @@ export interface BulkUploadBatchSnapshotParams {
 class BulkUploadBatch extends BaseModel {
     private _fileName?: string;
     private _createdAt!: Date;
-    private _status!: string;
+    private _status!: BulkUploadBatchStatus;
     private _itemCount!: number;
     private _errorCount!: number;
     private _userId?: string;

@@ -1,5 +1,6 @@
 import {ProductDTO} from "#application/dto/ProductDTO.ts";
 import {BulkUploadBatchDTO} from "#application/dto/BulkUploadBatchDTO.ts";
+import {BulkUploadItemStatus} from "#domain/enums/bulkUploadItemStatus.ts";
 
 
 export interface BulkUploadItemDTO {
@@ -14,7 +15,7 @@ export interface BulkUploadItemDTO {
     mainImage?: string;
     categoryId: string;
     inStock: number;
-    status: string;
+    status: BulkUploadItemStatus;
     error?: string;
     batch: BulkUploadBatchDTO;
     product?: ProductDTO

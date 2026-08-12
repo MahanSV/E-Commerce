@@ -1,6 +1,7 @@
 import BaseModel from "#models/base/baseModel.ts";
 import Product, {ProductSnapshotParams} from "#models/Product.ts";
 import BulkUploadBatch, {BulkUploadBatchSnapshotParams} from "#models/BulkUploadBatch.ts";
+import {BulkUploadItemStatus} from "#domain/enums/bulkUploadItemStatus.ts";
 
 
 export interface BulkUploadItemConstructorParams {
@@ -15,7 +16,7 @@ export interface BulkUploadItemConstructorParams {
     mainImage?: string;
     categoryId: string;
     inStock: number;
-    status: string;
+    status: BulkUploadItemStatus;
     error?: string;
 }
 
@@ -31,7 +32,7 @@ export interface BulkUploadItemSnapshotParams {
     mainImage?: string;
     categoryId: string;
     inStock: number;
-    status: string;
+    status: BulkUploadItemStatus;
     error?: string;
     batch: BulkUploadBatchSnapshotParams;
     product?: ProductSnapshotParams;
@@ -48,7 +49,7 @@ class BulkUploadItem extends BaseModel {
     private _mainImage?: string;
     private _categoryId!: string;
     private _inStock!: number;
-    private _status!: string;
+    private _status!: BulkUploadItemStatus;
     private _error?: string;
     private _batch!: BulkUploadBatch;
     private _product?: Product;
