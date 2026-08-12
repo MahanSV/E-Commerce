@@ -2,6 +2,8 @@ import {UserDTO} from "#application/dto/UserDTO.ts";
 import User from "#domain/models/User.ts";
 import {OrderMapper} from "#application/mappers/OrderMapper.ts";
 import {NotificationMapper} from "#application/mappers/NotificationMapper.ts";
+import {WishlistMapper} from "#application/mappers/WishlistMapper.ts";
+import {BulkUploadBatchMapper} from "#application/mappers/BulkUploadBatchMapper.ts";
 
 
 export class UserMapper {
@@ -14,18 +16,16 @@ export class UserMapper {
                         name: entity.name,
                         lastName: entity.lastName,
                         email: entity.email,
-                        // password: entity.password,
                         role: entity.role,
                         mobile: entity.mobile,
                         status: entity.status,
                         createdAt: entity.createdAt,
                         updatedAt: entity.updatedAt,
-                        orders: entity.orders?.length ? OrderMapper.toCustomerOrderDTOList(entity.orders) : [],
-                        notifications: entity.notifications?.length ? NotificationMapper.toDTOList(entity.notifications) : [],
-                        // wishlists: entity.wishlists,
-                        // bulkUploadBatches?: BulkUploadBatchDTO[];
+                        orders: entity.orders ? OrderMapper.toCustomerOrderDTOList(entity.orders) : undefined,
+                        notifications: entity.notifications ? NotificationMapper.toDTOList(entity.notifications) : undefined,
+                        wishlists: entity.wishlists ? WishlistMapper.toDTOList(entity.wishlists) : undefined,
+                        bulkUploadBatches: entity.bulkUploadBatches ? BulkUploadBatchMapper.toDTOList(entity.bulkUploadBatches) : undefined,
                 };
-                // TODO: Need's to complete!
         };
         /**
          * Maps a list of domain entities to DTOs
