@@ -15,15 +15,23 @@ import {MerchantProductFactory} from "#domain/factories/MerchantProductFactory.t
 import {MerchantProductRepositoryInterface} from "#domain/interfaces/MerchantProductRepository.ts";
 import {ImageFactory} from "#domain/factories/ImageFactory.ts";
 import MerchantProductRepository from "#repositories/MerchantProductRepository.ts";
+import { MerchantRepositoryInterface } from "#domain/interfaces/MerchantRepository.ts";
+import MerchantRepository from "#repositories/MerchantRepository.ts";
 
 
 export class ProductService implements ProductServiceInterface {
     private productRepository: ProductRepositoryInterface;
     private merchantProductRepository: MerchantProductRepositoryInterface;
+    private merchantRepository: MerchantRepositoryInterface;
 
-    constructor(productRepository: ProductRepositoryInterface = new ProductRepository(), merchantProductRepository: MerchantProductRepositoryInterface = new MerchantProductRepository()) {
+    constructor(
+        productRepository: ProductRepositoryInterface = new ProductRepository(),
+        merchantProductRepository: MerchantProductRepositoryInterface = new MerchantProductRepository(),
+        merchantRepository: MerchantRepositoryInterface = new MerchantRepository()
+    ) {
         this.productRepository = productRepository;
         this.merchantProductRepository = merchantProductRepository;
+        this.merchantRepository = merchantRepository;
     };
 
     async getProductBySlug(slug: string): Promise<ProductDTO[]> {
@@ -46,13 +54,15 @@ export class ProductService implements ProductServiceInterface {
     };
 
     async createProduct(command: createProductCommand): Promise<ProductDTO> {
+        const matchedToMerchant = await this.merchantRepository.getMerchantById(command.merchantId);
+
+        if (!matchedToMerchant) throw new ApiError(httpStatus.BAD_REQUEST, "Merchant doesn't exist.", "Error");
+
         const entity = ProductFactory.create(command);
 
         const addProduct = await this.productRepository.createProduct(entity);
 
         if (!addProduct) throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, "Failed to create product.", "Error");
-
-        // TODO: Need's To check Merchant exist!
 
         const merchantProductEntity = MerchantProductFactory.create(command.merchantId, entity.id);
 
