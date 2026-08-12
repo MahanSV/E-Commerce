@@ -4,6 +4,7 @@ import Order, {OrderSnapshotParams} from "#models/Order.ts";
 import Notification, {NotificationSnapshotParams} from "#models/Notification.ts";
 import WishList, {WishListSnapshotParams} from "#models/WishList.ts";
 import {encrypt} from "#substructure/utils/encryption.ts";
+import BulkUploadBatch, {BulkUploadBatchSnapshotParams} from "#models/BulkUploadBatch.ts";
 
 export interface UserConstructorParams {
     id: string;
@@ -32,6 +33,7 @@ export interface UserSnapshotParams {
     orders?: OrderSnapshotParams[];
     notifications?: NotificationSnapshotParams[];
     wishlists?: WishListSnapshotParams[];
+    bulkUploadBatches?: BulkUploadBatchSnapshotParams[];
 }
 
 class User extends BaseModel {
@@ -47,6 +49,7 @@ class User extends BaseModel {
     private _orders?: Order[];
     private _notifications?: Notification[];
     private _wishlists?: WishList[];
+    private _bulkUploadBatches?: BulkUploadBatch[];
 
     constructor() {
         super();
@@ -88,6 +91,7 @@ class User extends BaseModel {
         user.orders = snapshot.orders ? snapshot.orders.map(data => Order.createFromSnapshot(data)) : [];
         user.notifications = snapshot.notifications ? snapshot.notifications.map(data => Notification.createFromSnapshot(data)) : [];
         user.wishlists = snapshot.wishlists ? snapshot.wishlists.map(data => WishList.createFromSnapshot(data)) : [];
+        user.bulkUploadBatches = snapshot.bulkUploadBatches ? snapshot.bulkUploadBatches.map(data => BulkUploadBatch.createFromSnapshot(data)) : [];
 
         return user;
     };
@@ -174,6 +178,13 @@ class User extends BaseModel {
     }
     public set wishlists(value) {
         this._wishlists = value;
+    }
+
+    public get bulkUploadBatches() {
+        return this._bulkUploadBatches;
+    }
+    public set bulkUploadBatches(value) {
+        this._bulkUploadBatches = value;
     }
 }
 

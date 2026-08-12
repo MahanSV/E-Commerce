@@ -13,6 +13,8 @@ model User {
   orders        Order[]
   notifications Notification[]
   wishlists     WishList[]
+  // Back relation for bulk upload batches
+  bulkUploadBatches bulkUploadBatch[] @relation("UserBatches")
 
   @@index([email])
   @@index([mobile])

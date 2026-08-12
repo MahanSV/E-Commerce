@@ -1,4 +1,10 @@
 -- CreateEnum
+CREATE TYPE "BulkUploadStatus" AS ENUM ('PENDING', 'COMPLETED', 'PARTIAL', 'FAILED');
+
+-- CreateEnum
+CREATE TYPE "BulkUploadItemStatus" AS ENUM ('CREATED', 'UPDATED', 'ERROR');
+
+-- CreateEnum
 CREATE TYPE "NotificationType" AS ENUM ('ORDER_UPDATE', 'PAYMENT_STATUS', 'PROMOTION', 'SYSTEM_ALERT');
 
 -- CreateEnum
@@ -6,6 +12,38 @@ CREATE TYPE "NotificationPriority" AS ENUM ('LOW', 'NORMAL', 'HIGH', 'URGENT');
 
 -- CreateEnum
 CREATE TYPE "UserRole" AS ENUM ('admin', 'user', 'merchant');
+
+-- CreateTable
+CREATE TABLE "bulkUploadBatch" (
+    "id" TEXT NOT NULL,
+    "fileName" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "status" "BulkUploadStatus" NOT NULL DEFAULT 'PENDING',
+    "itemCount" INTEGER NOT NULL DEFAULT 0,
+    "errorCount" INTEGER NOT NULL DEFAULT 0,
+    "userId" TEXT,
+
+    CONSTRAINT "bulkUploadBatch_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "bulkUploadItem" (
+    "id" TEXT NOT NULL,
+    "batchId" TEXT NOT NULL,
+    "productId" TEXT,
+    "title" TEXT NOT NULL,
+    "slug" TEXT NOT NULL,
+    "price" INTEGER NOT NULL,
+    "manufacturer" TEXT,
+    "description" TEXT,
+    "mainImage" TEXT,
+    "categoryId" TEXT NOT NULL,
+    "inStock" INTEGER NOT NULL,
+    "status" "BulkUploadItemStatus" NOT NULL DEFAULT 'CREATED',
+    "error" TEXT,
+
+    CONSTRAINT "bulkUploadItem_pkey" PRIMARY KEY ("id")
+);
 
 -- CreateTable
 CREATE TABLE "Merchant" (
@@ -79,9 +117,10 @@ CREATE TABLE "Product" (
     "categoryId" TEXT NOT NULL,
     "title" TEXT NOT NULL,
     "slug" TEXT NOT NULL,
+    "mainImage" TEXT NOT NULL,
     "manufacturer" TEXT NOT NULL,
     "photo" JSONB,
-    "inStock" BOOLEAN NOT NULL DEFAULT false,
+    "inStock" INTEGER NOT NULL DEFAULT 1,
     "price" INTEGER NOT NULL DEFAULT 0,
     "rating" INTEGER NOT NULL DEFAULT 0,
     "quantity" INTEGER NOT NULL,
@@ -190,6 +229,15 @@ CREATE INDEX "WishList_productId_idx" ON "WishList"("productId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "WishList_userId_productId_key" ON "WishList"("userId", "productId");
+
+-- AddForeignKey
+ALTER TABLE "bulkUploadBatch" ADD CONSTRAINT "bulkUploadBatch_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "bulkUploadItem" ADD CONSTRAINT "bulkUploadItem_batchId_fkey" FOREIGN KEY ("batchId") REFERENCES "bulkUploadBatch"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "bulkUploadItem" ADD CONSTRAINT "bulkUploadItem_productId_fkey" FOREIGN KEY ("productId") REFERENCES "Product"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "MerchantProduct" ADD CONSTRAINT "MerchantProduct_merchantId_fkey" FOREIGN KEY ("merchantId") REFERENCES "Merchant"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

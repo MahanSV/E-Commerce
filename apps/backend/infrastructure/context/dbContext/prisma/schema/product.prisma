@@ -27,4 +27,6 @@ model Product {
   merchantProducts MerchantProduct[]
   category         Category          @relation(fields: [categoryId], references: [id])
   orderItems       OrderItem[]
+  // Back relation for bulk upload items
+  bulkUploadItems bulkUploadItem[]      @relation("ProductBulkItems")
 }

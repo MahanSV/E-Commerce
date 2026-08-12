@@ -2,6 +2,7 @@ import {CategoryDTO} from "#application/dto/CategoryDTO.ts";
 import {OrderItemDTO} from "#application/dto/OrderItemDTO.ts";
 import {WishlistDTO} from "#application/dto/WishListDTO.ts";
 import {MerchantProductDTO} from "#application/dto/MerchantProductDTO.ts";
+import {BulkUploadItemDTO} from "#application/dto/BulkUploadItemDTO.ts";
 
 export interface ProductDTO {
     id: string;
@@ -24,6 +25,7 @@ export interface ProductDTO {
     merchantProducts?: MerchantProductDTO[];
     category: CategoryDTO;
     orderItems?: OrderItemDTO[];
+    bulkUploadItems?: BulkUploadItemDTO[];
 }
 
 export interface ProductImageDTO {

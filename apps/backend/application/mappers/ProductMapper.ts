@@ -28,7 +28,9 @@ export class ProductMapper {
                     category: CategoryMapper.toDTO(entity.category),
                     /*merchantProducts?: [],
                     orderItems?: [],*/
+                    // bulkUploadItems: entity.bulkUploadItems,
                 };
+                // TODO: Need's to complete
         };
         /**
          * Maps a list of domain entities to DTOs

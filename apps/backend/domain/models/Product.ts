@@ -5,6 +5,7 @@ import MerchantProduct, {
 import WishList, { WishListSnapshotParams} from "#models/WishList.ts";
 import OrderItem, {OrderItemSnapshotParams} from "#models/OrderItem.ts";
 import Category, {CategorySnapshotParams} from "#models/Category.ts";
+import BulkUploadItem, {BulkUploadItemSnapshotParams} from "#models/BulkUploadItem.ts";
 
 export interface ProductConstructorParams {
     id: string;
@@ -44,6 +45,7 @@ export interface ProductSnapshotParams {
     merchantProducts: MerchantProductSnapshotParams[];
     category: CategorySnapshotParams;
     orderItems: OrderItemSnapshotParams[];
+    bulkUploadItems: BulkUploadItemSnapshotParams[];
 }
 
 
@@ -66,6 +68,7 @@ class Product extends BaseModel {
     private _merchantProducts?: MerchantProduct[];
     private _category!: Category;
     private _orderItems?: OrderItem[];
+    private _bulkUploadItems?: BulkUploadItem[];
 
     constructor() {
         super();
@@ -118,6 +121,7 @@ class Product extends BaseModel {
         product.wishlists = snapshot.wishlists ? snapshot.wishlists.map(data => WishList.createFromSnapshot(data)) : [];
         product.merchantProducts = snapshot.merchantProducts ? snapshot.merchantProducts.map(data => MerchantProduct.createFromSnapshot(data)): [];
         product.orderItems = snapshot.orderItems ? snapshot.orderItems.map(data => OrderItem.createFromSnapshot(data)) : [];
+        product.bulkUploadItems = snapshot.bulkUploadItems ? snapshot.bulkUploadItems.map(data => BulkUpload.createFromSnapshot(data)) : [];
 
         return product;
     }
@@ -246,6 +250,13 @@ class Product extends BaseModel {
     }
     public set orderItems(value) {
         this._orderItems = value;
+    }
+
+    public get bulkUploadItems() {
+        return this._bulkUploadItems;
+    }
+    public set bulkUploadItems(value) {
+        this._bulkUploadItems = value;
     }
 }
 

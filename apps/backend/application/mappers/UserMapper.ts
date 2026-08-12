@@ -1,5 +1,7 @@
 import {UserDTO} from "#application/dto/UserDTO.ts";
 import User from "#domain/models/User.ts";
+import {OrderMapper} from "#application/mappers/OrderMapper.ts";
+import {NotificationMapper} from "#application/mappers/NotificationMapper.ts";
 
 
 export class UserMapper {
@@ -18,7 +20,12 @@ export class UserMapper {
                         status: entity.status,
                         createdAt: entity.createdAt,
                         updatedAt: entity.updatedAt,
+                        orders: entity.orders?.length ? OrderMapper.toCustomerOrderDTOList(entity.orders) : [],
+                        notifications: entity.notifications?.length ? NotificationMapper.toDTOList(entity.notifications) : [],
+                        // wishlists: entity.wishlists,
+                        // bulkUploadBatches?: BulkUploadBatchDTO[];
                 };
+                // TODO: Need's to complete!
         };
         /**
          * Maps a list of domain entities to DTOs
