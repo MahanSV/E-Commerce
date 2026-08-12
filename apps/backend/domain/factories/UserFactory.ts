@@ -2,6 +2,7 @@ import crypto from "crypto";
 import {UserType} from "#domain/enums/userType.ts";
 import User from "#models/User.ts";
 import {createCustomerCommand} from "#application/types/user/command.ts";
+import env from "#substructure/env.ts";
 
 export class UserFactory {
   /**
@@ -30,7 +31,7 @@ export class UserFactory {
           name: command.name,
           lastName: command.lastName,
           email: command.email,
-          password: "123456", // TODo: read from ENV for default password!
+          password: env.defaultPassword,
           role: UserType.user,
           mobile: command.mobile,
           status: "Active",
