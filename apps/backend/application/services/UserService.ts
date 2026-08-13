@@ -30,7 +30,7 @@ export default class UserService implements UserServiceInterface {
 
         const createUser = await this.userRepository.createUser(entity);
 
-        if (createUser) throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, "Failed to create user.", "Error");
+        if (!createUser) throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, "Failed to create user.", "Error");
 
         return UserMapper.toDTO(createUser);
     };
