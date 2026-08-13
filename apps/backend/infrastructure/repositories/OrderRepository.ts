@@ -29,7 +29,10 @@ export default class OrderRepository extends BaseRepository<Order> implements Or
 
     async checkOrderExist(id: string): Promise<Order | null> {
         const dataModel = await prisma.order.findUnique({
-            where: {id}
+            where: {id},
+            include: {
+                user: true
+            }
         });
 
         return dataModel && Order.createFromSnapshot(dataModel);
@@ -53,6 +56,9 @@ export default class OrderRepository extends BaseRepository<Order> implements Or
                 deliversAt: entity.deliversAt,
                 createdAt: entity.createdAt,
                 updatedAt: entity.updatedAt,
+            },
+            include: {
+                user: true
             }
         });
 
@@ -75,6 +81,9 @@ export default class OrderRepository extends BaseRepository<Order> implements Or
                 description: command.description,
                 total: command.total,
                 deliversAt: command.createdAt
+            },
+            include: {
+                user: true
             }
         });
 
@@ -83,7 +92,10 @@ export default class OrderRepository extends BaseRepository<Order> implements Or
 
     async deleteCustomerOrder(id: string): Promise<Order> {
         const dataModel = await prisma.order.delete({
-            where: {id}
+            where: {id},
+            include: {
+                user: true
+            }
         });
 
         return dataModel && Order.createFromSnapshot(dataModel);
@@ -105,6 +117,9 @@ export default class OrderRepository extends BaseRepository<Order> implements Or
                 take: limit,
                 orderBy: {
                     createdAt: 'desc'
+                },
+                include: {
+                    user: true
                 }
             }),
             await prisma.order.count()
