@@ -1,4 +1,4 @@
-import {UserDTO} from "#application/dto/UserDTO.js";
+import {UserDTO} from "#application/dto/UserDTO.ts";
 import {createUserCommand, updateUserCommand} from "#application/types/user/command.ts";
 
 

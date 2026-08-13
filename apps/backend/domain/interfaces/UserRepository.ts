@@ -1,5 +1,5 @@
 import User from "#models/User.ts";
-import {updateUserCommand} from "#application/types/user/command.js";
+import {updateUserCommand} from "#application/types/user/command.ts";
 
 export interface UserRepositoryInterface {
     getAllUsers(): Promise<User[]>;

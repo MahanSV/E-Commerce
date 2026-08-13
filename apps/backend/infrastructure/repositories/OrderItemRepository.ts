@@ -1,8 +1,8 @@
 import prisma from '#context/dbContext/prisma/client.ts';
 import {BaseRepository} from "#repositories/BaseRepository.ts";
 import {OrderItemRepositoryInterface} from "#domain/interfaces/OrderItemRepository.ts";
-import OrderItem, { OrderItemSnapshotParams } from "#models/OrderItem.ts";
-import {updateOrderItemCommand} from "#application/types/orderItem/command.js";
+import OrderItem from "#models/OrderItem.ts";
+import {updateOrderItemCommand} from "#application/types/orderItem/command.ts";
 
 
 export default class OrderItemRepository extends BaseRepository<OrderItem> implements OrderItemRepositoryInterface {

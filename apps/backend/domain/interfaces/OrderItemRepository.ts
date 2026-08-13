@@ -1,5 +1,5 @@
 import OrderItem from "#domain/models/OrderItem.ts"
-import {updateOrderItemCommand} from "#application/types/orderItem/command.js";
+import {updateOrderItemCommand} from "#application/types/orderItem/command.ts";
 
 
 export interface OrderItemRepositoryInterface {
