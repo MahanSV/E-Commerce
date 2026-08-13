@@ -16,6 +16,6 @@ export interface CustomerOrderDTO {
     city: string;
     country: string;
     orderNotice: string;
-    total: string;
+    total: number;
     products?: ProductDTO[];
 }

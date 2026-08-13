@@ -23,7 +23,7 @@ export class OrderMapper {
             city: entity.city || "",
             country: entity.country || "",
             orderNotice: entity.description || "",
-            total: String(entity.total),
+            total: entity.total,
             // total: String(entity.orderItems?.reduce((sum, item) => sum + item.quantity, 0)) ?? "0",
             products: entity.orderItems?.map(item => ProductMapper.toDTO(item.product)),
         };
