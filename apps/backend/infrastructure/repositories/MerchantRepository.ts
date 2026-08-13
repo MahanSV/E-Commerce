@@ -14,7 +14,11 @@ export default class MerchantRepository extends BaseRepository<Merchant> impleme
             include: {
                 merchantProducts: {
                     include: {
-                        product: true
+                        product: {
+                            include: {
+                                category: true
+                            }
+                        }
                     },
                 },
             },
