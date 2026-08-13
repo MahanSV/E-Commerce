@@ -25,7 +25,7 @@ export default class MerchantService implements MerchantServiceInterface {
     async getMerchantById(id: string): Promise<MerchantDTO> {
         const merchant = await this.merchantRepository.getMerchantById(id);
 
-        if (merchant)  throw new ApiError(httpStatus.NOT_FOUND, "Merchant Doesn't exist", "Error");
+        if (!merchant) throw new ApiError(httpStatus.NOT_FOUND, "Merchant Doesn't exist", "Error");
 
         return MerchantMapper.toDTO(merchant);
     };
