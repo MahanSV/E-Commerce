@@ -2,7 +2,7 @@ import prisma from '#context/dbContext/prisma/client.ts';
 import {BaseRepository} from "#repositories/BaseRepository.ts";
 import {NotificationRepositoryInterface} from "#domain/interfaces/NotificationRepository.ts";
 import Notification from "#models/Notification.ts";
-import {updateNotificationCommand} from "#application/types/notification/command.js";
+import {notificationQuery, updateNotificationCommand} from "#application/types/notification/command.ts";
 
 
 export default class NotificationRepository extends BaseRepository<Notification> implements NotificationRepositoryInterface {
@@ -25,7 +25,75 @@ export default class NotificationRepository extends BaseRepository<Notification>
                 isRead: false
             }
         });
-    }
+    };
+
+    async getUserNotifications (userId: string, query: notificationQuery): Promise<{
+            notifications: Notification[],
+            total: number,
+            page: number,
+            totalPages: number,
+            unreadCount: number
+        }
+    > {
+        const {
+            type,
+            isRead,
+            search,
+            page = 1,
+            limit = 10,
+            sortBy = 'createdAt',
+            sortOrder = 'desc'
+        } = query;
+
+        const where: any = { userId };
+
+        if (type) where.type = type;
+        if (isRead !== undefined) where.isRead = isRead === 'true';
+
+        if (search) {
+            where.OR = [
+                { title: { contains: search } },
+                { message: { contains: search } }
+            ];
+        }
+
+        const skip = (page - 1) * limit;
+
+        const [dataModels, total, unreadCount] = await Promise.all([
+            await prisma.notification.findMany({
+                where,
+                skip,
+                take: limit,
+                orderBy: {
+                    [sortBy]: sortOrder
+                },
+                include: {
+                    user: true
+                }
+            }),
+
+            await prisma.notification.count({ where }),
+
+            await prisma.notification.count({
+                where: {
+                    userId,
+                    isRead: false
+                }
+            })
+        ]);
+
+        const notifications = dataModels.map(data =>
+            Notification.createFromSnapshot(data)
+        );
+
+        return {
+            notifications,
+            total,
+            page,
+            totalPages: Math.ceil(total / limit),
+            unreadCount
+        };
+    };
 
     async createNotification(notificationModel: Notification): Promise<Notification> {
         const dataModel = await prisma.notification.create({
@@ -37,7 +105,7 @@ export default class NotificationRepository extends BaseRepository<Notification>
                 type: notificationModel.type,
                 isRead: notificationModel.isRead,
                 priority: notificationModel.priority,
-                // metadata: notificationModel.metadata,
+                metadata: notificationModel.metadata,
                 createdAt: notificationModel.createdAt,
                 updatedAt: notificationModel.updatedAt,
             }

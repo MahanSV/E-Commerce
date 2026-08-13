@@ -27,7 +27,19 @@ class NotificationsController {
         try {
             const userId = req.params.userId;
 
-            const userNotifications = await this.notificationService.getUserNotifications(userId);
+            const query = {
+                type: req.query.type?.toString(),
+                isRead: req.query.isRead?.toString(),
+                search: req.query.search?.toString(),
+                page: Number(req.query.page) || 1,
+                limit:  Number(req.query.limit) || 10,
+                sortBy: req.query.sortBy?.toString() || 'createdAt',
+                sortOrder: req.query.sortOrder?.toString() || 'desc',
+            };
+
+            const userNotifications = await this.notificationService.getUserNotifications(userId, query);
+
+            res.json(userNotifications);
         } catch (error) {
             if (error instanceof ApiError) throw error;
         }
