@@ -32,7 +32,7 @@ export class NotificationService implements NotificationServiceInterface {
     }> {
         const result = await this.notificationRepository.getUserNotifications(userId, query);
 
-        const dto = result.notifications ? NotificationMapper.toDTOList(result.notifications) : [];
+        const dto = result.notifications.length ? NotificationMapper.toDTOList(result.notifications) : [];
 
         return {
             notifications: dto,
