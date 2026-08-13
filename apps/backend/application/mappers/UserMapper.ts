@@ -1,4 +1,4 @@
-import {UserDTO} from "#application/dto/UserDTO.ts";
+import {SimpleUserDTO, UserDTO} from "#application/dto/UserDTO.ts";
 import User from "#domain/models/User.ts";
 import {OrderMapper} from "#application/mappers/OrderMapper.ts";
 import {NotificationMapper} from "#application/mappers/NotificationMapper.ts";
@@ -28,10 +28,26 @@ export class UserMapper {
                 };
         };
         /**
+         * it's for simple users DTO
+         */
+        public static toSimpleUserDTO(entity: User): SimpleUserDTO {
+                return {
+                        id: entity.id,
+                        email: entity.email,
+                        role: entity.role,
+                };
+        };
+        /**
          * Maps a list of domain entities to DTOs
          */
         public static toDTOList(entities: User[]): UserDTO[] {
                 return entities.map(entity => this.toDTO(entity));
+        };
+        /**
+         * it's for simple users DTOs
+         */
+        public static toSimpleUserDTOList(entities: User[]): SimpleUserDTO[] {
+                return entities.map(entity => this.toSimpleUserDTO(entity));
         };
 }
 

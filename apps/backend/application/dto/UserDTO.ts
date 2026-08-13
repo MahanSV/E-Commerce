@@ -21,3 +21,10 @@ export interface UserDTO {
     wishlists?: WishlistDTO[];
     bulkUploadBatches?: BulkUploadBatchDTO[];
 }
+
+
+export interface SimpleUserDTO {
+    id: string;
+    email: string;
+    role: UserType;
+}

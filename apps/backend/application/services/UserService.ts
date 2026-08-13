@@ -4,7 +4,7 @@ import UserRepository from '#repositories/UserRepository.ts';
 import type { UserRepositoryInterface } from '#domain/interfaces/UserRepository.ts';
 import type {UserServiceInterface} from '#application/interfaces/UserServiceInterface.ts';
 import {UserMapper} from "#application/mappers/UserMapper.ts";
-import {UserDTO} from "#application/dto/UserDTO.ts";
+import {SimpleUserDTO, UserDTO} from "#application/dto/UserDTO.ts";
 import {createUserCommand, updateUserCommand} from "#application/types/user/command.ts";
 import {UserFactory} from "#domain/factories/UserFactory.ts";
 
@@ -15,10 +15,10 @@ export default class UserService implements UserServiceInterface {
         this.userRepository = userRepository;
     };
 
-    async getAllUsers() {
+    async getAllUsers(): Promise<SimpleUserDTO[]>  {
         const allUsers = await this.userRepository.getAllUsers();
 
-        return UserMapper.toDTOList(allUsers);
+        return UserMapper.toSimpleUserDTOList(allUsers);
     };
 
     async createUser(command: createUserCommand): Promise<UserDTO> {
@@ -35,7 +35,7 @@ export default class UserService implements UserServiceInterface {
         return UserMapper.toDTO(createUser);
     };
 
-    async getUser(id: string): Promise<UserDTO> {
+    async getUser(id: string): Promise<SimpleUserDTO> {
         const user = await this.userRepository.getUser(id);
 
         if (!user) throw new ApiError(httpStatus.NOT_FOUND, "Failed to get user.", "Error");
