@@ -24,7 +24,7 @@ export default class UserService implements UserServiceInterface {
     async createUser(command: createUserCommand): Promise<UserDTO> {
         const userExistEmail = await this.userRepository.getUserByEmail(command.email);
 
-        if (userExistEmail) throw new ApiError(httpStatus.BAD_REQUEST, "Email already exist.", "Error");
+        if (userExistEmail) throw new ApiError(httpStatus.CONFLICT, "Email already exist.", "Error");
 
         const entity = UserFactory.create(command.email, command.password, command.role);
 

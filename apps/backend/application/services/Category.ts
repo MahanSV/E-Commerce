@@ -28,7 +28,7 @@ export default class CategoryService implements CategoryServiceInterface {
 
         const addCategory = await this.categoryRepository.createCategory(name);
 
-        if (!addCategory) throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, "Failed to create Category.", "Error");
+        if (!addCategory) throw new ApiError(httpStatus.CONFLICT, "Failed to create Category.", "Error");
 
         return CategoryMapper.toDTO(addCategory);
     };
