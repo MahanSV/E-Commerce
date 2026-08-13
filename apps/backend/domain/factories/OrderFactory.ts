@@ -25,8 +25,6 @@ export class OrderFactory {
             city: command.city,
             description: command.description,
             total: 0,
-            // Next Month calculated for deliversAt
-            // TODO: Use date package instead.
             deliversAt: addMonths(new Date(), 1),
             createdAt: new Date(),
             updatedAt: new Date()
