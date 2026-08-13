@@ -1,9 +1,9 @@
 import ApiError from '#webhost/errors/apiError.ts';
 import httpStatus from 'http-status';
-import {OrderItemRepositoryInterface} from "#domain/interfaces/OrderItemRepository.ts";
+import { OrderItemRepositoryInterface } from "#domain/interfaces/OrderItemRepository.ts";
 import { OrderItemServiceInterface } from "#application/interfaces/OrderItemInterface.ts";
 import OrderItemRepository from "#repositories/OrderItemRepository.ts";
-import { OrderItemDTO } from "#application/dto/OrderItemDTO.ts";
+import { CreateOrderProductDTO, OrderGroupedDTO, OrderProductDTO } from "#application/dto/OrderItemDTO.ts";
 import {OrderItemMapper} from "#application/mappers/OrderItemMapper.ts";
 import {createOrderItemCommand, updateOrderItemCommand} from "#application/types/orderItem/command.ts";
 import {OrderItemFactory} from "#domain/factories/OrderItemFactory.ts";
@@ -15,7 +15,7 @@ export class OrderItemService implements OrderItemServiceInterface {
         this.orderItemRepository = orderItemRepository;
     };
 
-    async createOrderProduct(command: createOrderItemCommand): Promise<OrderItemDTO> {
+    async createOrderProduct(command: createOrderItemCommand): Promise<CreateOrderProductDTO> {
         // Note: Might need to change quantity for "Order"
         const entity = OrderItemFactory.create(command);
 
@@ -23,10 +23,10 @@ export class OrderItemService implements OrderItemServiceInterface {
 
         if (!addOrderProduct) throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, "Failed to create Order Item.", "Error");
 
-        return OrderItemMapper.toOrderItemDTO(addOrderProduct);
+        return OrderItemMapper.toCreateOrderProductDTO(addOrderProduct);
     };
 
-    async updateProductOrder(command: updateOrderItemCommand): Promise<OrderItemDTO> {
+    async updateProductOrder(command: updateOrderItemCommand): Promise<OrderProductDTO> {
         const checkProductOrderExist = await this.orderItemRepository.getOrderProductById(command.id);
 
         if (!checkProductOrderExist) throw new ApiError(httpStatus.BAD_REQUEST, "Order not found", "Error");
@@ -35,7 +35,7 @@ export class OrderItemService implements OrderItemServiceInterface {
 
         if (!updatedProductOrder) throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, "Failed to update Order Item.", "Error");
 
-        return updatedProductOrder && OrderItemMapper.toOrderItemDTO(updatedProductOrder);
+        return updatedProductOrder && OrderItemMapper.toOrderProductDTO(updatedProductOrder);
     };
 
     async deleteProductOrder(id: string): Promise<void> {
@@ -46,15 +46,15 @@ export class OrderItemService implements OrderItemServiceInterface {
         await this.orderItemRepository.deleteProductOrder(id);
     };
 
-    async getProductOrder(id: string): Promise<OrderItemDTO[]> {
+    async getProductOrder(id: string): Promise<OrderProductDTO[]> {
         const orderItem = await this.orderItemRepository.getProductOrder(id);
 
-        return OrderItemMapper.toOrderItemDTOList(orderItem);
+        return OrderItemMapper.toOrderProductDTOList(orderItem);
     };
 
-    async getAllProductOrders(): Promise<OrderItemDTO[]> {
+    async getAllProductOrders(): Promise<OrderGroupedDTO[]> {
         const orderItems = await this.orderItemRepository.getAllProductOrders();
 
-        return OrderItemMapper.toOrderItemDTOList(orderItems);
+        return OrderItemMapper.toGroupedDTOList(orderItems);
     };
 }

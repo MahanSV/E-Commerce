@@ -1,11 +1,11 @@
-import {OrderItemDTO} from "#application/dto/OrderItemDTO.ts";
+import {CreateOrderProductDTO, OrderGroupedDTO, OrderProductDTO} from "#application/dto/OrderItemDTO.ts";
 import {createOrderItemCommand, updateOrderItemCommand} from "#application/types/orderItem/command.ts";
 
 
 export interface OrderItemServiceInterface {
-    createOrderProduct(command: createOrderItemCommand): Promise<OrderItemDTO>
-    updateProductOrder(command: updateOrderItemCommand): Promise<OrderItemDTO>
+    createOrderProduct(command: createOrderItemCommand): Promise<CreateOrderProductDTO>
+    updateProductOrder(command: updateOrderItemCommand): Promise<OrderProductDTO>
     deleteProductOrder(id: string): Promise<void>
-    getProductOrder(id: string): Promise<OrderItemDTO[]>
-    getAllProductOrders(): Promise<OrderItemDTO[]>
+    getProductOrder(id: string): Promise<OrderProductDTO[]>
+    getAllProductOrders(): Promise<OrderGroupedDTO[]>
 }

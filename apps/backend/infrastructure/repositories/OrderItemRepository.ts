@@ -21,7 +21,11 @@ export default class OrderItemRepository extends BaseRepository<OrderItem> imple
                         user: true,
                     },
                 },
-                product: true,
+                product: {
+                    include: {
+                        category: true,
+                    },
+                },
             }
         });
 
@@ -39,7 +43,11 @@ export default class OrderItemRepository extends BaseRepository<OrderItem> imple
             },
             include: {
                 order: true,
-                product: true,
+                product: {
+                    include: {
+                        category: true,
+                    },
+                },
             }
         });
 
@@ -58,7 +66,11 @@ export default class OrderItemRepository extends BaseRepository<OrderItem> imple
             },
             include: {
                 order: true,
-                product: true,
+                product: {
+                    include: {
+                        category: true,
+                    },
+                },
             }
         });
 
@@ -84,7 +96,11 @@ export default class OrderItemRepository extends BaseRepository<OrderItem> imple
                         user: true,
                     },
                 },
-                product: true,
+                product: {
+                    include: {
+                        category: true,
+                    },
+                },
             }
         });
 
