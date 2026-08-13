@@ -19,7 +19,7 @@ export class ProductFactory {
         photo: command.photo,
         inStock: command.inStock || 1,
         price: command.price || 0,
-        rating: command.rating || 0,
+        rating: command.rating || 5,
         quantity: command.quantity || 0,
     });
   };
