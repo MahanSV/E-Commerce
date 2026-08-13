@@ -60,7 +60,7 @@ class MerchantController {
                 id: req.params.id,
                 name: req.body.name,
                 email: req.body.email,
-                phone: req.body.phone,
+                mobile: req.body.phone, // Note: "phone" to "mobile"
                 address: req.body.address,
                 description: req.body.description,
                 status: req.body.status,

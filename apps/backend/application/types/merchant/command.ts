@@ -12,7 +12,7 @@ export type updateMerchantCommand = {
     id: string;
     name: string;
     email: string;
-    phone: string;
+    mobile: string;
     address: string;
     description: string;
     status: string;
