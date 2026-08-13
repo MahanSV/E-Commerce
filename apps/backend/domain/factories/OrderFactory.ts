@@ -24,7 +24,7 @@ export class OrderFactory {
             country: command.country,
             city: command.city,
             description: command.description,
-            total: 0,
+            total: Number(command.total) || 0,
             deliversAt: addMonths(new Date(), 1),
             createdAt: new Date(),
             updatedAt: new Date()
