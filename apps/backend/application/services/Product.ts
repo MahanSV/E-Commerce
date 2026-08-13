@@ -159,7 +159,7 @@ export class ProductService implements ProductServiceInterface {
     async updateProduct(command: updateProductCommand): Promise<ProductDTO> {
         const product = await this.productRepository.getProductById(command.id);
 
-        if (!product) throw new ApiError(httpStatus.BAD_REQUEST, `productId: ${command.id} doesn't exist.`, "Error");
+        if (!product) throw new ApiError(httpStatus.NOT_FOUND, `productId: ${command.id} doesn't exist.`, "Error");
 
         const updatedProduct = await this.productRepository.updateProduct(command);
 

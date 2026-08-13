@@ -36,7 +36,7 @@ export default class CategoryService implements CategoryServiceInterface {
     async getCategory(id:string): Promise<CategoryDTO> {
         const category = await this.categoryRepository.getCategoryById(id);
 
-        if (!category) throw new ApiError(httpStatus.BAD_REQUEST, "Failed to find Category.", "Error");
+        if (!category) throw new ApiError(httpStatus.NOT_FOUND, "Failed to find Category.", "Error");
 
         return CategoryMapper.toDTO(category);
     };
@@ -44,7 +44,7 @@ export default class CategoryService implements CategoryServiceInterface {
     async updateCategory(id:string, name: string): Promise<CategoryDTO> {
         const category = await this.categoryRepository.getCategoryById(id);
 
-        if (!category) throw new ApiError(httpStatus.BAD_REQUEST, "Failed to find Category.", "Error");
+        if (!category) throw new ApiError(httpStatus.NOT_FOUND, "Failed to find Category.", "Error");
 
         const updateCategory = await this.categoryRepository.updateCategory(id, name);
 
