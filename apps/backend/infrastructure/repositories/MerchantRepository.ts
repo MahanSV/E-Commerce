@@ -76,7 +76,7 @@ export default class MerchantRepository extends BaseRepository<Merchant> impleme
                 id: command.id,
                 name: command.name,
                 email: command.email,
-                phone: command.phone,
+                mobile: command.phone,
                 address: command.address,
                 description: command.description,
                 status: command.status,

@@ -12,7 +12,7 @@ export class MerchantMapper {
             name: entity.name,
             description: entity?.description,
             email: entity?.email,
-            phone: entity?.phone,
+            phone: entity?.mobile,
             address: entity?.address,
             status: entity.status,
             createdAt: entity.createdAt,
