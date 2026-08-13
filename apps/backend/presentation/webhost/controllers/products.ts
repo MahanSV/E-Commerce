@@ -54,7 +54,7 @@ class ProductController {
 
             const product = await this.productService.createProduct(command);
 
-            res.json(product);
+            res.status(201);
         } catch (error) {
             if (error instanceof ApiError) throw error;
         }
@@ -114,7 +114,7 @@ class ProductController {
 
             const deletedProduct = await this.productService.deleteProduct(id);
 
-            res.json(deletedProduct);
+            res.status(204);
         } catch (error) {
             if (error instanceof ApiError) throw error;
         }
