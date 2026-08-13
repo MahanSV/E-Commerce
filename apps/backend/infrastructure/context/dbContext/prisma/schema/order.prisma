@@ -10,7 +10,7 @@ model Order {
   country     String?
   city        String?
   description String?
-  quantity    Int
+  total       Int
   deliversAt  DateTime
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt

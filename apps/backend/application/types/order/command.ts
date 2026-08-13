@@ -30,5 +30,5 @@ export type updateCustomerOrderCommand = {
     city: string;
     country: string;
     description: string | null;
-    quantity: number;
+    total: number;
 };

@@ -83,7 +83,7 @@ CREATE TABLE "Order" (
     "country" TEXT,
     "city" TEXT,
     "description" TEXT,
-    "quantity" INTEGER NOT NULL,
+    "total" INTEGER NOT NULL,
     "deliversAt" TIMESTAMP(3) NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,

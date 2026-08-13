@@ -49,7 +49,7 @@ export default class OrderRepository extends BaseRepository<Order> implements Or
                 country: entity.country,
                 city: entity.city,
                 description: entity.description,
-                quantity: entity.quantity,
+                total: entity.total,
                 deliversAt: entity.deliversAt,
                 createdAt: entity.createdAt,
                 updatedAt: entity.updatedAt,
@@ -73,7 +73,7 @@ export default class OrderRepository extends BaseRepository<Order> implements Or
                 country: command.country,
                 city: command.city,
                 description: command.description,
-                quantity: command.quantity,
+                total: command.total,
                 deliversAt: command.createdAt
             }
         });

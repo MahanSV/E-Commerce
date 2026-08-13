@@ -14,7 +14,7 @@ export interface OrderConstructorParams {
     country?: string;
     city?: string;
     description?: string;
-    quantity: number;
+    total: number;
     deliversAt: Date;
     createdAt: Date;
     updatedAt: Date;
@@ -31,7 +31,7 @@ export interface OrderSnapshotParams {
     country?: string;
     city?: string;
     description?: string;
-    quantity: number;
+    total: number;
     deliversAt: Date;
     createdAt: Date;
     updatedAt: Date;
@@ -50,7 +50,7 @@ class Order extends BaseModel {
     private _country?: string;
     private _city?: string;
     private _description?: string;
-    private _quantity!: number;
+    private _total!: number;
     private _deliversAt!: Date;
     private _createdAt!: Date;
     private _updatedAt!: Date;
@@ -78,7 +78,7 @@ class Order extends BaseModel {
         order.country = params.country;
         order.city = params.city;
         order.description = params.description;
-        order.quantity = params.quantity;
+        order.total = params.total;
         order.deliversAt = params.deliversAt;
         order.createdAt = params.createdAt;
         order.updatedAt = params.updatedAt;
@@ -99,7 +99,7 @@ class Order extends BaseModel {
         order.country = snapshot.country;
         order.city = snapshot.city;
         order.description = snapshot.description;
-        order.quantity = snapshot.quantity;
+        order.total = snapshot.total;
         order.deliversAt = snapshot.deliversAt;
         order.createdAt = snapshot.createdAt;
         order.updatedAt = snapshot.updatedAt;
@@ -179,11 +179,11 @@ class Order extends BaseModel {
         this._description = value;
     }
 
-    public get quantity() {
-        return this._quantity;
+    public get total() {
+        return this._total;
     }
-    public set quantity(value) {
-        this._quantity = value;
+    public set total(value) {
+        this._total = value;
     }
 
     public get deliversAt() {
