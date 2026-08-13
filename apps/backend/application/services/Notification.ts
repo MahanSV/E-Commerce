@@ -11,7 +11,6 @@ import {
 } from "#application/types/notification/command.ts";
 import {NotificationFactory} from "#domain/factories/Notification.ts";
 import {NotificationMapper} from "#application/mappers/NotificationMapper.ts";
-import Notification from "#models/Notification.ts";
 
 export class NotificationService implements NotificationServiceInterface {
     private notificationRepository: NotificationRepositoryInterface;
@@ -25,13 +24,23 @@ export class NotificationService implements NotificationServiceInterface {
     };
 
     async getUserNotifications(userId: string, query: notificationQuery): Promise<{
-        notifications: Notification[],
+        notifications: NotificationDTO[],
         total: number,
         page: number,
         totalPages: number,
         unreadCount: number
     }> {
-        return await this.notificationRepository.getUserNotifications(userId, query);
+        const result = await this.notificationRepository.getUserNotifications(userId, query);
+
+        const dto = result.notifications ? NotificationMapper.toDTOList(result.notifications) : [];
+
+        return {
+            notifications: dto,
+            total: result.total,
+            page: result.page,
+            totalPages: result.totalPages,
+            unreadCount: result.unreadCount,
+        };
     };
 
     async createNotification(command: createNotificationCommand): Promise<NotificationDTO> {

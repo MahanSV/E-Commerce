@@ -4,13 +4,12 @@ import {
     deleteNotificationCommand, notificationQuery,
     updateNotificationCommand
 } from "#application/types/notification/command.ts";
-import Notification from "#models/Notification.ts";
 
 
 export interface NotificationServiceInterface {
     getUnreadCount(userId: string): Promise<number>
     getUserNotifications(userId: string, query: notificationQuery): Promise<{
-        notifications: Notification[],
+        notifications: NotificationDTO[],
         total: number,
         page: number,
         totalPages: number,
