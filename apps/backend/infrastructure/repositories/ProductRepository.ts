@@ -45,6 +45,7 @@ export default class ProductRepository extends BaseRepository<Product> implement
                 ]
             },
             include: {
+                category: true,
                 merchantProducts: true,
             }
         });
