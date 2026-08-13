@@ -7,5 +7,5 @@ export interface OrderItemServiceInterface {
     updateProductOrder(command: updateOrderItemCommand): Promise<OrderItemDTO>
     deleteProductOrder(id: string): Promise<void>
     getProductOrder(id: string): Promise<OrderItemDTO[]>
-    getAllProductOrders(): Promise<any>
+    getAllProductOrders(): Promise<OrderItemDTO[]>
 }

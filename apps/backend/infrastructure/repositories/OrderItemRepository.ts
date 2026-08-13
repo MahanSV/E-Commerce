@@ -16,7 +16,11 @@ export default class OrderItemRepository extends BaseRepository<OrderItem> imple
                 id
             },
             include: {
-                order: true,
+                order: {
+                    include: {
+                        user: true,
+                    },
+                },
                 product: true,
             }
         });
@@ -75,7 +79,11 @@ export default class OrderItemRepository extends BaseRepository<OrderItem> imple
                 orderId: id
             },
             include: {
-                order: true,
+                order: {
+                    include: {
+                        user: true,
+                    },
+                },
                 product: true,
             }
         });

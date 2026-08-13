@@ -52,7 +52,9 @@ export class OrderItemService implements OrderItemServiceInterface {
         return OrderItemMapper.toOrderItemDTOList(orderItem);
     };
 
-    async getAllProductOrders(): Promise<any> {
-        // TODO: Need's Implementation!
+    async getAllProductOrders(): Promise<OrderItemDTO[]> {
+        const orderItems = await this.orderItemRepository.getAllProductOrders();
+
+        return OrderItemMapper.toOrderItemDTOList(orderItems);
     };
 }
