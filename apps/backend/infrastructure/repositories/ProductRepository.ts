@@ -56,8 +56,9 @@ export default class ProductRepository extends BaseRepository<Product> implement
     async getAllProducts(): Promise<Product[]> {
         const dataModels = await prisma.product.findMany({
             include: {
-            merchantProducts: true,
-        }
+                category: true,
+                merchantProducts: true,
+            }
         });
 
         return dataModels?.map(data => Product.createFromSnapshot(data));

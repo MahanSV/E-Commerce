@@ -41,6 +41,9 @@ export class ProductService implements ProductServiceInterface {
     async getProductBySlug(slug: string): Promise<ProductDTO[]> {
         const productBySlug = await this.productRepository.getProductBySlug(slug);
 
+        if (!productBySlug)
+            throw new ApiError(httpStatus.NOT_FOUND, "Product not found", "Error");
+
         return ProductMapper.toDTOList(productBySlug);
     };
 
