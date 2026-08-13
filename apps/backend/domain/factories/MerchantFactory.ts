@@ -17,7 +17,7 @@ export class MerchantFactory {
         email: command.email,
         mobile: command.phone,
         address: command.address,
-        status: command.status || "Active",
+        status: command.status || "ACTIVE",
         password: command.password || env.defaultPassword,
         createdAt: new Date(),
         updatedAt: new Date(),
