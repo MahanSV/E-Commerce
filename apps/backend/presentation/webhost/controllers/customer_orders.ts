@@ -44,7 +44,7 @@ class CustomerOrdersController {
         /*const { id } = req.params;*/
         try {
             const command = {
-                id: req.body.id,
+                id: req.params.id,
                 address: req.body.adress, // Note: Changed "address" to "adress"
                 apartment: req.body.apartment,
                 company: req.body.company,
