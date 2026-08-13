@@ -1,6 +1,7 @@
 import Order from "#domain/models/Order.ts";
 import {createCustomerOrderCommand} from "#application/types/order/command.ts";
 import crypto from "crypto";
+import { addMonths } from 'date-fns';
 
 
 
@@ -26,7 +27,7 @@ export class OrderFactory {
             total: 0,
             // Next Month calculated for deliversAt
             // TODO: Use date package instead.
-            deliversAt: (d => (x => (d.setMonth(d.getMonth() + 1), d.getDate() !== x && d.setDate(0), d))(d.getDate()))(new Date()),
+            deliversAt: addMonths(new Date(), 1),
             createdAt: new Date(),
             updatedAt: new Date()
         });
