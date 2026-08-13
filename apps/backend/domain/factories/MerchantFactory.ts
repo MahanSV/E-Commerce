@@ -1,5 +1,6 @@
 import Merchant from "#models/Merchant.ts";
 import {createMerchantCommand} from "#application/types/merchant/command.ts";
+import env from "#substructure/env.ts";
 
 
 export class MerchantFactory {
@@ -16,7 +17,7 @@ export class MerchantFactory {
         email: command.email,
         address: command.address,
         status: command.status || "Active",
-        password: command.password, // TODO: Create default password from env
+        password: command.password || env.defaultPassword,
         createdAt: new Date(),
         updatedAt: new Date(),
     });
