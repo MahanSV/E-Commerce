@@ -4,7 +4,7 @@ import CategoryController from '#webhost/controllers/category.ts';
 
 
 const router = express.Router();
-
+// TODO: Implement validation Schema
 router.get('/', authenticate, CategoryController.getAllCategories);
 
 router.post('/', authenticate, CategoryController.createCategory);

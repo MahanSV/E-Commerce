@@ -15,7 +15,7 @@ const createNotificationSchema = yup.object({
     message: yup.string().required("message is required."),
     type: yup.string().required("type is required.").oneOf(["ORDER_UPDATE", "PAYMENT_STATUS", "PROMOTION", "SYSTEM_ALERT"]),
     priority: yup.string().required("priority is required.").oneOf(["LOW", "NORMAL", "HIGH", "URGENT"]),
-    metadata: yup.string().required("metadata is required."),
+    metadata: yup.string().required("metadata is required."), // TODO: CHeck it probably its object!
 });
 
 const bulkMarkAsReadSchema = yup.object({
