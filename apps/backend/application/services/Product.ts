@@ -7,7 +7,7 @@ import ApiError from "#webhost/errors/apiError.ts";
 import {ProductMapper} from "#application/mappers/ProductMapper.ts";
 import {
     createProductCommand,
-    createProductImageCommand,
+    createProductImageCommand, GetFilteredProductsParams,
     updateProductCommand, updateProductImageCommand
 } from "#application/types/product/command.ts";
 import {ProductFactory} from "#domain/factories/ProductFactory.ts";
@@ -23,6 +23,10 @@ export class ProductService implements ProductServiceInterface {
     private productRepository: ProductRepositoryInterface;
     private merchantProductRepository: MerchantProductRepositoryInterface;
     private merchantRepository: MerchantRepositoryInterface;
+    // Security: Define whitelists for allowed filter types and operators
+    private readonly ALLOWED_FILTER_TYPES = ['price', 'rating', 'category', 'inStock', 'outOfStock'];
+    private readonly ALLOWED_OPERATORS = ['gte', 'lte', 'gt', 'lt', 'equals', 'contains'];
+    private readonly ALLOWED_SORT_VALUES = ['defaultSort', 'titleAsc', 'titleDesc', 'lowPrice', 'highPrice'];
 
     constructor(
         productRepository: ProductRepositoryInterface = new ProductRepository(),
@@ -46,11 +50,77 @@ export class ProductService implements ProductServiceInterface {
         return ProductMapper.toDTOList(searchedProducts);
     };
 
-    // TODO: Needs to complete!
-    async getAllProducts(mode: any): Promise<ProductDTO[]> {
-        const allProducts = await this.productRepository.getAllProducts();
 
-        return ProductMapper.toDTOList(allProducts);
+    async getAllProducts(params: { mode: string; page: number; url: string }): Promise<ProductDTO[]> {
+        const { mode, page, url } = params;
+
+        // checking if we are on the admin products page
+        if (mode === "admin") {
+            const adminProducts = await this.productRepository.getAllProducts();
+            return ProductMapper.toDTOList(adminProducts);
+        } else {
+            const dividerLocation = url.indexOf("?");
+            let filterObj = {};
+            let sortByValue = "defaultSort";
+
+            const validatedPage = (page && page > 0) ? page : 1;
+
+            if (dividerLocation !== -1) {
+                const queryArray = url.substring(dividerLocation + 1, url.length).split("&");
+                let filterType;
+                let filterArray = [];
+
+                for (let i = 0; i < queryArray.length; i++) {
+                    const queryParam = queryArray[i];
+
+                    if (queryParam.includes("filters")) {
+                        if (queryParam.includes("price")) filterType = "price";
+                        else if (queryParam.includes("rating")) filterType = "rating";
+                        else if (queryParam.includes("category")) filterType = "category";
+                        else if (queryParam.includes("inStock")) filterType = "inStock";
+                        else if (queryParam.includes("outOfStock")) filterType = "outOfStock";
+                        else continue;
+                    }
+
+                    if (queryParam.includes("sort")) {
+                        const extractedSortValue = queryParam.substring(queryParam.indexOf("=") + 1);
+                        if (this.validateSortValue(extractedSortValue)) {
+                            sortByValue = extractedSortValue;
+                        }
+                    }
+
+                    if (queryParam.includes("filters") && filterType) {
+                        let filterValue;
+                        if (filterType === "category") {
+                            filterValue = queryParam.substring(queryParam.indexOf("=") + 1);
+                        } else {
+                            const numValue = parseInt(queryParam.substring(queryParam.indexOf("=") + 1));
+                            filterValue = isNaN(numValue) ? null : numValue;
+                        }
+
+                        const operatorStart = queryParam.indexOf("$") + 1;
+                        const operatorEnd = queryParam.indexOf("=") - 1;
+
+                        if (operatorStart > 0 && operatorEnd > operatorStart) {
+                            const filterOperator = queryParam.substring(operatorStart, operatorEnd);
+                            if (filterValue !== null && filterOperator) {
+                                filterArray.push({ filterType, filterOperator, filterValue });
+                            }
+                        }
+                    }
+                }
+                filterObj = this.buildSafeFilterObject(filterArray);
+            }
+
+            const repoParams: GetFilteredProductsParams = {
+                page: validatedPage,
+                filterObj,
+                sortByValue
+            };
+
+            const products = await this.productRepository.getFilteredProducts(repoParams);
+            return ProductMapper.toDTOList(products);
+        }
     };
 
     async createProduct(command: createProductCommand): Promise<ProductDTO> {
@@ -164,5 +234,47 @@ export class ProductService implements ProductServiceInterface {
         const deletedProductImage = await this.productRepository.deleteProductImage(id);
 
         return ProductMapper.toProductImageDTO(deletedProductImage);
+    };
+
+    // Security: Input validation functions
+    private validateFilterType(filterType: string): boolean {
+        return this.ALLOWED_FILTER_TYPES.includes(filterType);
+    };
+
+    private validateOperator(operator: string): boolean {
+        return this.ALLOWED_OPERATORS.includes(operator);
+    };
+
+    private validateSortValue(sortValue: string): boolean {
+        return this.ALLOWED_SORT_VALUES.includes(sortValue);
+    };
+
+    private validateAndSanitizeFilterValue(filterType: string, filterValue: any): any {
+        switch (filterType) {
+            case 'price':
+            case 'rating':
+            case 'inStock':
+            case 'outOfStock':
+                const numValue = parseInt(filterValue);
+                return isNaN(numValue) ? null : numValue;
+            case 'category':
+                return typeof filterValue === 'string' && filterValue.trim().length > 0
+                    ? filterValue.trim()
+                    : null;
+            default:
+                return null;
+        }
+    };
+
+    private buildSafeFilterObject(filterArray: Array<any>): any {
+        const filterObj: any = {};
+        for (const item of filterArray) {
+            if (!this.validateFilterType(item.filterType)) continue;
+            if (!this.validateOperator(item.filterOperator)) continue;
+            const sanitizedValue = this.validateAndSanitizeFilterValue(item.filterType, item.filterValue);
+            if (sanitizedValue === null) continue;
+            filterObj[item.filterType] = { [item.filterOperator]: sanitizedValue };
+        }
+        return filterObj;
     };
 }

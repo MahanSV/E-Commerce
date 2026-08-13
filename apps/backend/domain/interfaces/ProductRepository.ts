@@ -1,11 +1,16 @@
 import Product from "#models/Product.ts";
-import {createImageCommand, updateProductCommand} from "#application/types/product/command.ts";
+import {
+    createImageCommand,
+    GetFilteredProductsParams,
+    updateProductCommand
+} from "#application/types/product/command.ts";
 
 
 export interface ProductRepositoryInterface {
     getProductBySlug(slug: string): Promise<Product[]>
     searchProducts(query: any): Promise<Product[]>
     getAllProducts(): Promise<Product[]>
+    getFilteredProducts(params: GetFilteredProductsParams): Promise<Product[]>
     createProduct(product: Product): Promise<Product>
     getProductById(id: string): Promise<Product | null>
     getAllProductsByCategoryId(categoryId: string): Promise<Product[]>

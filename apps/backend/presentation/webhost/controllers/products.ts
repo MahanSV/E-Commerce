@@ -12,11 +12,16 @@ class ProductController {
 
     public async getAllProducts(req: Request, res: Response): Promise<any> {
         try {
-            const mode = req.query.mode || "";
+            const mode = String(req.query.mode || "");
+            const page = Number(req.query.page) || 1;
 
-            const allProducts = await this.productService.getAllProducts(mode);
+            const products = await this.productService.getAllProducts({
+                mode,
+                page,
+                url: req.originalUrl,
+            });
 
-            res.json(allProducts);
+            res.json(products);
         } catch (error) {
             if (error instanceof ApiError) throw error;
         }

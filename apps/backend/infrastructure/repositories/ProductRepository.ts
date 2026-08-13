@@ -2,7 +2,11 @@ import prisma from '#context/dbContext/prisma/client.ts';
 import Product from '#models/Product.ts';
 import {BaseRepository} from "#repositories/BaseRepository.ts";
 import {ProductRepositoryInterface} from "#domain/interfaces/ProductRepository.ts";
-import {createImageCommand, updateProductCommand} from "#application/types/product/command.ts";
+import {
+    createImageCommand,
+    GetFilteredProductsParams,
+    updateProductCommand
+} from "#application/types/product/command.ts";
 
 
 export default class ProductRepository extends BaseRepository<Product> implements ProductRepositoryInterface {
@@ -56,6 +60,59 @@ export default class ProductRepository extends BaseRepository<Product> implement
         });
 
         return dataModels?.map(data => Product.createFromSnapshot(data));
+    };
+
+    async getFilteredProducts(params: GetFilteredProductsParams): Promise<Product[]> {
+        const { page, filterObj, sortByValue } = params;
+
+        let whereClause = { ...filterObj };
+
+        if (filterObj.category && filterObj.category.equals) {
+            delete whereClause.category;
+        }
+
+        let sortObj = {};
+        switch (sortByValue) {
+            case "defaultSort": sortObj = {}; break;
+            case "titleAsc": sortObj = { title: "asc" }; break;
+            case "titleDesc": sortObj = { title: "desc" }; break;
+            case "lowPrice": sortObj = { price: "asc" }; break;
+            case "highPrice": sortObj = { price: "desc" }; break;
+            default: sortObj = {};
+        }
+
+        const query: any = {
+            skip: (page - 1) * 10,
+            take: 12,
+            include: {
+                category: {
+                    select: {
+                        name: true,
+                    },
+                },
+            },
+            orderBy: sortObj,
+        };
+
+        if (Object.keys(filterObj).length === 0) {
+            // No where clause needed, exact same behavior as original
+        } else {
+            if (filterObj.category && filterObj.category.equals) {
+                query.where = {
+                    ...whereClause,
+                    category: {
+                        name: {
+                            equals: filterObj.category.equals,
+                        },
+                    },
+                };
+            } else {
+                query.where = whereClause;
+            }
+        }
+
+        const dataModels = await prisma.product.findMany(query);
+        return dataModels.map(data => Product.createFromSnapshot(data));
     };
 
     async getAllProductsByCategoryId(categoryId: string): Promise<Product[]> {
