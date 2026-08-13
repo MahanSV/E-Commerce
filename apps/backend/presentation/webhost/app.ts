@@ -51,7 +51,6 @@ app.use(compression());
 const whitelist = [
   env.corsLocalFrontend,
   env.corsDevFrontend,
-  env.corsDevInternal,
 ];
 
 const corsOptions = {
