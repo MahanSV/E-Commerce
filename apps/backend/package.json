@@ -21,11 +21,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "-": "^0.0.1-security.1",
     "@bull-board/api": "^8.1.2",
     "@bull-board/express": "^8.1.2",
     "@hoda/prisma-search-extension": "^0.1.1",
     "@hoda/shared": "^0.1.60",
     "@prisma/client": "^6.7.0",
+    "@types/multer": "^2.2.0",
     "axios": "^1.9.0",
     "bullmq": "^5.80.9",
     "compression": "^1.8.0",
