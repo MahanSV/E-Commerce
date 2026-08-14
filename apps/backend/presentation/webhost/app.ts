@@ -128,4 +128,29 @@ app.use(exceptionConverter);
 // Error handler
 app.use(exceptionHandler);
 
+// Health check endpoint (no rate limiting)
+app.get('/health', (req, res) => {
+  res.status(200).json({
+    status: 'OK',
+    timestamp: new Date().toISOString(),
+    rateLimiting: 'enabled',
+    requestId: req?.reqId || null
+  });
+});
+
+// Rate limit info endpoint
+app.get('/rate-limit-info', (req, res) => {
+  res.status(200).json({
+    general: '100 requests per 15 minutes',
+    auth: '5 login attempts per 15 minutes',
+    register: '3 registrations per hour',
+    upload: '10 uploads per 15 minutes',
+    search: '30 searches per minute',
+    orders: '15 order operations per 15 minutes',
+    wishlist: '20 operations per 5 minutes',
+    products: '60 requests per minute',
+    requestId: req?.reqId || null
+  });
+});
+
 export default app;
