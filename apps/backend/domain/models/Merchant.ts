@@ -18,10 +18,10 @@ export interface MerchantConstructorParams {
 export interface MerchantSnapshotParams {
     id: string;
     name: string;
-    description?: string;
-    email?: string;
-    mobile?: string;
-    address?: string;
+    description?: string | null;
+    email?: string | null;
+    mobile?: string | null;
+    address?: string | null;
     status: string;
     password: string;
     createdAt: Date;
@@ -31,10 +31,10 @@ export interface MerchantSnapshotParams {
 
 class Merchant extends BaseModel {
     private _name!: string;
-    private _description?: string;
-    private _email?: string;
-    private _mobile?: string;
-    private _address?: string;
+    private _description?: string | null;
+    private _email?: string | null;
+    private _mobile?: string | null;
+    private _address?: string | null;
     private _status!: string;
     private _password!: string;
     private _createdAt!: Date;

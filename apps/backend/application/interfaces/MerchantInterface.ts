@@ -1,3 +1,5 @@
+import {MerchantDTO} from "#application/dto/MerchantDTO.ts";
+import {createMerchantCommand, updateMerchantCommand} from "#application/types/merchant/command.ts";
 
 
 export interface MerchantServiceInterface {

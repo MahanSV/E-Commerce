@@ -10,7 +10,7 @@ class RedisDataModel<T = unknown> {
     // @TODO : fix error types
     { throw new Error('مشخصه اطلاعات باید پر باشد'); }
 
-    const dataModel = new RedisDataModel();
+    const dataModel = new RedisDataModel<T>();
 
     dataModel._creationDateTime = new Date();
     dataModel._specification = specification;

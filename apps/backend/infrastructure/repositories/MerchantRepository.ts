@@ -27,7 +27,7 @@ export default class MerchantRepository extends BaseRepository<Merchant> impleme
         return dataModel.map(data => Merchant.createFromSnapshot(data));
     };
 
-    async getMerchantById(id: string): Promise<Merchant> {
+    async getMerchantById(id: string): Promise<Merchant | null> {
         const dataModel = await prisma.merchant.findUnique({
             where: {
                 id

@@ -23,7 +23,7 @@ export interface ProductDTO {
     information?: string;
     wishlists?: WishlistDTO[];
     merchantProducts?: MerchantProductDTO[];
-    category: CategoryDTO;
+    category?: CategoryDTO;
     orderItems?: OrderItemDTO[];
     bulkUploadItems?: BulkUploadItemDTO[];
 }

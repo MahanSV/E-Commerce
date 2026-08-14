@@ -10,14 +10,14 @@ export class MerchantMapper {
         return {
             id: entity.id,
             name: entity.name,
-            description: entity?.description,
-            email: entity?.email,
-            phone: entity?.mobile,
-            address: entity?.address,
+            description: entity?.description ?? undefined,
+            email: entity?.email ?? undefined,
+            phone: entity?.mobile ?? undefined,
+            address: entity?.address ?? undefined,
             status: entity.status,
             createdAt: entity.createdAt,
             updatedAt: entity.updatedAt,
-            products: entity.merchantProducts?.map(mp => ProductMapper.toDTO(mp.product))
+            products: entity.merchantProducts?.map(mp => ProductMapper.toDTO(mp.product!))
         };
     };
     /**

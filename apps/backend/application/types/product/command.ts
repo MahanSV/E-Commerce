@@ -10,8 +10,10 @@ export type createProductCommand = {
     description: string;
     manufacturer: string;
     categoryId: string;
-    inStock?: number;
-};
+    inStock: number;
+    rating?: number;
+    quantity?: number;
+}
 
 export type updateProductCommand = {
     id: string;

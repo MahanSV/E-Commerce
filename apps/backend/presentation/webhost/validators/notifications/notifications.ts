@@ -14,8 +14,8 @@ const createNotificationSchema = yup.object({
     title: yup.string().required("title is required."),
     message: yup.string().required("message is required."),
     type: yup.string().required("type is required.").oneOf(["ORDER_UPDATE", "PAYMENT_STATUS", "PROMOTION", "SYSTEM_ALERT"]),
-    priority: yup.string().required("priority is required.").oneOf(["LOW", "NORMAL", "HIGH", "URGENT"]),
-    metadata: yup.string().required("metadata is required."), // TODO: CHeck it probably its object!
+    priority: yup.string().optional().oneOf(["LOW", "NORMAL", "HIGH", "URGENT"]),
+    metadata: yup.object().optional().nullable(),
 });
 
 const bulkMarkAsReadSchema = yup.object({
@@ -30,7 +30,7 @@ const bulkDeleteNotificationsSchema = yup.object({
 
 const updateNotificationSchema = yup.object({
     id: yup.string().required("id is required."),
-    isRead: yup.string().required("isRead is required."),
+    isRead: yup.boolean().required("isRead is required."),
 });
 
 const deleteNotificationSchema = yup.object({

@@ -23,7 +23,7 @@ const translatePrismaError = (error: any): translatePrismaError => {
   switch (error.code) {
     case 'P2002':
       return {
-        statusCode: httpStatus.BAD_REQUEST,
+        statusCode: httpStatus.CONFLICT,
         message: 'این مقدار قبلاً استفاده شده است.',
         innerMessage: `Unique constraint failed on ${error.meta?.target}`,
       };
@@ -54,7 +54,7 @@ const translatePrismaError = (error: any): translatePrismaError => {
   }
 };
 
-const logError = (error) => {
+const logError = (error: any) => {
   console.log();
   const log = {
     timestamp: new Date().toISOString(),

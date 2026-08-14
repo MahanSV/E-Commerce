@@ -22,12 +22,12 @@ export interface NotificationSnapshotParams {
     title: string;
     description: string;
     isRead: boolean;
-    priority: NotificationPriority;
-    type: NotificationType;
+    priority: NotificationPriority | string;
+    type: NotificationType | string;
     metadata?: any;
     createdAt: Date;
     updatedAt: Date;
-    user: UserSnapshotParams;
+    user?: UserSnapshotParams;
 }
 
 class Notification extends BaseModel {
@@ -40,7 +40,7 @@ class Notification extends BaseModel {
     private _metadata?: any;
     private _createdAt!: Date;
     private _updatedAt!: Date;
-    private _user!: User;
+    private _user?: User | null;
 
     constructor() {
         super();
@@ -74,12 +74,12 @@ class Notification extends BaseModel {
         notification.title = snapshot.title;
         notification.description = snapshot.description;
         notification.isRead = snapshot.isRead;
-        notification.priority = snapshot.priority;
-        notification.type = snapshot.type;
+        notification.priority = snapshot.priority as NotificationPriority;
+        notification.type = snapshot.type as NotificationType;
         notification.metadata = snapshot.metadata;
         notification.createdAt = snapshot.createdAt;
         notification.updatedAt = snapshot.updatedAt;
-        notification.user = snapshot.user && User.createFromSnapshot(snapshot.user);
+        notification.user = snapshot.user ? User.createFromSnapshot(snapshot.user) : undefined;
 
         return notification;
     }
@@ -150,7 +150,7 @@ class Notification extends BaseModel {
     public get user() {
         return this._user;
     }
-    public set user(value: User) {
+    public set user(value: User | null | undefined) {
         this._user = value;
     }
 }

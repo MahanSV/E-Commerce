@@ -14,8 +14,8 @@ export class OrderFactory {
 
         return Order.create({
             id : crypto.randomUUID(), // Generate ID if isn't provided
-            userId: command.userId,
-            status: command.status,
+            userId: command.userId || "",
+            status: command.status || "pending",
             isActive: true,
             companyName: command.company,
             address: command.address,

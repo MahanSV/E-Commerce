@@ -10,10 +10,10 @@ export class OrderMapper {
     public static toCustomerOrderDTO(entity: Order): CustomerOrderDTO {
         return {
             id: entity.id,
-            name: entity.user.name,
-            lastname: entity.user.lastName,
-            phone: entity.user.mobile,
-            email: entity.user.email,
+            name: entity.user?.name ?? '',
+            lastname: entity.user?.lastName ?? '',
+            phone: entity.user?.mobile ?? '',
+            email: entity.user?.email ?? '',
             company: entity.companyName || "",
             adress: entity.address || "",
             apartment: entity.apartment || "",
@@ -25,7 +25,7 @@ export class OrderMapper {
             orderNotice: entity.description || "",
             total: entity.total,
             // total: String(entity.orderItems?.reduce((sum, item) => sum + item.quantity, 0)) ?? "0",
-            products: entity.orderItems?.map(item => ProductMapper.toDTO(item.product)),
+            products: entity.orderItems?.map(item => ProductMapper.toDTO(item.product!)),
         };
     };
     /**

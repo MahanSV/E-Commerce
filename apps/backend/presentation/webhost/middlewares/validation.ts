@@ -15,7 +15,7 @@ const validate = (schema: any) => (req: any, res: any, next: any): any => {
 
     return next();
   } catch (error) {
-    return next(new ApiError(httpStatus.BAD_REQUEST, error.message, 'Error'));
+    return next(new ApiError(httpStatus.BAD_REQUEST, (error as any).message, 'Error'));
   }
 };
 

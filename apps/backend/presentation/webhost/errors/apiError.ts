@@ -1,6 +1,9 @@
 import BaseError from '#substructure/error/baseError.ts';
 
 class ApiError extends BaseError {
+  public statusCode: any;
+  public isOperational: boolean;
+
   constructor(statusCode: any, message: string, innerMessage: string, isOperational: boolean = true, stack: string = '') {
     super(message, innerMessage);
     this.statusCode = statusCode;

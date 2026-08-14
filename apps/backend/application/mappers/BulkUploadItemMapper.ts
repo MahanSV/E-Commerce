@@ -24,7 +24,7 @@ export class BulkUploadItemMapper {
             inStock: entity.inStock,
             status: entity.status,
             error: entity.error,
-            batch: BulkUploadBatchMapper.toDTO(entity.batch),
+            batch: entity.batch ? BulkUploadBatchMapper.toDTO(entity.batch) : undefined,
             product: entity.product ? ProductMapper.toDTO(entity.product) : undefined,
         };
     };

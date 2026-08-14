@@ -12,15 +12,15 @@ export interface MerchantProductSnapshotParams {
     id: string;
     merchantId: string;
     productId: string;
-    merchant: MerchantSnapshotParams;
-    product: ProductSnapshotParams;
+    merchant?: MerchantSnapshotParams;
+    product?: ProductSnapshotParams;
 }
 
 class MerchantProduct extends BaseModel {
     private _merchantId!: string;
     private _productId!: string;
-    private _merchant!: Merchant;
-    private _product!: Product;
+    private _merchant?: Merchant;
+    private _product?: Product;
 
     constructor() {
         super();
@@ -46,8 +46,8 @@ class MerchantProduct extends BaseModel {
         merchantProduct.id = snapshot.id;
         merchantProduct.merchantId = snapshot.merchantId;
         merchantProduct.productId = snapshot.productId;
-        merchantProduct.merchant = snapshot.merchant && Merchant.createFromSnapshot(snapshot.merchant);
-        merchantProduct.product = snapshot.product && Product.createFromSnapshot(snapshot.product);
+        merchantProduct.merchant = snapshot.merchant ? Merchant.createFromSnapshot(snapshot.merchant) : undefined;
+        merchantProduct.product = snapshot.product ? Product.createFromSnapshot(snapshot.product) : undefined;
 
         return merchantProduct;
     }

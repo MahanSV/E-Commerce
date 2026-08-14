@@ -39,9 +39,9 @@ export class OrderItemService implements OrderItemServiceInterface {
     };
 
     async deleteProductOrder(id: string): Promise<void> {
-        const checkProductOrderExist = await this.orderItemRepository.getOrderProductById(id);
+        const orderItems = await this.orderItemRepository.getProductOrder(id);
 
-        if (!checkProductOrderExist) throw new ApiError(httpStatus.BAD_REQUEST, "Order not found", "Error");
+        if (!orderItems.length) throw new ApiError(httpStatus.NOT_FOUND, "Order not found", "Error");
 
         await this.orderItemRepository.deleteProductOrder(id);
     };

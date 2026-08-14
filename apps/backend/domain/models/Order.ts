@@ -24,18 +24,18 @@ export interface OrderSnapshotParams {
     userId: string;
     status: string;
     isActive: boolean;
-    companyName?: string;
-    address?: string;
-    apartment?: string;
-    postalCode?: string;
-    country?: string;
-    city?: string;
-    description?: string;
+    companyName?: string | null;
+    address?: string | null;
+    apartment?: string | null;
+    postalCode?: string | null;
+    country?: string | null;
+    city?: string | null;
+    description?: string | null;
     total: number;
     deliversAt: Date;
     createdAt: Date;
     updatedAt: Date;
-    user: UserSnapshotParams;
+    user?: UserSnapshotParams;
     orderItems?: OrderItemSnapshotParams[];
 }
 
@@ -43,18 +43,18 @@ class Order extends BaseModel {
     private _userId!: string;
     private _status!: string;
     private _isActive!: boolean;
-    private _companyName?: string;
-    private _address?: string;
-    private _apartment?: string;
-    private _postalCode?: string;
-    private _country?: string;
-    private _city?: string;
-    private _description?: string;
+    private _companyName?: string | null;
+    private _address?: string | null;
+    private _apartment?: string | null;
+    private _postalCode?: string | null;
+    private _country?: string | null;
+    private _city?: string | null;
+    private _description?: string | null;
     private _total!: number;
     private _deliversAt!: Date;
     private _createdAt!: Date;
     private _updatedAt!: Date;
-    private _user!: User;
+    private _user?: User;
     private _orderItems?: OrderItem[]
 
     constructor() {
@@ -103,7 +103,7 @@ class Order extends BaseModel {
         order.deliversAt = snapshot.deliversAt;
         order.createdAt = snapshot.createdAt;
         order.updatedAt = snapshot.updatedAt;
-        order.user = snapshot.user && User.createFromSnapshot(snapshot.user);
+        order.user = snapshot.user ? User.createFromSnapshot(snapshot.user) : undefined;
         order.orderItems = snapshot.orderItems ? snapshot.orderItems.map(data => OrderItem.createFromSnapshot(data)) : [];
 
         return order;

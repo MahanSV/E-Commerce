@@ -18,9 +18,9 @@ export class OrderItemMapper {
         return {
             id: entity.id,
             quantity: entity.quantity,
-            customerOrder: OrderMapper.toCustomerOrderDTO(entity.order),
+            customerOrder: OrderMapper.toCustomerOrderDTO(entity.order!),
             price: entity.price,
-            products: ProductMapper.toDTO(entity.product),
+            products: ProductMapper.toDTO(entity.product!),
         };
     };
     /**
@@ -51,7 +51,7 @@ export class OrderItemMapper {
             customerOrderId: entity.orderId,
             productId: entity.productId,
             quantity: entity.quantity,
-            product: ProductMapper.toDTO(entity.product),
+            product: ProductMapper.toDTO(entity.product!),
         };
     };
 
@@ -74,18 +74,18 @@ export class OrderItemMapper {
             if (!grouped.has(key)) {
                 grouped.set(key, {
                     customerOrderId: key,
-                    customerOrder: OrderMapper.toCustomerOrderDTO(entity.order),
+                    customerOrder: OrderMapper.toCustomerOrderDTO(entity.order!),
                     products: [],
                 });
             }
 
             const products = grouped.get(key)!.products;
             const summary: OrderProductSummaryDTO = {
-                id: entity.product.id,
-                title: entity.product.title,
-                mainImage: entity.product.mainImage,
-                price: entity.product.price,
-                slug: entity.product.slug,
+                id: entity.product!.id,
+                title: entity.product!.title,
+                mainImage: entity.product!.mainImage,
+                price: entity.product!.price,
+                slug: entity.product!.slug,
                 quantity: entity.quantity,
             };
 

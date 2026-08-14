@@ -22,13 +22,13 @@ app.use((req, res, next) => {
 
   const originalJson = res.json.bind(res);
 
-  res.json = (data: any) => {
+  res.json = ((data: any) => {
     const replacer = (key: any, value: any): any => (typeof value === 'bigint' ? value.toString() : value);
 
     const stringified = JSON.stringify(data, replacer);
 
     res.send(stringified);
-  };
+  }) as unknown as typeof res.json;
 
   next();
 });

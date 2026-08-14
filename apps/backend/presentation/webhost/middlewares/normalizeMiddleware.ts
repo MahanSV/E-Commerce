@@ -7,10 +7,10 @@ function normalizeDeep(obj: object | string | {item: any, index: string}[], path
     } else if (Array.isArray(obj)) {
         return obj.map((item: any, index: number) => normalizeDeep(item, `${path}[${index}]`));
     } else if (typeof obj === 'object' && obj !== null) {
-        const normalized = {};
+        const normalized: Record<string, any> = {};
         for (const key in obj) {
             if (Object.hasOwn(obj, key)) {
-                normalized[key] = normalizeDeep(obj[key], `${path}.${key}`);
+                normalized[key] = normalizeDeep((obj as Record<string, any>)[key], `${path}.${key}`);
             }
         }
         return normalized;

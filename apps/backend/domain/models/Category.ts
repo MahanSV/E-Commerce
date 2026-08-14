@@ -11,14 +11,14 @@ export interface CategoryConstructorParams {
 export interface CategorySnapshotParams {
     id: string;
     name: string;
-    icon?: string;
+    icon?: string | null;
     products?: ProductSnapshotParams[];
 }
 
 
 class Category extends BaseModel {
     private _name!: string;
-    private _icon?: string;
+    private _icon?: string | null;
     private _products?: Product[];
 
     constructor() {

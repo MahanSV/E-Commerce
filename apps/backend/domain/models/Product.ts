@@ -32,20 +32,20 @@ export interface ProductSnapshotParams {
     slug: string;
     mainImage: string;
     manufacturer: string;
-    photo?: Array<{imageID: string, image: string}>;
+    photo?: any;
     inStock: number;
     price: number;
     rating: number;
     quantity: number;
-    SKU?: string;
-    socialLink?: string;
-    description?: string;
-    information?: string;
-    wishlists: WishListSnapshotParams[];
-    merchantProducts: MerchantProductSnapshotParams[];
-    category: CategorySnapshotParams;
-    orderItems: OrderItemSnapshotParams[];
-    bulkUploadItems: BulkUploadItemSnapshotParams[];
+    SKU?: string | null;
+    socialLink?: string | null;
+    description?: string | null;
+    information?: string | null;
+    wishlists?: WishListSnapshotParams[];
+    merchantProducts?: MerchantProductSnapshotParams[];
+    category?: CategorySnapshotParams;
+    orderItems?: OrderItemSnapshotParams[];
+    bulkUploadItems?: BulkUploadItemSnapshotParams[];
 }
 
 
@@ -60,13 +60,13 @@ class Product extends BaseModel {
     private _price!: number;
     private _rating!: number;
     private _quantity!: number;
-    private _SKU?: string;
-    private _socialLink?: string;
-    private _description?: string;
-    private _information?: string;
+    private _SKU?: string | null;
+    private _socialLink?: string | null;
+    private _description?: string | null;
+    private _information?: string | null;
     private _wishlists?: WishList[];
     private _merchantProducts?: MerchantProduct[];
-    private _category!: Category;
+    private _category?: Category;
     private _orderItems?: OrderItem[];
     private _bulkUploadItems?: BulkUploadItem[];
 
@@ -117,11 +117,11 @@ class Product extends BaseModel {
         product.socialLink = snapshot.socialLink;
         product.description = snapshot.description;
         product.information = snapshot.information;
-        product.category = snapshot.category && Category.createFromSnapshot(snapshot.category);
+        product.category = snapshot.category ? Category.createFromSnapshot(snapshot.category) : undefined;
         product.wishlists = snapshot.wishlists ? snapshot.wishlists.map(data => WishList.createFromSnapshot(data)) : [];
         product.merchantProducts = snapshot.merchantProducts ? snapshot.merchantProducts.map(data => MerchantProduct.createFromSnapshot(data)): [];
         product.orderItems = snapshot.orderItems ? snapshot.orderItems.map(data => OrderItem.createFromSnapshot(data)) : [];
-        product.bulkUploadItems = snapshot.bulkUploadItems ? snapshot.bulkUploadItems.map(data => BulkUpload.createFromSnapshot(data)) : [];
+        product.bulkUploadItems = snapshot.bulkUploadItems ? snapshot.bulkUploadItems.map(data => BulkUploadItem.createFromSnapshot(data)) : [];
 
         return product;
     }

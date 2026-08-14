@@ -24,7 +24,7 @@ class CustomerOrdersController {
                 city: req.body.city,
                 country: req.body.country,
                 description: req.body.orderNotice, // Note: Changed "orderNotice" to "description"
-                userId: req.body.userId,
+                userId: (req as any).tokenData?.id || req.body.userId,
             };
 
             const order = await this.orderService.createCustomerOrder(command);

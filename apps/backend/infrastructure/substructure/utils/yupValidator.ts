@@ -22,8 +22,8 @@ const yupValidateSync = (value: any, validatorSchema: any, validatorOptions = {}
     };
 
     return validatorSchema.validateSync(value, defaultValidatorOptions);
-  } catch ({ errors }) {
-    throw new Error(prefixError + errors);
+  } catch (err: any) {
+    throw new Error(prefixError + err.errors);
   }
 };
 

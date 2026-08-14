@@ -25,7 +25,7 @@ export interface UserSnapshotParams {
     lastName: string;
     email: string;
     password: string;
-    role: UserType;
+    role: UserType | string;
     mobile: string;
     status: string;
     createdAt?: Date;
@@ -83,7 +83,7 @@ class User extends BaseModel {
         user.lastName = snapshot.lastName;
         user.email = snapshot.email;
         user.password = snapshot.password;
-        user.role = snapshot.role;
+        user.role = snapshot.role as UserType;
         user.mobile = snapshot.mobile;
         user.status = snapshot.status;
         user.createdAt = snapshot.createdAt;

@@ -7,12 +7,12 @@ export type createCustomerOrderCommand = {
     address: string;
     apartment: string;
     postalCode: string;
-    status: string;
-    total: string;
+    status?: string;
+    total: number;
     city: string;
     country: string;
-    description: string;
-    userId: string;
+    description?: string;
+    userId?: string;
 };
 
 export type updateCustomerOrderCommand = {
@@ -26,7 +26,7 @@ export type updateCustomerOrderCommand = {
     name: string;
     mobile: string;
     postalCode: string;
-    status: "processing" | "canceled" | "delivered";
+    status: "pending" | "processing" | "shipped" | "delivered" | "cancelled";
     city: string;
     country: string;
     description: string | null;

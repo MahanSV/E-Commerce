@@ -7,7 +7,7 @@ const generateJWSToken = async (raw: any, format: string = 'compact', contentAlg
     const _publicKey = env.tokenEncryptingKey;
     const publicKey = await JWK.asKey(_publicKey, "pem");
     const buffer = Buffer.from(JSON.stringify(raw))
-    const encrypted = await JWE.createEncrypt({format, contentAlg, fields: {alg}}, publicKey)
+    const encrypted = await JWE.createEncrypt({format: format as "compact" | "general" | "flattened", contentAlg, fields: {alg}}, publicKey)
         .update(buffer).final();
     return encrypted;
 }
@@ -19,7 +19,7 @@ const decryptJWSToken = async (encryptedBody: any): Promise<string> => {
     await keystore.add(await JWK.asKey(_privateKey, "pem"));
     let outPut = parse.compact(encryptedBody);
     let decryptedVal = await outPut.perform(keystore);
-    let claims = Buffer.from(decryptedVal.plaintext).toString();
+    let claims = Buffer.from((decryptedVal as any).plaintext).toString();
     return claims;
 }
 

@@ -10,17 +10,22 @@ import {OrderMapper} from "#application/mappers/OrderMapper.ts";
 import { UserFactory } from '#domain/factories/UserFactory.ts';
 import { UserRepositoryInterface } from '#domain/interfaces/UserRepository.ts';
 import UserRepository from "#repositories/UserRepository.ts";
+import { NotificationService } from '#application/services/Notification.ts';
+import { NotificationType, NotificationPriority } from '#domain/enums/notification.ts';
 
 export class OrderService implements OrderServiceInterface {
     private orderRepository: OrderRepositoryInterface;
     private userRepository: UserRepositoryInterface;
+    private notificationService: NotificationService;
 
     constructor(
         orderRepository: OrderRepositoryInterface = new OrderRepository(),
         userRepository: UserRepositoryInterface = new UserRepository(),
+        notificationService: NotificationService = new NotificationService(),
     ) {
         this.orderRepository = orderRepository;
         this.userRepository = userRepository;
+        this.notificationService = notificationService;
     };
 
 
@@ -32,15 +37,23 @@ export class OrderService implements OrderServiceInterface {
             mobile: command.mobile,
         });
 
-        const checkUserEmailExist = await this.userRepository.getUserByEmail(userEntity.email);
+        let orderUserId: string | undefined = command.userId;
 
-        if (checkUserEmailExist) throw new ApiError(httpStatus.BAD_REQUEST, "User already exist", "Error");
+        if (!orderUserId) {
+            const existingUser = await this.userRepository.getUserByEmail(userEntity.email);
 
-        const addUser = await this.userRepository.createUser(userEntity);
+            if (existingUser) {
+                orderUserId = existingUser.id;
+            } else {
+                const addUser = await this.userRepository.createUser(userEntity);
 
-        if (!addUser) throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, "Failed to create user", "Error");
+                if (!addUser) throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, "Failed to create user", "Error");
 
-        const orderEntity = OrderFactory.create(command);
+                orderUserId = addUser.id;
+            }
+        }
+
+        const orderEntity = OrderFactory.create({ ...command, userId: orderUserId });
 
         const addOrder = await this.orderRepository.createCustomerOrder(orderEntity);
 
@@ -57,6 +70,21 @@ export class OrderService implements OrderServiceInterface {
         const updatedOrder = await this.orderRepository.updateCustomerOrder(command);
 
         if (!updatedOrder) throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, "Failed to update order", "Error");
+
+        if (order.status !== updatedOrder.status && updatedOrder.userId) {
+            try {
+                await this.notificationService.createNotification({
+                    userId: updatedOrder.userId,
+                    title: "Order status updated",
+                    description: `Your order status changed to ${updatedOrder.status}.`,
+                    type: NotificationType.ORDER_UPDATE,
+                    priority: NotificationPriority.NORMAL,
+                    metadata: { orderId: updatedOrder.id },
+                });
+            } catch (error) {
+                // notification failure must not fail the order update
+            }
+        }
 
         return OrderMapper.toCustomerOrderDTO(updatedOrder);
     };

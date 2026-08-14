@@ -33,7 +33,7 @@ class ProductImageController {
 
             const createdProductImage = await this.productService.createImage(command);
 
-            res.status(201);
+            res.status(201).json(createdProductImage);
         } catch (error) {
             if (error instanceof ApiError) throw error;
         }

@@ -17,8 +17,8 @@ export interface OrderItemSnapshotParams {
     productId: string
     quantity: number;
     price: number;
-    order:   OrderSnapshotParams;
-    product: ProductSnapshotParams;
+    order?:   OrderSnapshotParams;
+    product?: ProductSnapshotParams;
 }
 
 class OrderItem extends BaseModel {
@@ -26,8 +26,8 @@ class OrderItem extends BaseModel {
     private _productId!: string
     private _quantity!: number;
     private _price!: number;
-    private _order!: Order
-    private _product!: Product;
+    private _order?: Order
+    private _product?: Product;
 
     constructor() {
         super();
@@ -56,8 +56,8 @@ class OrderItem extends BaseModel {
         orderItem.productId = snapshot.productId;
         orderItem.quantity = snapshot.quantity;
         orderItem.price = snapshot.price;
-        orderItem.order = snapshot.order && Order.createFromSnapshot(snapshot.order);
-        orderItem.product = snapshot.product && Product.createFromSnapshot(snapshot.product);
+        orderItem.order = snapshot.order ? Order.createFromSnapshot(snapshot.order) : undefined;
+        orderItem.product = snapshot.product ? Product.createFromSnapshot(snapshot.product) : undefined;
 
         return orderItem;
     };

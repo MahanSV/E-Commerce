@@ -12,11 +12,11 @@ class BulkUploadController {
 
     public async uploadCsvAndCreateBatch(req: Request, res: Response): Promise<any> {
         try {
-            const csvFile = req?.files?.file;
+            const csvFile = (req as any)?.files?.file;
 
             const bulkUpload = await this.bulkUploadService.uploadCsvAndCreateBatch(csvFile);
 
-            res.json(bulkUpload);
+            res.status(201).json(bulkUpload);
         } catch (error) {
             if (error instanceof ApiError) throw error;
         }
