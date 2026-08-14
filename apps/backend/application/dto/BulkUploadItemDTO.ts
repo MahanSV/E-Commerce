@@ -18,5 +18,5 @@ export interface BulkUploadItemDTO {
     status: BulkUploadItemStatus;
     error?: string;
     batch?: BulkUploadBatchDTO;
-    product?: ProductDTO
+    product?: ProductDTO;
 }
