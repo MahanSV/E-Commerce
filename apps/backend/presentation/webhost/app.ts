@@ -115,7 +115,7 @@ app.use(cookieParser());
 app.use(normalizeMiddleware);
 
 // API routes
-app.use('/v1', routes);
+app.use('/api', routes);
 
 // Handle 404
 app.use((req, res, next) => {

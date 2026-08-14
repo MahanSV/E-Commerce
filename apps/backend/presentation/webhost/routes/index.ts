@@ -18,55 +18,55 @@ const router = express.Router();
 
 const routes = [
     {
-        path: "/api/products",
+        path: "/products",
         source: productRouter
     },
     {
-        path: "/api/categories",
+        path: "/categories",
         source: categoryRouter
     },
     {
-        path: "/api/images",
+        path: "/images",
         source: productImagesRouter
     },
     {
-        path: "/api/main-image",
+        path: "/main-image",
         source: mainImageRouter
     },
     {
-        path: "/api/users",
+        path: "/users",
         source: userRouter
     },
     {
-        path: "/api/search",
+        path: "/search",
         source: searchRouter
     },
     {
-        path: "/api/orders",
+        path: "/orders",
         source: orderRouter
     },
     {
-        path: "/api/order-product",
+        path: "/order-product",
         source: orderProductRouter
     },
     {
-        path: "/api/slugs",
+        path: "/slugs",
         source: slugRouter
     },
     {
-        path: "/api/wishlist",
+        path: "/wishlist",
         source: wishlistRouter
     },
     {
-        path: "/api/notifications",
+        path: "/notifications",
         source: notificationsRouter
     },
     {
-        path: "/api/merchants",
+        path: "/merchants",
         source: merchantRouter
     },
     {
-        path: "/api/bulk-upload",
+        path: "/bulk-upload",
         source: bulkUploadRouter
     },
 ];

@@ -54,7 +54,7 @@ class ProductController {
 
             const product = await this.productService.createProduct(command);
 
-            res.status(201);
+            res.status(201).json(product);
         } catch (error) {
             if (error instanceof ApiError) throw error;
         }
@@ -112,9 +112,9 @@ class ProductController {
         try {
             const id = req.params.id;
 
-            const deletedProduct = await this.productService.deleteProduct(id);
+            await this.productService.deleteProduct(id);
 
-            res.status(204);
+            res.status(204).send();
         } catch (error) {
             if (error instanceof ApiError) throw error;
         }
