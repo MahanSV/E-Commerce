@@ -58,7 +58,7 @@ class CustomerOrdersController {
                 city: req.body.city,
                 country: req.body.country,
                 description: req.body.orderNotice, // Note: Changed "orderNotice" to "description"
-                quantity: req.body.total,
+                total: Number(req.body.total),
             };
 
             const updatedOrder = await this.orderService.updateCustomerOrder(command);

@@ -33,7 +33,7 @@ class ProductImageController {
 
             const createdProductImage = await this.productService.createImage(command);
 
-            res.json(createdProductImage);
+            res.status(201);
         } catch (error) {
             if (error instanceof ApiError) throw error;
         }
@@ -64,7 +64,7 @@ class ProductImageController {
 
             const deletedProductImage = await this.productService.deleteImage(id);
 
-            res.json(deletedProductImage);
+            res.status(204).send();
         } catch (error) {
             if (error instanceof ApiError) throw error;
         }

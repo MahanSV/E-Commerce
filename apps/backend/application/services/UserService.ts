@@ -21,7 +21,7 @@ export default class UserService implements UserServiceInterface {
         return UserMapper.toSimpleUserDTOList(allUsers);
     };
 
-    async createUser(command: createUserCommand): Promise<UserDTO> {
+    async createUser(command: createUserCommand): Promise<SimpleUserDTO> {
         const userExistEmail = await this.userRepository.getUserByEmail(command.email);
 
         if (userExistEmail) throw new ApiError(httpStatus.CONFLICT, "Email already exist.", "Error");
@@ -32,7 +32,7 @@ export default class UserService implements UserServiceInterface {
 
         if (!createUser) throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, "Failed to create user.", "Error");
 
-        return UserMapper.toDTO(createUser);
+        return UserMapper.toSimpleUserDTO(createUser);
     };
 
     async getUser(id: string): Promise<SimpleUserDTO> {
@@ -66,7 +66,7 @@ export default class UserService implements UserServiceInterface {
     async getUserByEmail(email: string): Promise<UserDTO | null> {
         const user = await this.userRepository.getUserByEmail(email);
 
-        if (!user) return null;
+        if (!user) throw new ApiError(httpStatus.NOT_FOUND, "User doesn't exist", "Error");
 
         return UserMapper.toDTO(user);
     };

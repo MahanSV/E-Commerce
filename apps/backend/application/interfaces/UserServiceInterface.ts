@@ -4,7 +4,7 @@ import {createUserCommand, updateUserCommand} from "#application/types/user/comm
 
 export interface UserServiceInterface {
     getAllUsers(): Promise<SimpleUserDTO[]>;
-    createUser(command: createUserCommand): Promise<UserDTO>;
+    createUser(command: createUserCommand): Promise<SimpleUserDTO>;
     getUser(id: string): Promise<SimpleUserDTO> ;
     updateUser(command: updateUserCommand): Promise<UserDTO>;
     deleteUser(id: string): Promise<UserDTO>;

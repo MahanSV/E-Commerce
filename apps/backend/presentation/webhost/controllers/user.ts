@@ -31,7 +31,7 @@ class UserController {
 
             const user = await this.userService.createUser(command);
 
-            res.json(user);
+            res.status(201).json(user);
         } catch (error) {
             if (error instanceof ApiError) throw error;
         }
@@ -76,7 +76,7 @@ class UserController {
 
             const user = await this.userService.deleteUser(id);
 
-            res.json(user);
+            res.status(204).send();
         } catch (error) {
             if (error instanceof ApiError) throw error;
         }

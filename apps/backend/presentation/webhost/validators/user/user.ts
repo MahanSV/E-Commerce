@@ -11,10 +11,10 @@ const getUserSchema = yup.object({
 });
 
 const updateUserSchema = yup.object({
-    id: yup.string().required("id is required."),
-    email: yup.string().required("email is required."),
-    password: yup.string().required("password is required."),
-    role: yup.string().required("role is required."),
+    id: yup.string(),
+    email: yup.string(),
+    password: yup.string(),
+    role: yup.string(),
 });
 
 const deleteUserSchema = yup.object({
