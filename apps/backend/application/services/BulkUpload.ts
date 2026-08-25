@@ -1,7 +1,7 @@
-import { BulkUploadServiceInterface } from "#application/interfaces/BulkUploadInterface.ts";
-import { BulkUploadBatchRepositoryInterface } from "#domain/interfaces/BulkUploadBatchRepository.ts";
+import {BulkUploadServiceInterface} from "#application/interfaces/BulkUploadInterface.ts";
+import {BulkUploadBatchRepositoryInterface} from "#domain/interfaces/BulkUploadBatchRepository.ts";
 import BulkUploadBatchRepository from "#repositories/BulkUploadBatchRepository.ts";
-import { excelCsvBufferToJSON, normalizeXlsxToCsvRows } from "#substructure/utils/excel.ts";
+import {excelCsvBufferToJSON, normalizeXlsxToCsvRows} from "#substructure/utils/excel.ts";
 import ApiError from "#webhost/errors/apiError.ts";
 import httpStatus from "http-status";
 
@@ -66,13 +66,11 @@ export default class BulkUploadService implements BulkUploadServiceInterface {
             );
 
             const finalStatus = this.computeBatchStatus(successCount, errorCount);
-            const batch = await this.bulkUploadBatchRepository.updateBatch(tx, createdBatch.id, {
+            return await this.bulkUploadBatchRepository.updateBatch(tx, createdBatch.id, {
                 status: finalStatus,
                 itemCount: successCount + errorCount,
                 errorCount,
             });
-
-            return batch;
         });
 
         const summary = await this.bulkUploadBatchRepository.getBatchSummary(result.id);
