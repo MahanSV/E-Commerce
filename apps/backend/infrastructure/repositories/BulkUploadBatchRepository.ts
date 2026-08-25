@@ -1,9 +1,9 @@
-import { BulkUploadRepositoryInterface } from "#domain/interfaces/BulkUploadBatchRepository.ts";
+import { BulkUploadBatchRepositoryInterface } from "#domain/interfaces/BulkUploadBatchRepository.ts";
 import { BaseRepository } from "#repositories/BaseRepository.ts";
 import BulkUploadBatch from "#models/BulkUploadBatch.ts";
 import prisma from "#context/dbContext/prisma/client.ts";
 
-export default class BulkUploadBatchRepository extends BaseRepository<BulkUploadBatch> implements BulkUploadRepositoryInterface {
+export default class BulkUploadBatchRepository extends BaseRepository<BulkUploadBatch> implements BulkUploadBatchRepositoryInterface {
     constructor() {
         super(BulkUploadBatch.createFromSnapshot);
     }
@@ -21,11 +21,11 @@ export default class BulkUploadBatchRepository extends BaseRepository<BulkUpload
     };
 
     async createBatch(tx: any, data: any): Promise<any> {
-        return tx.bulk_upload_batch.create({ data });
+        return tx.bulkUploadBatch.create({ data });
     };
 
     async updateBatch(tx: any, batchId: string, data: any): Promise<any> {
-        return tx.bulk_upload_batch.update({
+        return tx.bulkUploadBatch.update({
             where: { id: batchId },
             data
         });

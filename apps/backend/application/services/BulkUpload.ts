@@ -1,5 +1,5 @@
 import { BulkUploadServiceInterface } from "#application/interfaces/BulkUploadInterface.ts";
-import { BulkUploadRepositoryInterface } from "#domain/interfaces/BulkUploadBatchRepository.ts";
+import { BulkUploadBatchRepositoryInterface } from "#domain/interfaces/BulkUploadBatchRepository.ts";
 import BulkUploadBatchRepository from "#repositories/BulkUploadBatchRepository.ts";
 import { excelCsvBufferToJSON, normalizeXlsxToCsvRows } from "#substructure/utils/excel.ts";
 import ApiError from "#webhost/errors/apiError.ts";
@@ -23,10 +23,10 @@ interface ValidationResult {
 }
 
 export default class BulkUploadService implements BulkUploadServiceInterface {
-    private bulkUploadRepository: BulkUploadRepositoryInterface;
+    private bulkUploadBatchRepository: BulkUploadBatchRepositoryInterface;
 
-    constructor(bulkUploadRepository: BulkUploadRepositoryInterface = new BulkUploadBatchRepository()) {
-        this.bulkUploadRepository = bulkUploadRepository;
+    constructor(bulkUploadBatchRepository: BulkUploadBatchRepositoryInterface = new BulkUploadBatchRepository()) {
+        this.bulkUploadBatchRepository = bulkUploadBatchRepository;
     };
 
     public async uploadCsvAndCreateBatch(csvFile: Express.Multer.File): Promise<any> {
@@ -50,8 +50,8 @@ export default class BulkUploadService implements BulkUploadServiceInterface {
             }
         }
 
-        const result = await this.bulkUploadRepository.executeTransaction(async (tx: any) => {
-            const createdBatch = await this.bulkUploadRepository.createBatch(tx, {
+        const result = await this.bulkUploadBatchRepository.executeTransaction(async (tx: any) => {
+            const createdBatch = await this.bulkUploadBatchRepository.createBatch(tx, {
                 fileName: csvFile.originalname,
                 status: "PENDING",
                 itemCount: rows.length,
@@ -66,7 +66,7 @@ export default class BulkUploadService implements BulkUploadServiceInterface {
             );
 
             const finalStatus = this.computeBatchStatus(successCount, errorCount);
-            const batch = await this.bulkUploadRepository.updateBatch(tx, createdBatch.id, {
+            const batch = await this.bulkUploadBatchRepository.updateBatch(tx, createdBatch.id, {
                 status: finalStatus,
                 itemCount: successCount + errorCount,
                 errorCount,
@@ -75,7 +75,7 @@ export default class BulkUploadService implements BulkUploadServiceInterface {
             return batch;
         });
 
-        const summary = await this.bulkUploadRepository.getBatchSummary(result.id);
+        const summary = await this.bulkUploadBatchRepository.getBatchSummary(result.id);
 
         return {
             batchId: result.id,
@@ -85,7 +85,9 @@ export default class BulkUploadService implements BulkUploadServiceInterface {
         };
     };
 
-    async listBatches(): Promise<any> {};
+    async listBatches(): Promise<any> {
+        const batches = await t
+    };
     async getBatchDetail(batchId: string): Promise<any> {};
     async updateBatchItems(batchId: string, items: string): Promise<any> {};
     async deleteBatch(batchId: string, deleteProducts: boolean): Promise<any> {};
@@ -131,7 +133,7 @@ export default class BulkUploadService implements BulkUploadServiceInterface {
         const uniqueCategoryIds = [...new Set(validRows.map((r) => r.categoryId))];
 
         // کوئری از طریق ریپازیتوری
-        const categories = await this.bulkUploadRepository.findCategories(tx, uniqueCategoryIds);
+        const categories = await this.bulkUploadBatchRepository.findCategories(tx, uniqueCategoryIds);
 
         const categoryMap = new Map<string, string>();
         categories.forEach((cat: any) => {
@@ -149,7 +151,7 @@ export default class BulkUploadService implements BulkUploadServiceInterface {
                 (row.categoryId ? categoryMap.get(row.categoryId.toLowerCase()) : undefined);
 
             if (!resolvedCategoryId) {
-                await this.bulkUploadRepository.createBulkUploadItem(tx, {
+                await this.bulkUploadBatchRepository.createBulkUploadItem(tx, {
                     batchId, title: row.title, slug: row.slug, price: row.price,
                     manufacturer: row.manufacturer, description: row.description,
                     mainImage: row.mainImage, categoryId: row.categoryId, inStock: row.inStock,
@@ -160,20 +162,20 @@ export default class BulkUploadService implements BulkUploadServiceInterface {
             }
 
             try {
-                const product = await this.bulkUploadRepository.createProduct(tx, {
+                const product = await this.bulkUploadBatchRepository.createProduct(tx, {
                     title: row.title, slug: row.slug, price: row.price, rating: 5,
                     description: row.description ?? "", manufacturer: row.manufacturer ?? "",
                     mainImage: row.mainImage ?? "", categoryId: resolvedCategoryId, inStock: row.inStock,
                 });
 
-                await this.bulkUploadRepository.createBulkUploadItem(tx, {
+                await this.bulkUploadBatchRepository.createBulkUploadItem(tx, {
                     batchId, productId: product.id, title: row.title, slug: row.slug, price: row.price,
                     manufacturer: row.manufacturer, description: row.description, mainImage: row.mainImage,
                     categoryId: resolvedCategoryId, inStock: row.inStock, status: "CREATED", error: null,
                 });
                 success++;
             } catch (e: any) {
-                await this.bulkUploadRepository.createBulkUploadItem(tx, {
+                await this.bulkUploadBatchRepository.createBulkUploadItem(tx, {
                     batchId, title: row.title, slug: row.slug, price: row.price,
                     manufacturer: row.manufacturer, description: row.description, mainImage: row.mainImage,
                     categoryId: resolvedCategoryId || row.categoryId, inStock: row.inStock,
@@ -185,7 +187,7 @@ export default class BulkUploadService implements BulkUploadServiceInterface {
 
         // مدیریت ردیف‌های نامعتبر
         for (const err of errorRows) {
-            await this.bulkUploadRepository.createBulkUploadItem(tx, {
+            await this.bulkUploadBatchRepository.createBulkUploadItem(tx, {
                 batchId, title: "", slug: "", price: 0, manufacturer: null,
                 description: null, mainImage: null, categoryId: "", inStock: 0,
                 status: "ERROR", error: `Row ${err.index}: ${err.error}`,

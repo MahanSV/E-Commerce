@@ -1,6 +1,6 @@
 import BulkUploadBatch from "#models/BulkUploadBatch.ts";
 
-export interface BulkUploadRepositoryInterface {
+export interface BulkUploadBatchRepositoryInterface {
     uploadCsvAndCreateBatch(csvFile: any): Promise<BulkUploadBatch>
     listBatches(): Promise<BulkUploadBatch[]>
     getBatchDetail(batchId: string): Promise<BulkUploadBatch>
