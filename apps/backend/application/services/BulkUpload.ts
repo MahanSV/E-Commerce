@@ -29,6 +29,13 @@ export default class BulkUploadService implements BulkUploadServiceInterface {
         this.bulkUploadBatchRepository = bulkUploadBatchRepository;
     };
 
+    async listBatches(): Promise<any> {
+        const batches = await t
+    };
+    async getBatchDetail(batchId: string): Promise<any> {};
+    async updateBatchItems(batchId: string, items: string): Promise<any> {};
+    async deleteBatch(batchId: string, deleteProducts: boolean): Promise<any> {};
+
     public async uploadCsvAndCreateBatch(csvFile: Express.Multer.File): Promise<any> {
         // ۱. پارس کردن فایل
         const parsedData = excelCsvBufferToJSON(csvFile.buffer);
@@ -82,13 +89,6 @@ export default class BulkUploadService implements BulkUploadServiceInterface {
             validationErrors: errors,
         };
     };
-
-    async listBatches(): Promise<any> {
-        const batches = await t
-    };
-    async getBatchDetail(batchId: string): Promise<any> {};
-    async updateBatchItems(batchId: string, items: string): Promise<any> {};
-    async deleteBatch(batchId: string, deleteProducts: boolean): Promise<any> {};
 
     // متد اعتبارسنجی
     private validateRow(row: Record<string, string>): ValidationResult {
