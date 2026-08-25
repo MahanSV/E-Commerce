@@ -1,6 +1,7 @@
 import type { Request, Response } from 'express';
 import ApiError from "#webhost/errors/apiError.ts";
 import BulkUploadService from "#application/services/BulkUpload.ts";
+import httpStatus from "http-status";
 
 
 class BulkUploadController {
@@ -12,7 +13,11 @@ class BulkUploadController {
 
     public async uploadCsvAndCreateBatch(req: Request, res: Response): Promise<any> {
         try {
-            const csvFile = (req as any)?.files?.file;
+            const csvFile = req.file;
+
+            if (!csvFile) {
+                throw new ApiError(httpStatus.BAD_REQUEST, "CSV file is required", "Error");
+            }
 
             const bulkUpload = await this.bulkUploadService.uploadCsvAndCreateBatch(csvFile);
 

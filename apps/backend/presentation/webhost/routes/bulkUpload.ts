@@ -6,15 +6,19 @@ import {
     deleteBatchSchema,
     getBatchDetailSchema,
     updateBatchItemsSchema,
-    uploadCsvAndCreateBatchSchema
 } from "#webhost/validators/bulkUpload/bulkUpload.ts";
+import multer from 'multer';
 
 const router = express.Router();
+
+const upload = multer({
+    storage: multer.memoryStorage(),
+});
 
 router.post(
     '/',
     authenticate,
-    validate(uploadCsvAndCreateBatchSchema),
+    upload.single("file"),
     BulkUploadController.uploadCsvAndCreateBatch
 );
 
