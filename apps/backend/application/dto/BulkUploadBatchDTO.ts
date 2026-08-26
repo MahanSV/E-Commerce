@@ -13,3 +13,20 @@ export interface BulkUploadBatchDTO {
     items?: BulkUploadItemDTO[];
     user?: UserDTO;
 }
+
+export interface BulkUploadBatchReportDTO {
+    id: string;
+    fileName: string;
+    totalRecords: number;
+    successfulRecords: number;
+    failedRecords: number;
+    status: BulkUploadBatchStatus;
+    uploadedBy: string;
+    uploadedAt: Date;
+    errors: (string | undefined)[] | undefined
+}
+
+export interface BulkUploadBatchDetailDTO {
+    batch: BulkUploadBatchDTO;
+    items?: BulkUploadItemDTO[];
+}

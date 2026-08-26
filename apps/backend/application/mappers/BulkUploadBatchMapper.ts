@@ -1,7 +1,8 @@
 import BulkUploadBatch from "#domain/models/BulkUploadBatch.ts";
-import { BulkUploadBatchDTO } from "#application/dto/BulkUploadBatchDTO.ts";
+import {BulkUploadBatchDetailDTO, BulkUploadBatchDTO} from "#application/dto/BulkUploadBatchDTO.ts";
 import {UserMapper} from "#application/mappers/UserMapper.ts";
 import {BulkUploadItemMapper} from "#application/mappers/BulkUploadItemMapper.ts";
+import BulkUploadItem from "#models/BulkUploadItem.ts";
 
 
 export class BulkUploadBatchMapper {
@@ -26,5 +27,12 @@ export class BulkUploadBatchMapper {
          */
         public static toDTOList(entities: BulkUploadBatch[]): BulkUploadBatchDTO[] {
                 return entities.map(entity => this.toDTO(entity));
+        };
+
+        public static toDetailsDTO(bulkBatchEntity: BulkUploadBatch, bulkItemEntity:BulkUploadItem[]): BulkUploadBatchDetailDTO {
+            return {
+                batch: this.toDTO(bulkBatchEntity),
+                items: bulkItemEntity ? BulkUploadItemMapper.toDTOList(bulkItemEntity) : undefined,
+            };
         };
 }

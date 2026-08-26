@@ -11,7 +11,11 @@ const getBatchDetailSchema = yup.object({
 
 const updateBatchItemsSchema = yup.object({
     batchId: yup.string().required("batchId is required."),
-    items: yup.string().required("items is required."),
+    items: yup
+        .array()
+        .of(yup.string().required())
+        .min(1, "items must contain at least one item.")
+        .required("items is required."),
 });
 
 const deleteBatchSchema = yup.object({

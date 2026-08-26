@@ -17,4 +17,17 @@ export default class BulkUploadItemRepository extends BaseRepository<BulkUploadI
 
         return dataModels.map(data => BulkUploadItem.createFromSnapshot(data));
     };
+
+    async findItemsByBatchIdWithProducts(batchId: string): Promise<BulkUploadItem[]> {
+        const dataModels = await prisma.bulkUploadItem.findMany({
+            where: {
+                batchId
+            },
+            include: {
+                product: true
+            }
+        });
+
+        return dataModels.map(data => BulkUploadItem.createFromSnapshot(data));
+    };
 }

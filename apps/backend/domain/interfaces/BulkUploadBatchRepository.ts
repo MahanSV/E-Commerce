@@ -1,10 +1,25 @@
 import BulkUploadBatch from "#models/BulkUploadBatch.ts";
+import {updateBatchItemsCommand} from "#application/types/bulkUpload/command.js";
 
 export interface BulkUploadBatchRepositoryInterface {
     uploadCsvAndCreateBatch(csvFile: any): Promise<BulkUploadBatch>
     listBatches(): Promise<BulkUploadBatch[]>
-    getBatchDetail(batchId: string): Promise<BulkUploadBatch>
-    updateBatchItems(batchId: string, items: string): Promise<BulkUploadBatch>
+    findById(id: string): Promise<BulkUploadBatch | null>
+    updateBatchItems(command: updateBatchItemsCommand): Promise<{
+        error: string | null;
+        id: string;
+        status: string;
+        batchId: string;
+        productId: string | null;
+        title: string;
+        slug: string;
+        price: number;
+        manufacturer: string | null;
+        description: string | null;
+        mainImage: string | null;
+        categoryId: string;
+        inStock: number;
+    }[]>
     deleteBatch(batchId: string, deleteProducts: boolean): Promise<BulkUploadBatch>
     // متد مدیریت تراکنش‌ها
     executeTransaction<T>(callback: (tx: any) => Promise<T>): Promise<T>;

@@ -1,9 +1,14 @@
-import {BulkUploadServiceInterface} from "#application/interfaces/BulkUploadInterface.ts";
+import {BulkUploadBatchServiceInterface} from "#application/interfaces/BulkUploadBatchInterface.ts";
 import {BulkUploadBatchRepositoryInterface} from "#domain/interfaces/BulkUploadBatchRepository.ts";
 import BulkUploadBatchRepository from "#repositories/BulkUploadBatchRepository.ts";
 import {excelCsvBufferToJSON, normalizeXlsxToCsvRows} from "#substructure/utils/excel.ts";
 import ApiError from "#webhost/errors/apiError.ts";
 import httpStatus from "http-status";
+import {BulkUploadBatchDetailDTO, BulkUploadBatchReportDTO} from "#application/dto/BulkUploadBatchDTO.ts";
+import {BulkUploadItemRepositoryInterface} from "#domain/interfaces/BulkUploadItemRepository.ts";
+import BulkUploadItemRepository from "#repositories/BulkUploadItemRepository.ts";
+import {BulkUploadBatchMapper} from "#application/mappers/BulkUploadBatchMapper.ts";
+import {updateBatchItemsCommand} from "#application/types/bulkUpload/command.ts";
 
 interface CleanRowData {
     title: string;
@@ -22,19 +27,87 @@ interface ValidationResult {
     error?: string;
 }
 
-export default class BulkUploadService implements BulkUploadServiceInterface {
+export default class BulkUploadBatchService implements BulkUploadBatchServiceInterface {
     private bulkUploadBatchRepository: BulkUploadBatchRepositoryInterface;
+    private bulkUploadItemRepository: BulkUploadItemRepositoryInterface;
 
-    constructor(bulkUploadBatchRepository: BulkUploadBatchRepositoryInterface = new BulkUploadBatchRepository()) {
+    constructor(
+        bulkUploadBatchRepository: BulkUploadBatchRepositoryInterface = new BulkUploadBatchRepository(),
+        bulkUploadItemRepository: BulkUploadItemRepositoryInterface = new BulkUploadItemRepository()
+    ) {
         this.bulkUploadBatchRepository = bulkUploadBatchRepository;
+        this.bulkUploadItemRepository = bulkUploadItemRepository;
     };
 
-    async listBatches(): Promise<any> {
-        const batches = await t
+    async listBatches(): Promise<Awaited<BulkUploadBatchReportDTO[]>> {
+        const batches = await this.bulkUploadBatchRepository.listBatches();
+
+        return await Promise.all(
+            batches.map(async (batch) => {
+                const items = await this.bulkUploadItemRepository.findBulkUploadItemByBatchId(batch.id);
+
+                const successfulRecords = items.filter(
+                    (item) => item.status === "CREATED" && item.productId !== null
+                ).length;
+                const failedRecords = items.filter(
+                    (item) => item.status === "ERROR" || item.error !== null
+                ).length;
+
+                // Collect error messages
+                const errors = items
+                    .filter((item) => item.error)
+                    .map((item) => item.error);
+
+                return {
+                    id: batch.id,
+                    fileName: batch.fileName || `batch-${batch.id.substring(0, 8)}.csv`,
+                    totalRecords: items.length,
+                    successfulRecords,
+                    failedRecords,
+                    status: batch.status,
+                    uploadedBy: "Admin", // You can get this from session if needed
+                    uploadedAt: batch.createdAt,
+                    errors: errors.length > 0 ? errors : undefined,
+                };
+            })
+        );
     };
-    async getBatchDetail(batchId: string): Promise<any> {};
-    async updateBatchItems(batchId: string, items: string): Promise<any> {};
-    async deleteBatch(batchId: string, deleteProducts: boolean): Promise<any> {};
+
+    async getBatchDetail(batchId: string): Promise<BulkUploadBatchDetailDTO> {
+        const batch = await this.bulkUploadBatchRepository.findById(batchId);
+
+        if (!batch) throw new ApiError(httpStatus.NOT_FOUND, "Batch not found", "Error");
+
+        const items = await this.bulkUploadItemRepository.findItemsByBatchIdWithProducts(batchId);
+
+        return BulkUploadBatchMapper.toDetailsDTO(batch, items);
+    };
+
+    async updateBatchItems(command: updateBatchItemsCommand): Promise<{updatedCount: number, items: {
+            error: string | null;
+            id: string;
+            status: string;
+            batchId: string;
+            productId: string | null;
+            title: string;
+            slug: string;
+            price: number;
+            manufacturer: string | null;
+            description: string | null;
+            mainImage: string | null;
+            categoryId: string;
+            inStock: number;
+    }[]
+    }>
+    {
+        const updated = await this.bulkUploadBatchRepository.updateBatchItems(command);
+
+        return { updatedCount: updated.length, items: updated };
+    };
+
+    async deleteBatch(batchId: string, deleteProducts: boolean): Promise<any> {
+
+    };
 
     public async uploadCsvAndCreateBatch(csvFile: Express.Multer.File): Promise<any> {
         // ۱. پارس کردن فایل

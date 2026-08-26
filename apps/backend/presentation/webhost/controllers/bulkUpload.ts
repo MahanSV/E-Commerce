@@ -1,14 +1,14 @@
 import type { Request, Response } from 'express';
 import ApiError from "#webhost/errors/apiError.ts";
-import BulkUploadService from "#application/services/BulkUpload.ts";
+import BulkUploadBatchService from "#application/services/BulkUpload.ts";
 import httpStatus from "http-status";
 
 
 class BulkUploadController {
-    private bulkUploadService: BulkUploadService;
+    private bulkUploadBatchService: BulkUploadBatchService;
 
-    constructor(bulkUploadService = new BulkUploadService()) {
-        this.bulkUploadService = bulkUploadService;
+    constructor(bulkUploadBatchService = new BulkUploadBatchService()) {
+        this.bulkUploadBatchService = bulkUploadBatchService;
     };
 
     public async uploadCsvAndCreateBatch(req: Request, res: Response): Promise<any> {
@@ -19,7 +19,7 @@ class BulkUploadController {
                 throw new ApiError(httpStatus.BAD_REQUEST, "CSV file is required", "Error");
             }
 
-            const bulkUpload = await this.bulkUploadService.uploadCsvAndCreateBatch(csvFile);
+            const bulkUpload = await this.bulkUploadBatchService.uploadCsvAndCreateBatch(csvFile);
 
             res.status(201).json(bulkUpload);
         } catch (error) {
@@ -29,7 +29,7 @@ class BulkUploadController {
 
     public async listBatches(req: Request, res: Response): Promise<any> {
         try {
-            const bulkUpload = await this.bulkUploadService.listBatches();
+            const bulkUpload = await this.bulkUploadBatchService.listBatches();
 
             res.json(bulkUpload);
         } catch (error) {
@@ -42,7 +42,7 @@ class BulkUploadController {
         try {
             const batchId = req.params.batchId;
 
-            const bulkUpload = await this.bulkUploadService.getBatchDetail(batchId);
+            const bulkUpload = await this.bulkUploadBatchService.getBatchDetail(batchId);
 
             res.json(bulkUpload);
         } catch (error) {
@@ -59,7 +59,7 @@ class BulkUploadController {
                 items: req.body.items,
             };
 
-            const bulkUpload = await this.bulkUploadService.updateBatchItems(command.batchId, command.items);
+            const bulkUpload = await this.bulkUploadBatchService.updateBatchItems(command);
 
             res.json(bulkUpload);
         } catch (error) {
@@ -76,7 +76,7 @@ class BulkUploadController {
                 deleteProducts: req.query.deleteProducts === "true",
             };
 
-            const bulkUpload = await this.bulkUploadService.deleteBatch(command.batchId, command.deleteProducts);
+            const bulkUpload = await this.bulkUploadBatchService.deleteBatch(command.batchId, command.deleteProducts);
 
             res.json(bulkUpload);
         } catch (error) {
