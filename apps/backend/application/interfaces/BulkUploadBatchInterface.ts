@@ -20,5 +20,9 @@ export interface BulkUploadBatchServiceInterface {
             categoryId: string;
             inStock: number;
         }[]}>
-    deleteBatch(batchId: string, deleteProducts: boolean): Promise<any>
+    deleteBatch(batchId: string, deleteProducts: boolean): Promise<{
+        success: boolean;
+        message: string;
+        deletedProducts: boolean;
+    }>
 }

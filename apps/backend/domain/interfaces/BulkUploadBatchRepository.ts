@@ -20,7 +20,18 @@ export interface BulkUploadBatchRepositoryInterface {
         categoryId: string;
         inStock: number;
     }[]>
-    deleteBatch(batchId: string, deleteProducts: boolean): Promise<BulkUploadBatch>
+    // Delete batch + items + products
+    deleteBatchAndItemsAndProducts(batchId: string): Promise<{
+        success: boolean;
+        message: string;
+        deletedProducts: boolean;
+    }>
+    // Delete batch + items only, keep products
+    deleteBatchAndItems(batchId: string): Promise<{
+        success: boolean;
+        message: string;
+        deletedProducts: boolean;
+    }>
     // متد مدیریت تراکنش‌ها
     executeTransaction<T>(callback: (tx: any) => Promise<T>): Promise<T>;
     // متدهای مربوط به Batch

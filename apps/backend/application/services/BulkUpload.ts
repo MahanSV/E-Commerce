@@ -9,6 +9,8 @@ import {BulkUploadItemRepositoryInterface} from "#domain/interfaces/BulkUploadIt
 import BulkUploadItemRepository from "#repositories/BulkUploadItemRepository.ts";
 import {BulkUploadBatchMapper} from "#application/mappers/BulkUploadBatchMapper.ts";
 import {updateBatchItemsCommand} from "#application/types/bulkUpload/command.ts";
+import OrderItemRepository from "#repositories/OrderItemRepository.ts";
+import {OrderItemRepositoryInterface} from "#domain/interfaces/OrderItemRepository.ts";
 
 interface CleanRowData {
     title: string;
@@ -30,13 +32,16 @@ interface ValidationResult {
 export default class BulkUploadBatchService implements BulkUploadBatchServiceInterface {
     private bulkUploadBatchRepository: BulkUploadBatchRepositoryInterface;
     private bulkUploadItemRepository: BulkUploadItemRepositoryInterface;
+    private orderItemRepository: OrderItemRepositoryInterface;
 
     constructor(
         bulkUploadBatchRepository: BulkUploadBatchRepositoryInterface = new BulkUploadBatchRepository(),
-        bulkUploadItemRepository: BulkUploadItemRepositoryInterface = new BulkUploadItemRepository()
+        bulkUploadItemRepository: BulkUploadItemRepositoryInterface = new BulkUploadItemRepository(),
+        orderItemRepository: OrderItemRepositoryInterface = new OrderItemRepository(),
     ) {
         this.bulkUploadBatchRepository = bulkUploadBatchRepository;
         this.bulkUploadItemRepository = bulkUploadItemRepository;
+        this.orderItemRepository = orderItemRepository;
     };
 
     async listBatches(): Promise<Awaited<BulkUploadBatchReportDTO[]>> {
@@ -97,7 +102,7 @@ export default class BulkUploadBatchService implements BulkUploadBatchServiceInt
             mainImage: string | null;
             categoryId: string;
             inStock: number;
-    }[]
+        }[]
     }>
     {
         const updated = await this.bulkUploadBatchRepository.updateBatchItems(command);
@@ -105,8 +110,34 @@ export default class BulkUploadBatchService implements BulkUploadBatchServiceInt
         return { updatedCount: updated.length, items: updated };
     };
 
-    async deleteBatch(batchId: string, deleteProducts: boolean): Promise<any> {
+    async deleteBatch(batchId: string, deleteProducts: boolean): Promise<{
+        success: boolean;
+        message: string;
+        deletedProducts: boolean;
+    }> {
+        const batch = await this.bulkUploadBatchRepository.findById(batchId);
 
+        if (!batch) throw new ApiError(httpStatus.NOT_FOUND, "Batch not found", "Error");
+
+        if (deleteProducts) {
+            const check = await this.canDeleteProductsForBatch(batchId);
+
+            if (!check.canDelete) {
+                const errorMsg =
+                    check.blockedProductIds && check.blockedProductIds.length > 0
+                        ? `Cannot delete products: ${
+                            check.reason
+                        }. Products in orders: ${check.blockedProductIds.join(", ")}`
+                        : `Cannot delete products: ${check.reason || "Unknown error"}`;
+
+                throw new ApiError(httpStatus.CONFLICT, errorMsg, "Error");
+            }
+
+            return await this.bulkUploadBatchRepository.deleteBatchAndItemsAndProducts(batchId);
+        }
+        else {
+            return await this.bulkUploadBatchRepository.deleteBatchAndItems(batchId);
+        }
     };
 
     public async uploadCsvAndCreateBatch(csvFile: Express.Multer.File): Promise<any> {
@@ -275,5 +306,34 @@ export default class BulkUploadBatchService implements BulkUploadBatchServiceInt
         if (successCount > 0 && errorCount > 0) return "PARTIAL";
         if (successCount === 0 && errorCount > 0) return "FAILED";
         return "PENDING";
+    };
+
+
+    private async canDeleteProductsForBatch(batchId: string): Promise<{
+        canDelete: boolean, blockedProductIds: string[], reason?: string,
+    }>
+    {
+        const items = await this.bulkUploadItemRepository.getNonNullProductIdsByBatchId(batchId);
+
+        const productIds = items.map((i) => i.productId).filter(Boolean);
+
+        if (productIds.length === 0) {
+            return { canDelete: true, blockedProductIds: [] };
+        }
+
+        const referenced = await this.orderItemRepository.findAllByProductIds(productIds);
+
+        const blocked = new Set(referenced.map((r) => r.productId));
+        const blockedList = productIds.filter((id) => blocked.has(id));
+
+        if (blockedList.length > 0) {
+            return {
+                canDelete: false,
+                blockedProductIds: blockedList,
+                reason: "Some products are in orders",
+            };
+        }
+
+        return { canDelete: true, blockedProductIds: [] };
     };
 }

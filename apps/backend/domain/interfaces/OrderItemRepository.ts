@@ -9,4 +9,5 @@ export interface OrderItemRepositoryInterface {
     deleteProductOrder(id: string): Promise<void>
     getProductOrder(id: string): Promise<OrderItem[]>
     getAllProductOrders(): Promise<OrderItem[]>
+    findAllByProductIds(productIds: string[]): Promise<OrderItem[]>
 }

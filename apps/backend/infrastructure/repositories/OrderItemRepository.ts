@@ -121,4 +121,13 @@ export default class OrderItemRepository extends BaseRepository<OrderItem> imple
 
         return dataModels.map(data => OrderItem.createFromSnapshot(data));
     };
+
+    async findAllByProductIds(productIds: string[]): Promise<OrderItem[]> {
+        const dataModels = await prisma.orderItem.findMany({
+            where: { productId: { in: productIds } },
+            select: { productId: true },
+        });
+
+        return dataModels.map(data => OrderItem.createFromSnapshot(data));
+    }
 };

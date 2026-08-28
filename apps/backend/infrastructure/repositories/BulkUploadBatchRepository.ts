@@ -89,7 +89,69 @@ export default class BulkUploadBatchRepository extends BaseRepository<BulkUpload
         return dataModels;
     };
 
-    async deleteBatch(batchId: string, deleteProducts: boolean): Promise<any> {};
+    // Delete batch + items + products
+    async deleteBatchAndItemsAndProducts(batchId: string): Promise<{
+        success: boolean;
+        message: string;
+        deletedProducts: boolean;
+    }> {
+        return await prisma.$transaction(async (tx) => {
+            const items = await tx.bulkUploadItem.findMany({
+                where: { batchId, productId: { not: null } },
+                select: { productId: true },
+            });
+
+            const productIds = items.map((i) => i.productId).filter(Boolean);
+
+            if (productIds.length > 0 && !Array.isArray(productIds)) {
+                // Delete products
+                await tx.product.deleteMany({
+                    where: { id: { in: productIds } },
+                });
+            }
+
+            // Delete bulkUploadItem (cascade will handle this, but explicit is better)
+            await tx.bulkUploadItem.deleteMany({
+                where: { batchId },
+            });
+
+            // Delete batch
+            await tx.bulkUploadBatch.delete({
+                where: { id: batchId },
+            });
+
+            return {
+                success: true,
+                message: "Batch and products deleted successfully",
+                deletedProducts: true,
+            };
+        });
+    };
+
+    // Delete batch + items only, keep products
+    async deleteBatchAndItems(batchId: string): Promise<{
+        success: boolean;
+        message: string;
+        deletedProducts: boolean;
+    }> {
+        return await prisma.$transaction(async (tx) => {
+            // Delete items
+            await tx.bulkUploadItem.deleteMany({
+                where: { batchId },
+            });
+
+            // Delete batch
+            await tx.bulkUploadBatch.delete({
+                where: { id: batchId },
+            });
+
+            return {
+                success: true,
+                message: "Batch deleted successfully (products kept)",
+                deletedProducts: false,
+            };
+        });
+    };
 
     // مدیریت تراکنش‌ها فقط در ریپازیتوری
     async executeTransaction<T>(callback: (tx: any) => Promise<T>): Promise<T> {
