@@ -129,5 +129,5 @@ export default class OrderItemRepository extends BaseRepository<OrderItem> imple
         });
 
         return dataModels.map(data => OrderItem.createFromSnapshot(data));
-    }
+    };
 };

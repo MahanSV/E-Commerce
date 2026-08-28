@@ -101,9 +101,10 @@ export default class BulkUploadBatchRepository extends BaseRepository<BulkUpload
                 select: { productId: true },
             });
 
-            const productIds = items.map((i) => i.productId).filter(Boolean);
+            const productIds = items.map((i) => i.productId)
+                .filter((id): id is string => id !== null);
 
-            if (productIds.length > 0 && !Array.isArray(productIds)) {
+            if (productIds.length > 0) {
                 // Delete products
                 await tx.product.deleteMany({
                     where: { id: { in: productIds } },
