@@ -13,7 +13,7 @@
     "lint:fix": "eslint ./ --fix --ext js",
     "typecheck": "tsc --noEmit",
     "test": "jest",
-    "seed:permissions": "node seeds/seedPermissions.js",
+    "seed:DemoData": "tsx seedData/insertDemoData.ts",
     "prisma:generate": "prisma generate",
     "prisma:clean": "pm2 kill && rimraf node_modules/.prisma && npx prisma generate"
   },
