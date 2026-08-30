@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.get(
     '/:slug',
-    authenticate,
+    // authenticate,
     validate(getProductBySlugSchema),
     SlugController.getProductBySlug
 );

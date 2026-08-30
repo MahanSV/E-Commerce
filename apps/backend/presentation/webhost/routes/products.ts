@@ -12,35 +12,35 @@ const router = express.Router();
 
 router.get(
     '/',
-    authenticate,
+    // authenticate,
     validate(getAllProductsSchema),
     ProductController.getAllProducts
 );
 
 router.post(
     '/',
-    authenticate,
+    // authenticate,
     validate(createProductSchema),
     ProductController.createProduct
 );
 
 router.get(
     '/:id',
-    authenticate,
+    // authenticate,
     validate(getProductByIdSchema),
     ProductController.getProductById
 );
 
 router.put(
     '/:id',
-    authenticate,
+    // authenticate,
     validate(updateProductSchema),
     ProductController.updateProduct
 );
 
 router.delete(
     '/:id',
-    authenticate,
+    // authenticate,
     validate(deleteProductSchema),
     ProductController.deleteProduct
 );

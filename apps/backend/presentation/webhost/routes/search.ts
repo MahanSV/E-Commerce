@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.get(
     '/',
-    authenticate,
+    // authenticate,
     validate(searchProductsSchema),
     SearchController.searchProducts
 );

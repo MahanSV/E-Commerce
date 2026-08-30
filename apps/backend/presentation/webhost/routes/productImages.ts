@@ -13,28 +13,28 @@ const router = express.Router();
 
 router.get(
     '/:id',
-    authenticate,
+    // authenticate,
     validate(getSingleProductImagesSchema),
     ProductImageController.getSingleProductImages
 );
 
 router.post(
     '/',
-    authenticate,
+    // authenticate,
     validate(createImageSchema),
     ProductImageController.createImage
 );
 
 router.put(
     '/:id',
-    authenticate,
+    // authenticate,
     validate(updateImageSchema),
     ProductImageController.updateImage
 );
 
 router.delete(
     '/:id',
-    authenticate,
+    // authenticate,
     validate(deleteImageSchema),
     ProductImageController.deleteImage
 );

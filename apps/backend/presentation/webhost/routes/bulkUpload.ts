@@ -17,7 +17,7 @@ const upload = multer({
 
 router.post(
     '/',
-    authenticate,
+    // authenticate,
     upload.single("file"),
     BulkUploadController.uploadCsvAndCreateBatch
 );
@@ -26,21 +26,21 @@ router.get('/', authenticate, BulkUploadController.listBatches);
 
 router.get(
     '/:batchId',
-    authenticate,
+    // authenticate,
     validate(getBatchDetailSchema),
     BulkUploadController.getBatchDetail
 );
 
 router.put(
     '/:batchId',
-    authenticate,
+    // authenticate,
     validate(updateBatchItemsSchema),
     BulkUploadController.updateBatchItems
 );
 
 router.delete(
     '/:batchId',
-    authenticate,
+    // authenticate,
     validate(deleteBatchSchema),
     BulkUploadController.deleteBatch
 );

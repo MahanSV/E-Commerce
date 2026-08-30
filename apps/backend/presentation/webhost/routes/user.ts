@@ -13,39 +13,39 @@ import validate from "#middlewares/validation.ts";
 
 const router = express.Router();
 
-router.get('/', authenticate, UserController.getAllUsers);
+router.get('/', /*authenticate,*/ UserController.getAllUsers);
 
 router.post(
     '/',
-    authenticate,
+    // authenticate,
     validate(createUserSchema),
     UserController.createUser
 );
 
 router.get(
     '/:id',
-    authenticate,
+    // authenticate,
     validate(getUserSchema),
     UserController.getUser
 );
 
 router.put(
     '/:id',
-    authenticate,
+    // authenticate,
     validate(updateUserSchema),
     UserController.updateUser
 );
 
 router.delete(
     '/:id',
-    authenticate,
+    // authenticate,
     validate(deleteUserSchema),
     UserController.deleteUser
 );
 
 router.get(
     '/email/:email',
-    authenticate,
+    // authenticate,
     validate(getUserByEmailSchema),
     UserController.getUserByEmail
 );

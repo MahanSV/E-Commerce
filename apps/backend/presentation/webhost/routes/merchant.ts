@@ -13,14 +13,14 @@ const router = express.Router();
 // Get all merchants
 router.get(
     "/",
-    authenticate,
+    // authenticate,
     MerchantController.getAllMerchants
 );
 
 // Get a specific merchant by ID
 router.get(
     "/:id",
-    authenticate,
+    // authenticate,
     validate(getMerchantByIdSchema),
     MerchantController.getMerchantById
 );
@@ -28,7 +28,7 @@ router.get(
 // Create a new merchant
 router.post(
     "/",
-    authenticate,
+    // authenticate,
     validate(createMerchantSchema),
     MerchantController.createMerchant
 );
@@ -36,7 +36,7 @@ router.post(
 // Update a merchant
 router.put(
     "/:id",
-    authenticate,
+    // authenticate,
     validate(updateMerchantSchema),
     MerchantController.updateMerchant
 );
@@ -45,7 +45,7 @@ router.put(
 router.delete(
 
     "/:id",
-    authenticate,
+    // authenticate,
     validate(deleteMerchantSchema),
     MerchantController.deleteMerchant
 );

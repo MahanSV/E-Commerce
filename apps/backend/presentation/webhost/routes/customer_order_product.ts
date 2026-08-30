@@ -9,32 +9,32 @@ import {
 
 const router = express.Router();
 
-router.get('/', authenticate, CustomerOrderProductController.getAllProductOrders);
+router.get('/', /*authenticate,*/ CustomerOrderProductController.getAllProductOrders);
 
 router.post(
     '/' ,
-    authenticate,
+    // authenticate,
     validate(createOrderProduct),
     CustomerOrderProductController.createOrderProduct
 );
 
 router.get(
     '/:id',
-    authenticate,
+    // authenticate,
     validate(getProductOrder),
     CustomerOrderProductController.getProductOrder
 );
 
 router.put(
     '/:id',
-    authenticate,
+    // authenticate,
     validate(updateProductOrder),
     CustomerOrderProductController.updateProductOrder
 );
 
 router.delete(
     '/:id',
-    authenticate,
+    // authenticate,
     validate(deleteProductOrder),
     CustomerOrderProductController.deleteProductOrder
 );
