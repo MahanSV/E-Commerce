@@ -8,7 +8,7 @@ class NotificationsController {
         this.notificationService = notificationService;
     };
 
-    public async getUnreadCount(req: Request, res: Response): Promise<any> {
+    public getUnreadCount = async (req: Request, res: Response): Promise<any> => {
         /*const { userId } = req.params;*/
         try {
             const userId = req.params.userId;
@@ -21,7 +21,7 @@ class NotificationsController {
         }
     };
 
-    public async getUserNotifications(req: Request, res: Response): Promise<any> {
+    public getUserNotifications = async (req: Request, res: Response): Promise<any> => {
         /*const { userId } = req.params;*/
         try {
             const userId = req.params.userId;
@@ -44,7 +44,7 @@ class NotificationsController {
         }
     };
 
-    public async createNotification(req: Request, res: Response): Promise<any> {
+    public createNotification = async (req: Request, res: Response): Promise<any> => {
         /*const { userId, title, message, type, priority = 'NORMAL', metadata } = req.body;*/
         try {
             const command = {
@@ -64,7 +64,7 @@ class NotificationsController {
         }
     };
 
-    public async bulkMarkAsRead(req: Request, res: Response): Promise<any> {
+    public bulkMarkAsRead = async (req: Request, res: Response): Promise<any> => {
         /*const { notificationIds, userId } = req.body;*/
         try {
             const { notificationIds, userId } = req.body;
@@ -80,7 +80,7 @@ class NotificationsController {
         }
     };
 
-    public async bulkDeleteNotifications(req: Request, res: Response): Promise<any> {
+    public bulkDeleteNotifications = async (req: Request, res: Response): Promise<any> => {
         /*const { notificationIds, userId } = req.body;*/
         try {
             const { notificationIds, userId } = req.body;
@@ -96,7 +96,7 @@ class NotificationsController {
         }
     };
 
-    public async updateNotification(req: Request, res: Response): Promise<any> {
+    public updateNotification = async (req: Request, res: Response): Promise<any> => {
         /*const { id } = req.params;
         const { isRead } = req.body;*/
         try {
@@ -113,7 +113,7 @@ class NotificationsController {
         }
     };
 
-    public async deleteNotification(req: Request, res: Response): Promise<any> {
+    public deleteNotification = async (req: Request, res: Response): Promise<any> => {
         /*const { id } = req.params;
         const { userId } = req.body;*/
         try {

@@ -9,7 +9,7 @@ class UserController {
         this.userService = userService;
     };
 
-    public async getAllUsers(req: Request, res: Response): Promise<any> {
+    public getAllUsers = async (req: Request, res: Response): Promise<any> => {
         try {
             const users = await this.userService.getAllUsers();
 
@@ -19,7 +19,7 @@ class UserController {
         }
     };
 
-    public async createUser(req: Request, res: Response): Promise<any> {
+    public createUser = async (req: Request, res: Response): Promise<any> => {
         /*const { email, password, role } = req.body;*/
         try {
             const command = {
@@ -36,7 +36,7 @@ class UserController {
         }
     };
 
-    public async getUser(req: Request, res: Response): Promise<any> {
+    public getUser = async (req: Request, res: Response): Promise<any> => {
         /*const { id } = req.params;*/
         try {
             const id = req.params.id;
@@ -49,7 +49,7 @@ class UserController {
         }
     };
 
-    public async updateUser(req: Request, res: Response): Promise<any> {
+    public updateUser = async (req: Request, res: Response): Promise<any> => {
         /*const { id } = req.params;
         const { email, password, role } = req.body;*/
         try {
@@ -68,7 +68,7 @@ class UserController {
         }
     };
 
-    public async deleteUser(req: Request, res: Response): Promise<any> {
+    public deleteUser = async (req: Request, res: Response): Promise<any> => {
         /*const { id } = req.params;*/
         try {
             const id = req.params.id;
@@ -81,7 +81,7 @@ class UserController {
         }
     };
 
-    public async getUserByEmail(req: Request, res: Response): Promise<any> {
+    public getUserByEmail = async (req: Request, res: Response): Promise<any> => {
         /*const { email } = req.params;*/
         try {
             const email = req.params.email;

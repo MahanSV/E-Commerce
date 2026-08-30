@@ -9,7 +9,7 @@ class SlugController {
         this.productService = productService;
     };
 
-    public async getProductBySlug(req: Request, res: Response): Promise<any> {
+    public getProductBySlug = async (req: Request, res: Response): Promise<any> => {
         /*const { slug } = req.params;*/
         try {
             const slug = req.params.slug;

@@ -11,7 +11,7 @@ class BulkUploadController {
         this.bulkUploadBatchService = bulkUploadBatchService;
     };
 
-    public async uploadCsvAndCreateBatch(req: Request, res: Response): Promise<any> {
+    public uploadCsvAndCreateBatch = async (req: Request, res: Response): Promise<any> => {
         try {
             const csvFile = req.file;
 
@@ -27,7 +27,7 @@ class BulkUploadController {
         }
     };
 
-    public async listBatches(req: Request, res: Response): Promise<any> {
+    public listBatches = async (req: Request, res: Response): Promise<any> => {
         try {
             const bulkUpload = await this.bulkUploadBatchService.listBatches();
 
@@ -37,7 +37,7 @@ class BulkUploadController {
         }
     };
 
-    public async getBatchDetail(req: Request, res: Response): Promise<any> {
+    public getBatchDetail = async (req: Request, res: Response): Promise<any> => {
         /*const { batchId } = req.params;*/
         try {
             const batchId = req.params.batchId;
@@ -50,7 +50,7 @@ class BulkUploadController {
         }
     };
 
-    public async updateBatchItems(req: Request, res: Response): Promise<any> {
+    public updateBatchItems = async (req: Request, res: Response): Promise<any> => {
         /*const { batchId } = req.params;
         const { items } = req.body;*/
         try {
@@ -67,7 +67,7 @@ class BulkUploadController {
         }
     };
 
-    public async deleteBatch(req: Request, res: Response): Promise<any> {
+    public deleteBatch = async (req: Request, res: Response): Promise<any> => {
         /*const { batchId } = req.params;
         const deleteProducts = req.query.deleteProducts === "true";*/
         try {

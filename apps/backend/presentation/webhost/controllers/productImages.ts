@@ -9,7 +9,7 @@ class ProductImageController {
         this.productService = productService;
     };
 
-    public async getSingleProductImages(req: Request, res: Response): Promise<any> {
+    public getSingleProductImages = async (req: Request, res: Response): Promise<any> => {
         /*const { id } = req.params;*/
         try {
             const id = req.params.id;
@@ -22,7 +22,7 @@ class ProductImageController {
         }
     };
 
-    public async createImage(req: Request, res: Response): Promise<any> {
+    public createImage = async (req: Request, res: Response): Promise<any> => {
         /*const { productID, image } = req.body;*/
         try {
             const command = {
@@ -38,7 +38,7 @@ class ProductImageController {
         }
     };
 
-    public async updateImage(req: Request, res: Response): Promise<any> {
+    public updateImage = async (req: Request, res: Response): Promise<any> => {
         /*const { id } = req.params; */// Getting product id from params
         /*const { productID, image } = req.body;*/
         try {
@@ -56,7 +56,7 @@ class ProductImageController {
         }
     };
 
-    public async deleteImage(req: Request, res: Response): Promise<any> {
+    public deleteImage = async (req: Request, res: Response): Promise<any> => {
        /* const { id } = req.params;*/
         try {
             const id = req.params.id;

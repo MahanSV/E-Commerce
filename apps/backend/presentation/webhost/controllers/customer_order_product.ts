@@ -3,11 +3,12 @@ import {OrderItemService} from "#application/services/OrderItem.ts";
 
 class CustomerOrderProductController {
     private orderItemService: OrderItemService;
+
     constructor(orderItemService = new OrderItemService()) {
         this.orderItemService = orderItemService;
     };
 
-    public async createOrderProduct(req: Request, res: Response): Promise<any> {
+    public createOrderProduct = async (req: Request, res: Response): Promise<any> => {
         /*const { customerOrderId, productId, quantity } = req.body;*/
         try {
             const command = {
@@ -24,7 +25,7 @@ class CustomerOrderProductController {
         }
     };
 
-    public async updateProductOrder(req: Request, res: Response): Promise<any> {
+    public updateProductOrder = async (req: Request, res: Response): Promise<any> => {
         /*const { id } = req.params;
         const { customerOrderId, productId, quantity } = req.body;*/
         try {
@@ -43,7 +44,7 @@ class CustomerOrderProductController {
         }
     };
 
-    public async deleteProductOrder(req: Request, res: Response): Promise<any> {
+    public deleteProductOrder = async (req: Request, res: Response): Promise<any> => {
         /*const { id } = req.params;*/
         try {
             const id = req.params.id;
@@ -56,7 +57,7 @@ class CustomerOrderProductController {
         }
     };
 
-    public async getProductOrder(req: Request, res: Response): Promise<any> {
+    public getProductOrder = async (req: Request, res: Response): Promise<any> => {
         /*const { id } = req.params;*/
         try {
             const id = req.params.id;
@@ -69,7 +70,7 @@ class CustomerOrderProductController {
         }
     };
 
-    public async getAllProductOrders(req: Request, res: Response): Promise<any> {
+    public getAllProductOrders = async (req: Request, res: Response): Promise<any> => {
         try {
             const groupedOrders = await this.orderItemService.getAllProductOrders();
             res.json(groupedOrders);

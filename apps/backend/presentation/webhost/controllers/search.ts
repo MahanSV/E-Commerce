@@ -9,7 +9,7 @@ class SearchController {
         this.productService = productService;
     };
 
-    public async searchProducts(req: Request, res: Response): Promise<any> {
+    public searchProducts = async (req: Request, res: Response): Promise<any> => {
         /*const { query } = req.query;*/
         try {
             const query = req.query.query;

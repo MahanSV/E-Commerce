@@ -5,11 +5,11 @@ import httpStatus from 'http-status';
 class WishlistController {
     constructor() {};
 
-    public async getAllWishlist(req: Request, res: Response): Promise<any> {};
-    public async createWishItem(req: Request, res: Response): Promise<any> {};
-    public async getAllWishlistByUserId(req: Request, res: Response): Promise<any> {};
-    public async getSingleProductFromWishlist(req: Request, res: Response): Promise<any> {};
-    public async deleteWishItem(req: Request, res: Response): Promise<any> {};
+    public getAllWishlist = async (req: Request, res: Response): Promise<any> => {};
+    public createWishItem = async (req: Request, res: Response): Promise<any> => {};
+    public getAllWishlistByUserId = async (req: Request, res: Response): Promise<any> => {};
+    public getSingleProductFromWishlist = async (req: Request, res: Response): Promise<any> => {};
+    public deleteWishItem = async (req: Request, res: Response): Promise<any> => {};
 }
 
 export default new WishlistController();

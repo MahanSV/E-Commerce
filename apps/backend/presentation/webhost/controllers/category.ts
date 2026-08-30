@@ -4,11 +4,12 @@ import CategoryService from "#application/services/Category.ts";
 
 class CategoryController {
     private categoryService: CategoryService;
+
     constructor(categoryService = new CategoryService()) {
         this.categoryService = categoryService;
     };
 
-    public async getAllCategories(req: Request, res: Response): Promise<any> {
+    public getAllCategories = async (req: Request, res: Response): Promise<any> => {
         try {
             const allCategories = await this.categoryService.getAllCategories();
 
@@ -18,7 +19,7 @@ class CategoryController {
         }
     };
 
-    public async createCategory(req: Request, res: Response): Promise<any> {
+    public createCategory = async (req: Request, res: Response): Promise<any> => {
         try {
             const name = req.body.name;
 
@@ -30,7 +31,7 @@ class CategoryController {
         }
     };
 
-    public async getCategory(req: Request, res: Response): Promise<any> {
+    public getCategory = async (req: Request, res: Response): Promise<any> => {
         try {
             const id = req.params.id;
 
@@ -42,7 +43,7 @@ class CategoryController {
         }
     };
 
-    public async updateCategory(req: Request, res: Response): Promise<any> {
+    public updateCategory = async (req: Request, res: Response): Promise<any> => {
         try {
             const command = {
                 id: req.params.id,
@@ -57,7 +58,7 @@ class CategoryController {
         }
     };
 
-    public async deleteCategory(req: Request, res: Response): Promise<any> {
+    public deleteCategory = async (req: Request, res: Response): Promise<any> => {
         try {
             const id = req.params.id;
 

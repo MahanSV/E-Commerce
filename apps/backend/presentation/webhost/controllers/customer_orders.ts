@@ -3,11 +3,12 @@ import {OrderService} from "#application/services/Order.ts";
 
 class CustomerOrdersController {
     private orderService: OrderService;
+
     constructor(orderService = new OrderService()) {
         this.orderService = orderService;
     };
 
-    public async createCustomerOrder(req: Request, res: Response): Promise<any> {
+    public createCustomerOrder = async (req: Request, res: Response): Promise<any> => {
         try {
             const command = {
                 name: req.body.name,
@@ -39,7 +40,7 @@ class CustomerOrdersController {
         }
     };
 
-    public async updateCustomerOrder(req: Request, res: Response): Promise<any> {
+    public updateCustomerOrder = async (req: Request, res: Response): Promise<any> => {
         /*const { id } = req.params;*/
         try {
             const command = {
@@ -68,7 +69,7 @@ class CustomerOrdersController {
         }
     };
 
-    public async deleteCustomerOrder(req: Request, res: Response): Promise<any> {
+    public deleteCustomerOrder = async (req: Request, res: Response): Promise<any> => {
         /*const { id } = req.params;*/
         try {
             const id = req.params.id;
@@ -81,7 +82,7 @@ class CustomerOrdersController {
         }
     };
 
-    public async getCustomerOrder(req: Request, res: Response): Promise<any> {
+    public getCustomerOrder = async (req: Request, res: Response): Promise<any> => {
         /*const { id } = req.params;*/
         try {
             const id = req.params.id;
@@ -94,7 +95,7 @@ class CustomerOrdersController {
         }
     };
 
-    public async getAllOrders(req: Request, res: Response): Promise<any> {
+    public getAllOrders = async (req: Request, res: Response): Promise<any> => {
         // Add pagination and filtering for better performance
         try {
             const page = parseInt(<string>req.query.page) || 1;
