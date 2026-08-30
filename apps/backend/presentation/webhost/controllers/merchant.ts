@@ -15,7 +15,7 @@ class MerchantController {
 
             res.json(merchants);
         } catch (error) {
-            if (error instanceof ApiError) throw error;
+            throw error;
         }
     };
 
@@ -28,7 +28,7 @@ class MerchantController {
 
             res.json(merchant);
         } catch (error) {
-            if (error instanceof ApiError) throw error;
+            throw error;
         }
     };
 
@@ -48,7 +48,7 @@ class MerchantController {
 
             res.status(201).json(merchant);
         } catch (error) {
-            if (error instanceof ApiError) throw error;
+            throw error;
         }
     };
 
@@ -70,7 +70,7 @@ class MerchantController {
 
             res.json(merchant);
         } catch (error) {
-            if (error instanceof ApiError) throw error;
+            throw error;
         }
     };
 
@@ -83,7 +83,7 @@ class MerchantController {
 
             res.status(204).send();
         } catch (error) {
-            if (error instanceof ApiError) throw error;
+            throw error;
         }
     };
 }

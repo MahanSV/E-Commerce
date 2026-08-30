@@ -19,7 +19,7 @@ class SlugController {
 
             res.json(productSlug);
         } catch (error) {
-            if (error instanceof ApiError) throw error;
+            throw error;
         }
     };
 }

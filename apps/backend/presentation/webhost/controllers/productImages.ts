@@ -19,7 +19,7 @@ class ProductImageController {
 
             res.json(productImage);
         } catch (error) {
-            if (error instanceof ApiError) throw error;
+            throw error;
         }
     };
 
@@ -35,7 +35,7 @@ class ProductImageController {
 
             res.status(201).json(createdProductImage);
         } catch (error) {
-            if (error instanceof ApiError) throw error;
+            throw error;
         }
     };
 
@@ -53,7 +53,7 @@ class ProductImageController {
 
             res.json(updateProductImage);
         } catch (error) {
-            if (error instanceof ApiError) throw error;
+            throw error;
         }
     };
 
@@ -66,7 +66,7 @@ class ProductImageController {
 
             res.status(204).send();
         } catch (error) {
-            if (error instanceof ApiError) throw error;
+            throw error;
         }
     };
 }

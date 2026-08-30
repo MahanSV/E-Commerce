@@ -23,7 +23,7 @@ class BulkUploadController {
 
             res.status(201).json(bulkUpload);
         } catch (error) {
-            if (error instanceof ApiError) throw error;
+            throw error;
         }
     };
 
@@ -33,7 +33,7 @@ class BulkUploadController {
 
             res.json(bulkUpload);
         } catch (error) {
-            if (error instanceof ApiError) throw error;
+            throw error;
         }
     };
 
@@ -46,7 +46,7 @@ class BulkUploadController {
 
             res.json(bulkUpload);
         } catch (error) {
-            if (error instanceof ApiError) throw error;
+            throw error;
         }
     };
 
@@ -63,7 +63,7 @@ class BulkUploadController {
 
             res.json(bulkUpload);
         } catch (error) {
-            if (error instanceof ApiError) throw error;
+            throw error;
         }
     };
 
@@ -80,7 +80,7 @@ class BulkUploadController {
 
             res.json(bulkUpload);
         } catch (error) {
-            if (error instanceof ApiError) throw error;
+            throw error;
         }
     };
 }

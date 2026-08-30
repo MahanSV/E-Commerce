@@ -19,7 +19,7 @@ class SearchController {
 
             res.json(searchedProducts);
         } catch (error) {
-            if (error instanceof ApiError) throw error;
+            throw error;
         }
     };
 }

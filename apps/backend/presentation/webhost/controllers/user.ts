@@ -16,7 +16,7 @@ class UserController {
 
             res.json(users);
         } catch (error) {
-            if (error instanceof ApiError) throw error;
+            throw error;
         }
     };
 
@@ -33,7 +33,7 @@ class UserController {
 
             res.status(201).json(user);
         } catch (error) {
-            if (error instanceof ApiError) throw error;
+            throw error;
         }
     };
 
@@ -46,7 +46,7 @@ class UserController {
 
             res.json(user);
         } catch (error) {
-            if (error instanceof ApiError) throw error;
+            throw error;
         }
     };
 
@@ -65,7 +65,7 @@ class UserController {
 
             res.json(user);
         } catch (error) {
-            if (error instanceof ApiError) throw error;
+            throw error;
         }
     };
 
@@ -78,7 +78,7 @@ class UserController {
 
             res.status(204).send();
         } catch (error) {
-            if (error instanceof ApiError) throw error;
+            throw error;
         }
     };
 
@@ -91,7 +91,7 @@ class UserController {
 
             res.json(user);
         } catch (error) {
-            if (error instanceof ApiError) throw error;
+            throw error;
         }
     };
 }

@@ -18,7 +18,7 @@ class NotificationsController {
 
             res.json({unreadCount});
         } catch (error) {
-            if (error instanceof ApiError) throw error;
+            throw error;
         }
     };
 
@@ -41,7 +41,7 @@ class NotificationsController {
 
             res.json(userNotifications);
         } catch (error) {
-            if (error instanceof ApiError) throw error;
+            throw error;
         }
     };
 
@@ -61,7 +61,7 @@ class NotificationsController {
 
             res.status(201).json(notification);
         } catch (error) {
-            if (error instanceof ApiError) throw error;
+            throw error;
         }
     };
 
@@ -77,7 +77,7 @@ class NotificationsController {
                 updatedCount: updateResult
             });
         } catch (error) {
-            if (error instanceof ApiError) throw error;
+            throw error;
         }
     };
 
@@ -93,7 +93,7 @@ class NotificationsController {
                 deletedCount: deletedNotifications
             });
         } catch (error) {
-            if (error instanceof ApiError) throw error;
+            throw error;
         }
     };
 
@@ -110,7 +110,7 @@ class NotificationsController {
 
             res.json(notification);
         } catch (error) {
-            if (error instanceof ApiError) throw error;
+            throw error;
         }
     };
 
@@ -127,7 +127,7 @@ class NotificationsController {
 
             res.json({ message: 'Notification deleted successfully' });
         } catch (error) {
-            if (error instanceof ApiError) throw error;
+            throw error;
         }
     };
 }

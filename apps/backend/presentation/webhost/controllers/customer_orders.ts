@@ -36,7 +36,7 @@ class CustomerOrdersController {
             };
             return res.status(201).json(responseData);
         } catch (error) {
-            if (error instanceof ApiError) throw error;
+            throw error;
         }
     };
 
@@ -65,7 +65,7 @@ class CustomerOrdersController {
 
             return res.status(200).json(updatedOrder);
         } catch (error) {
-            if (error instanceof ApiError) throw error;
+            throw error;
         }
     };
 
@@ -78,7 +78,7 @@ class CustomerOrdersController {
 
             return res.status(204).send();
         } catch (error) {
-            if (error instanceof ApiError) throw error;
+            throw error;
         }
     };
 
@@ -91,7 +91,7 @@ class CustomerOrdersController {
 
             return res.status(200).json(order);
         } catch (error) {
-            if (error instanceof ApiError) throw error;
+            throw error;
         }
     };
 
@@ -113,7 +113,7 @@ class CustomerOrdersController {
 
             return res.json(orders);
         } catch (error) {
-            if (error instanceof ApiError) throw error;
+            throw error;
         }
     };
 }

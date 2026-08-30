@@ -15,7 +15,7 @@ class CategoryController {
 
             res.json(allCategories);
         } catch (error) {
-            if (error instanceof ApiError) throw error;
+            throw error;
         }
     };
 
@@ -27,7 +27,7 @@ class CategoryController {
 
             res.status(201).json(category);
         } catch (error) {
-            if (error instanceof ApiError) throw error;
+            throw error;
         }
     };
 
@@ -39,7 +39,7 @@ class CategoryController {
 
             res.status(200).json(category);
         } catch (error) {
-            if (error instanceof ApiError) throw error;
+            throw error;
         }
     };
 
@@ -54,7 +54,7 @@ class CategoryController {
 
             res.status(200).json(updatedCategory);
         } catch (error) {
-            if (error instanceof ApiError) throw error;
+            throw error;
         }
     };
 
@@ -66,7 +66,7 @@ class CategoryController {
 
             res.status(204).send();
         } catch (error) {
-            if (error instanceof ApiError) throw error;
+            throw error;
         }
     };
 }

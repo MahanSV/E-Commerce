@@ -21,7 +21,7 @@ class CustomerOrderProductController {
 
             res.status(201).json(orderProduct);
         } catch (error) {
-            if (error instanceof ApiError) throw error;
+            throw error;
         }
     };
 
@@ -40,7 +40,7 @@ class CustomerOrderProductController {
 
             res.json(updatedOrder);
         } catch (error) {
-            if (error instanceof ApiError) throw error;
+            throw error;
         }
     };
 
@@ -53,7 +53,7 @@ class CustomerOrderProductController {
 
             res.status(204).send();
         } catch (error) {
-            if (error instanceof ApiError) throw error;
+            throw error;
         }
     };
 
@@ -66,7 +66,7 @@ class CustomerOrderProductController {
 
             res.status(200).json(order);
         } catch (error) {
-            if (error instanceof ApiError) throw error;
+            throw error;
         }
     };
 
@@ -75,7 +75,7 @@ class CustomerOrderProductController {
             const groupedOrders = await this.orderItemService.getAllProductOrders();
             res.json(groupedOrders);
         } catch (error) {
-            if (error instanceof ApiError) throw error;
+            throw error;
         }
     };
 }
