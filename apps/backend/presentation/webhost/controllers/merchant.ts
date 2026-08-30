@@ -1,6 +1,5 @@
 import MerchantService from "#application/services/Merchant.ts";
 import type { Request, Response } from 'express';
-import ApiError from "#webhost/errors/apiError.ts";
 
 
 class MerchantController {

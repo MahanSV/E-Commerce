@@ -1,5 +1,4 @@
 import type { Request, Response } from 'express';
-import ApiError from "#webhost/errors/apiError.ts";
 import {ProductService} from "#application/services/Product.ts";
 
 

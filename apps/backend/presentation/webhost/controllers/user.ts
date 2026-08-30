@@ -1,6 +1,5 @@
 import type { Request, Response } from 'express';
 import UserService from '#application/services/UserService.ts';
-import ApiError from "#webhost/errors/apiError.ts";
 
 
 class UserController {

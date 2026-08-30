@@ -1,6 +1,5 @@
 import type { Request, Response } from 'express';
 import {OrderService} from "#application/services/Order.ts";
-import ApiError from "#webhost/errors/apiError.ts";
 
 class CustomerOrdersController {
     private orderService: OrderService;
