@@ -114,20 +114,6 @@ app.use(cookieParser());
 // Apply normalization middleware to all incoming requests
 app.use(normalizeMiddleware);
 
-// API routes
-app.use('/api', routes);
-
-// Handle 404
-app.use((req, res, next) => {
-  next(new ApiError(httpStatus.NOT_FOUND, 'Not found', 'Error'));
-});
-
-// Convert error to ApiError
-app.use(exceptionConverter);
-
-// Error handler
-app.use(exceptionHandler);
-
 // Health check endpoint (no rate limiting)
 app.get('/health', (req, res) => {
   res.status(200).json({
@@ -152,5 +138,19 @@ app.get('/rate-limit-info', (req, res) => {
     requestId: req?.reqId || null
   });
 });
+
+// API routes
+app.use('/api', routes);
+
+// Handle 404
+app.use((req, res, next) => {
+  next(new ApiError(httpStatus.NOT_FOUND, 'Not found', 'Error'));
+});
+
+// Convert error to ApiError
+app.use(exceptionConverter);
+
+// Error handler
+app.use(exceptionHandler);
 
 export default app;
