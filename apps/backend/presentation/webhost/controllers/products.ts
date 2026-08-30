@@ -1,7 +1,5 @@
 import type { Request, Response } from 'express';
 import {ProductService} from "#application/services/Product.ts";
-import ApiError from "#webhost/errors/apiError.ts";
-
 
 class ProductController {
     private productService: ProductService;
@@ -10,7 +8,7 @@ class ProductController {
         this.productService = productService;
     };
 
-    public async getAllProducts(req: Request, res: Response): Promise<any> {
+    public getAllProducts = async (req: Request, res: Response): Promise<void> => {
         try {
             const mode = String(req.query.mode || "");
             const page = Number(req.query.page) || 1;
@@ -23,22 +21,11 @@ class ProductController {
 
             res.json(products);
         } catch (error) {
-            if (error instanceof ApiError) throw error;
+            throw error;
         }
     };
 
-    public async createProduct(req: Request, res: Response): Promise<any> {
-        /*const {
-            merchantId,
-            slug,
-            title,
-            mainImage,
-            price,
-            description,
-            manufacturer,
-            categoryId,
-            inStock,
-        } = req.body;*/
+    public createProduct = async(req: Request, res: Response): Promise<any> => {
         try {
             const command = {
                 merchantId: req.body.merchantId,
@@ -56,11 +43,11 @@ class ProductController {
 
             res.status(201).json(product);
         } catch (error) {
-            if (error instanceof ApiError) throw error;
+            throw error;
         }
     };
 
-    public async getProductById(req: Request, res: Response): Promise<any> {
+    public getProductById = async(req: Request, res: Response): Promise<any> => {
         /*const { id } = req.params;*/
         try {
             const id = req.params.id;
@@ -69,23 +56,11 @@ class ProductController {
 
             res.json(product);
         } catch (error) {
-            if (error instanceof ApiError) throw error;
+            throw error;
         }
     };
+
     public async updateProduct(req: Request, res: Response): Promise<any> {
-        /*const { id } = req.params;
-        const {
-            merchantId,
-            slug,
-            title,
-            mainImage,
-            price,
-            rating,
-            description,
-            manufacturer,
-            categoryId,
-            inStock,
-        } = req.body;*/
         try {
             const command = {
                 id: req.params.id,
@@ -104,11 +79,11 @@ class ProductController {
 
             res.json(product);
         } catch (error) {
-            if (error instanceof ApiError) throw error;
+            throw error;
         }
     };
-    public async deleteProduct(req: Request, res: Response): Promise<any> {
-        /*const { id } = req.params;*/
+
+    public deleteProduct = async(req: Request, res: Response): Promise<any> => {
         try {
             const id = req.params.id;
 
@@ -116,10 +91,9 @@ class ProductController {
 
             res.status(204).send();
         } catch (error) {
-            if (error instanceof ApiError) throw error;
+            throw error;
         }
     };
-
 }
 
 export default new ProductController();
