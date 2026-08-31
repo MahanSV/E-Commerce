@@ -185,7 +185,6 @@ export class ProductService implements ProductServiceInterface {
         return ProductMapper.toProductImageDTO(product);
     };
 
-
     async createImage(command: createProductImageCommand): Promise<ProductImageDTO[] | undefined> {
         const product = await this.productRepository.getProductById(command.id);
 
