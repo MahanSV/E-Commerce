@@ -268,6 +268,9 @@ async function insertDemoData() {
 
     for (const product of demoProducts) {
         const productModel = ProductFactory.create(product);
+
+        productModel.photo = [{ imageID: crypto.randomUUID(), image: productModel.mainImage }];
+
         await prisma.product.create({
             data: {
                 id: productModel?.id,
