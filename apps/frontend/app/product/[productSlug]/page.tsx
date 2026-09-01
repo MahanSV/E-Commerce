@@ -24,7 +24,7 @@ interface ImageItem {
 }
 
 interface SingleProductPageProps {
-  params: Promise<{  productSlug: string, id: string }>;
+  params: Promise<{  productSlug: string/*, id: string*/ }>;
 }
 
 const SingleProductPage = async ({ params }: SingleProductPageProps) => {
@@ -36,8 +36,11 @@ const SingleProductPage = async ({ params }: SingleProductPageProps) => {
   const product = await data.json();
 
   // sending API request for more than 1 product image if it exists
-  const imagesData = await apiClient.get(
+  /*const imagesData = await apiClient.get(
     `/api/images/${paramsAwaited?.id}`
+  );*/
+  const imagesData = await apiClient.get(
+      `/api/images/${product?.id}`
   );
   const images = await imagesData.json();
 
