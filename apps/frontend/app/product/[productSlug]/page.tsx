@@ -6,14 +6,16 @@ import {
   SingleProductDynamicFields,
   
 } from "../../../components";
-import apiClient from "@/apps/frontend/lib/api";
+// import apiClient from "@/apps/frontend/lib/api"; // Note: I fixed import
+import apiClient from "@/lib/api";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import React from "react";
 import { FaSquareFacebook } from "react-icons/fa6";
 import { FaSquareXTwitter } from "react-icons/fa6";
 import { FaSquarePinterest } from "react-icons/fa6";
-import { sanitize } from "@/apps/frontend/lib/sanitize";
+// import { sanitize } from "@/apps/frontend/lib/sanitize"; // Note: I fixed import
+import { sanitize } from "@/lib/sanitize";
 
 interface ImageItem {
   imageID: string;
