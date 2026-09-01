@@ -1,8 +1,8 @@
 import { PrismaClient } from '@prisma/client';
 import { pagination } from "prisma-extension-pagination";
 import env from '#substructure/env.ts';
-
-const prismaClient = new PrismaClient({
+// Note: I have fixed using prisma
+export const prismaClient = new PrismaClient({
     errorFormat: env.environment === 'production' ? 'minimal' : 'pretty',
 });
 

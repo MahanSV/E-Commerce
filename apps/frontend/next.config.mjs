@@ -12,6 +12,10 @@ const nextConfig = {
     env: {
         NEXT_PUBLIC_API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL,
     },
+    serverExternalPackages: [
+      '@prisma/client',
+      'prisma-extension-pagination',
+    ], // Note: I have fixed using prisma
     async headers() {
       return [
         {
