@@ -38,13 +38,16 @@ export class ProductService implements ProductServiceInterface {
         this.merchantRepository = merchantRepository;
     };
 
-    async getProductBySlug(slug: string): Promise<ProductDTO[]> {
+    async getProductBySlug(slug: string): Promise<ProductDTO> {
         const productBySlug = await this.productRepository.getProductBySlug(slug);
 
         if (productBySlug.length === 0)
             throw new ApiError(httpStatus.NOT_FOUND, "Product not found", "Error");
 
-        return ProductMapper.toDTOList(productBySlug);
+        const productDTOs = ProductMapper.toDTOList(productBySlug);
+
+        // Note: The code base assumed there is only one product with that slug
+        return productDTOs[0];
     };
 
     async searchProducts(query: any): Promise<ProductDTO[]> {

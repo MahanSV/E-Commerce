@@ -7,7 +7,7 @@ import {
 
 
 export interface ProductServiceInterface {
-    getProductBySlug(slug: string): Promise<ProductDTO[]>
+    getProductBySlug(slug: string): Promise<ProductDTO>
     searchProducts(query: any): Promise<ProductDTO[]>
     getAllProducts(params: { mode: string; page: number; url: string }): Promise<ProductDTO[]>
     createProduct(command: createProductCommand): Promise<ProductDTO>
