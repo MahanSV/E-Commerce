@@ -9,7 +9,7 @@ const createAdminUser = async (): Promise<void> => {
 
         if (!email || !password) {
             console.log("Please specify a valid email");
-            console.log("Usage: node adminUser.js <email> <password>");
+            console.log("Usage: node adminUser.ts <email> <password>");
             process.exit(1);
         }
 
