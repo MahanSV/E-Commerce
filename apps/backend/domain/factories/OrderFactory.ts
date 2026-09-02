@@ -25,7 +25,7 @@ export class OrderFactory {
             city: command.city,
             description: command.description,
             total: Number(command.total) || 0,
-            deliversAt: addMonths(new Date(), 1),
+            deliversAt: addMonths(new Date(), 1), // TODO: It should be day not month (use env)
             createdAt: new Date(),
             updatedAt: new Date()
         });
