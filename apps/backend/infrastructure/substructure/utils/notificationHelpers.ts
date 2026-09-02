@@ -1,16 +1,50 @@
 import prisma from '#context/dbContext/prisma/client.ts';
 
+type NotificationPriority = 'NORMAL' | 'HIGH' | 'URGENT';
+
+type NotificationType =
+    | 'ORDER_UPDATE'
+    | 'PAYMENT_STATUS'
+    | 'PROMOTION'
+    | 'SYSTEM_ALERT';
+
+type OrderStatus =
+    | 'pending'
+    | 'confirmed'
+    | 'processing'
+    | 'shipped'
+    | 'delivered'
+    | 'cancelled';
+
+type PaymentStatus =
+    | 'success'
+    | 'failed'
+    | 'pending';
+
+type StatusMessage = {
+    title: string;
+    message: string;
+    priority: NotificationPriority;
+};
+
+type NotificationMetadata = Record<
+    string,
+    string | number | boolean | null
+>;
+
 /**
  * Generate ID using nanoid with dynamic import
  */
-const generateId = async () => {
+const generateId = async (): Promise<string> => {
     try {
         const { nanoid } = await import('nanoid');
+
         return nanoid();
-    } catch (error) {
+    } catch (error: unknown) {
         console.error('Error generating nanoid:', error);
+
         // Fallback ID generation
-        return Math.random().toString(36).substr(2, 10);
+        return Math.random().toString(36).substring(2, 12);
     }
 };
 
@@ -18,70 +52,86 @@ const generateId = async () => {
  * Create an order update notification
  */
 const createOrderUpdateNotification = async (
-    userId: string, orderStatus: string, orderId: string, totalAmount: number | null = null
+    userId: string,
+    orderStatus: string,
+    orderId: string,
+    totalAmount: number | null = null
 ) => {
     try {
-        const statusMessages = {
-            'pending': {
+        const statusMessages: Record<OrderStatus, StatusMessage> = {
+            pending: {
                 title: 'Order Received',
                 message: `Thank you! Your order #${orderId} has been received and is being processed.`,
                 priority: 'NORMAL'
             },
-            'confirmed': {
+
+            confirmed: {
                 title: 'Order Confirmed',
                 message: `Great news! Your order #${orderId} has been confirmed and will be prepared for shipping.`,
                 priority: 'HIGH'
             },
-            'processing': {
+
+            processing: {
                 title: 'Order Processing',
                 message: `Your order #${orderId} is currently being processed and will ship soon.`,
                 priority: 'NORMAL'
             },
-            'shipped': {
+
+            shipped: {
                 title: 'Order Shipped',
                 message: `Excellent! Your order #${orderId} has been shipped and is on its way to you.`,
                 priority: 'HIGH'
             },
-            'delivered': {
+
+            delivered: {
                 title: 'Order Delivered',
                 message: `Your order #${orderId} has been successfully delivered. We hope you love your new items!`,
                 priority: 'HIGH'
             },
-            'cancelled': {
+
+            cancelled: {
                 title: 'Order Cancelled',
                 message: `Your order #${orderId} has been cancelled. If you have any questions, please contact our support.`,
                 priority: 'URGENT'
             }
         };
 
-        const statusInfo = statusMessages[orderStatus.toLowerCase()] || {
-            title: 'Order Update',
-            message: `Your order #${orderId} status has been updated to: ${orderStatus}`,
-            priority: 'NORMAL'
-        };
+        const normalizedStatus = orderStatus.toLowerCase();
+
+        const statusInfo: StatusMessage =
+            normalizedStatus in statusMessages
+                ? statusMessages[normalizedStatus as OrderStatus]
+                : {
+                    title: 'Order Update',
+                    message: `Your order #${orderId} status has been updated to: ${orderStatus}`,
+                    priority: 'NORMAL'
+                };
 
         const notificationId = await generateId();
 
         const notification = await prisma.notification.create({
             data: {
                 id: notificationId,
-                userId: userId,
+                userId,
                 title: statusInfo.title,
                 message: statusInfo.message,
                 type: 'ORDER_UPDATE',
                 priority: statusInfo.priority,
                 isRead: false,
                 metadata: {
-                    orderId: orderId,
+                    orderId,
                     status: orderStatus,
-                    ...(totalAmount && { totalAmount: totalAmount })
+                    ...(totalAmount !== null && { totalAmount })
                 }
             }
         });
 
-        console.log(`✅ Notification created for user ${userId}: ${statusInfo.title}`);
+        console.log(
+            `✅ Notification created for user ${userId}: ${statusInfo.title}`
+        );
+
         return notification;
-    } catch (error) {
+    } catch (error: unknown) {
         console.error('❌ Error creating order notification:', error);
         throw error;
     }
@@ -91,55 +141,68 @@ const createOrderUpdateNotification = async (
  * Create a payment status notification
  */
 const createPaymentNotification = async (
-    userId: string, paymentStatus: string, amount: number, orderId: string
+    userId: string,
+    paymentStatus: string,
+    amount: number,
+    orderId: string
 ) => {
     try {
-        const statusMessages = {
-            'success': {
+        const statusMessages: Record<PaymentStatus, StatusMessage> = {
+            success: {
                 title: 'Payment Successful',
                 message: `Your payment of $${amount} has been successfully processed for order #${orderId}.`,
                 priority: 'HIGH'
             },
-            'failed': {
+
+            failed: {
                 title: 'Payment Failed',
                 message: `Unfortunately, your payment of $${amount} for order #${orderId} could not be processed. Please try again.`,
                 priority: 'URGENT'
             },
-            'pending': {
+
+            pending: {
                 title: 'Payment Pending',
                 message: `Your payment of $${amount} for order #${orderId} is currently being processed.`,
                 priority: 'NORMAL'
             }
         };
 
-        const statusInfo = statusMessages[paymentStatus.toLowerCase()] || {
-            title: 'Payment Update',
-            message: `Your payment status for order #${orderId} has been updated.`,
-            priority: 'NORMAL'
-        };
+        const normalizedStatus = paymentStatus.toLowerCase();
+
+        const statusInfo: StatusMessage =
+            normalizedStatus in statusMessages
+                ? statusMessages[normalizedStatus as PaymentStatus]
+                : {
+                    title: 'Payment Update',
+                    message: `Your payment status for order #${orderId} has been updated.`,
+                    priority: 'NORMAL'
+                };
 
         const notificationId = await generateId();
 
         const notification = await prisma.notification.create({
             data: {
                 id: notificationId,
-                userId: userId,
+                userId,
                 title: statusInfo.title,
                 message: statusInfo.message,
                 type: 'PAYMENT_STATUS',
                 priority: statusInfo.priority,
                 isRead: false,
                 metadata: {
-                    orderId: orderId,
-                    paymentStatus: paymentStatus,
-                    amount: amount
+                    orderId,
+                    paymentStatus,
+                    amount
                 }
             }
         });
 
-        console.log(`✅ Payment notification created for user ${userId}: ${statusInfo.title}`);
+        console.log(
+            `✅ Payment notification created for user ${userId}: ${statusInfo.title}`
+        );
+
         return notification;
-    } catch (error) {
+    } catch (error: unknown) {
         console.error('❌ Error creating payment notification:', error);
         throw error;
     }
@@ -148,29 +211,38 @@ const createPaymentNotification = async (
 /**
  * Create a promotional notification
  */
-const createPromotionNotification = async (userId: string, title: string, message: string, promoCode = null, discount = null) => {
+const createPromotionNotification = async (
+    userId: string,
+    title: string,
+    message: string,
+    promoCode: string | null = null,
+    discount: number | null = null
+) => {
     try {
         const notificationId = await generateId();
 
         const notification = await prisma.notification.create({
             data: {
                 id: notificationId,
-                userId: userId,
-                title: title,
-                message: message,
+                userId,
+                title,
+                message,
                 type: 'PROMOTION',
                 priority: 'NORMAL',
                 isRead: false,
                 metadata: {
-                    ...(promoCode && { promoCode: promoCode }),
-                    ...(discount && { discount: discount })
+                    ...(promoCode !== null && { promoCode }),
+                    ...(discount !== null && { discount })
                 }
             }
         });
 
-        console.log(`✅ Promotion notification created for user ${userId}: ${title}`);
+        console.log(
+            `✅ Promotion notification created for user ${userId}: ${title}`
+        );
+
         return notification;
-    } catch (error) {
+    } catch (error: unknown) {
         console.error('❌ Error creating promotion notification:', error);
         throw error;
     }
@@ -179,18 +251,23 @@ const createPromotionNotification = async (userId: string, title: string, messag
 /**
  * Create a system alert notification
  */
-const createSystemAlertNotification = async (userId: string, title: string, message: string, priority: string = 'HIGH') => {
+const createSystemAlertNotification = async (
+    userId: string,
+    title: string,
+    message: string,
+    priority: NotificationPriority = 'HIGH'
+) => {
     try {
         const notificationId = await generateId();
 
         const notification = await prisma.notification.create({
             data: {
                 id: notificationId,
-                userId: userId,
-                title: title,
-                message: message,
+                userId,
+                title,
+                message,
                 type: 'SYSTEM_ALERT',
-                priority: priority,
+                priority,
                 isRead: false,
                 metadata: {
                     alertType: 'system'
@@ -198,9 +275,12 @@ const createSystemAlertNotification = async (userId: string, title: string, mess
             }
         });
 
-        console.log(`✅ System alert notification created for user ${userId}: ${title}`);
+        console.log(
+            `✅ System alert notification created for user ${userId}: ${title}`
+        );
+
         return notification;
-    } catch (error) {
+    } catch (error: unknown) {
         console.error('❌ Error creating system alert notification:', error);
         throw error;
     }
@@ -209,21 +289,28 @@ const createSystemAlertNotification = async (userId: string, title: string, mess
 /**
  * Bulk create notifications for multiple users
  */
-const createBulkNotifications = async (userIds: string[], title: string, message: string, type: string = 'SYSTEM_ALERT', priority: string = 'NORMAL', metadata = {}) => {
+const createBulkNotifications = async (
+    userIds: string[],
+    title: string,
+    message: string,
+    type: NotificationType = 'SYSTEM_ALERT',
+    priority: NotificationPriority = 'NORMAL',
+    metadata: NotificationMetadata = {}
+): Promise<number> => {
     try {
-        // Generate all IDs first
         const notificationData = await Promise.all(
             userIds.map(async (userId) => {
                 const notificationId = await generateId();
+
                 return {
                     id: notificationId,
-                    userId: userId,
-                    title: title,
-                    message: message,
-                    type: type,
-                    priority: priority,
+                    userId,
+                    title,
+                    message,
+                    type,
+                    priority,
                     isRead: false,
-                    metadata: metadata
+                    metadata
                 };
             })
         );
@@ -232,9 +319,12 @@ const createBulkNotifications = async (userIds: string[], title: string, message
             data: notificationData
         });
 
-        console.log(`✅ Bulk notifications created for ${userIds.length} users: ${title}`);
+        console.log(
+            `✅ Bulk notifications created for ${userIds.length} users: ${title}`
+        );
+
         return notificationData.length;
-    } catch (error) {
+    } catch (error: unknown) {
         console.error('❌ Error creating bulk notifications:', error);
         throw error;
     }
@@ -246,4 +336,4 @@ export {
     createPromotionNotification,
     createSystemAlertNotification,
     createBulkNotifications
-}
+};

@@ -12,6 +12,7 @@ import { UserRepositoryInterface } from '#domain/interfaces/UserRepository.ts';
 import UserRepository from "#repositories/UserRepository.ts";
 import { NotificationService } from '#application/services/Notification.ts';
 import { NotificationType, NotificationPriority } from '#domain/enums/notification.ts';
+import { createOrderUpdateNotification } from "#substructure/utils/notificationHelpers.ts";
 
 export class OrderService implements OrderServiceInterface {
     private orderRepository: OrderRepositoryInterface;
@@ -30,6 +31,15 @@ export class OrderService implements OrderServiceInterface {
 
 
     async createCustomerOrder(command: createCustomerOrderCommand): Promise<CustomerOrderDTO> {
+        const duplicateOrder = await this.orderRepository.findRecentDuplicateOrder(command.email, command.total);
+
+        if (!duplicateOrder)
+            throw new ApiError(
+                httpStatus.CONFLICT,
+                "An identical order was just created. Please wait a moment before creating another order with the same details.",
+                "Duplicate order detected"
+            );
+
         const userEntity = UserFactory.createCustomer({
             name: command.name,
             lastName: command.lastname,
@@ -58,6 +68,13 @@ export class OrderService implements OrderServiceInterface {
         const addOrder = await this.orderRepository.createCustomerOrder(orderEntity);
 
         if (!addOrder) throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, "Failed to create order", "Error");
+
+        await createOrderUpdateNotification(
+            orderUserId,
+            'confirmed',
+            orderEntity.id,
+            orderEntity.total
+        );
 
         return OrderMapper.toCustomerOrderDTO(addOrder);
     };

@@ -22,4 +22,6 @@ export interface OrderRepositoryInterface {
             totalPages: number
         }
     }>
+
+    findRecentDuplicateOrder(email: string, total: number): Promise<Order | null>
 }

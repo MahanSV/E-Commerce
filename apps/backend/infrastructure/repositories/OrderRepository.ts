@@ -137,4 +137,20 @@ export default class OrderRepository extends BaseRepository<Order> implements Or
             }
         }
     };
+
+    async findRecentDuplicateOrder(email: string, total: number): Promise<Order | null> {
+         const dataModel = await prisma.order.findFirst({
+            where: {
+                total,
+                createdAt: {
+                    gte: new Date(Date.now() - 60 * 1000), // oneMinuteAgo
+                },
+                user: {
+                    email,
+                },
+            },
+        });
+
+        return dataModel && Order.createFromSnapshot(dataModel);
+    };
 };
