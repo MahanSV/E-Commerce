@@ -9,12 +9,12 @@ export class OrderFactory {
     /**
      * Creates a new Order entity
      */
-    public static create(command: createCustomerOrderCommand): Order {
+    public static create(command: createCustomerOrderCommand, userId: string): Order {
         // Add any domain logic or validation here before creating the entity
 
         return Order.create({
             id : crypto.randomUUID(), // Generate ID if isn't provided
-            userId: command.userId || "",
+            userId: userId || "",
             status: command.status || "pending",
             isActive: true,
             companyName: command.company,
