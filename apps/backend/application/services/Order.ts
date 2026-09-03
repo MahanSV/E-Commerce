@@ -33,7 +33,7 @@ export class OrderService implements OrderServiceInterface {
     async createCustomerOrder(command: createCustomerOrderCommand): Promise<CustomerOrderDTO> {
         const duplicateOrder = await this.orderRepository.findRecentDuplicateOrder(command.email, command.total);
 
-        if (!duplicateOrder)
+        if (duplicateOrder)
             throw new ApiError(
                 httpStatus.CONFLICT,
                 "An identical order was just created. Please wait a moment before creating another order with the same details.",
