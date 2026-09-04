@@ -3,7 +3,7 @@ import {updateBatchItemsCommand} from "#application/types/bulkUpload/command.ts"
 
 export interface BulkUploadBatchServiceInterface {
     uploadCsvAndCreateBatch(csvFile: Express.Multer.File): Promise<any>
-    listBatches(): Promise<Awaited<BulkUploadBatchReportDTO[]>>
+    listBatches(): Promise<BulkUploadBatchReportDTO>
     getBatchDetail(batchId: string): Promise<BulkUploadBatchDetailDTO>
     updateBatchItems(command: updateBatchItemsCommand): Promise<{updatedCount: number, items: {
             error: string | null;

@@ -15,15 +15,17 @@ export interface BulkUploadBatchDTO {
 }
 
 export interface BulkUploadBatchReportDTO {
-    id: string;
-    fileName: string;
-    totalRecords: number;
-    successfulRecords: number;
-    failedRecords: number;
-    status: BulkUploadBatchStatus;
-    uploadedBy: string;
-    uploadedAt: Date;
-    errors: (string | undefined)[] | undefined
+    batches: Awaited<{
+        id: string;
+        fileName: string;
+        totalRecords: number;
+        successfulRecords: number;
+        failedRecords: number;
+        status: BulkUploadBatchStatus;
+        uploadedBy: string;
+        uploadedAt: Date;
+        errors: (string | undefined)[] | undefined
+    }> [];
 }
 
 export interface BulkUploadBatchDetailDTO {

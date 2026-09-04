@@ -44,10 +44,10 @@ export default class BulkUploadBatchService implements BulkUploadBatchServiceInt
         this.orderItemRepository = orderItemRepository;
     };
 
-    async listBatches(): Promise<Awaited<BulkUploadBatchReportDTO[]>> {
+    async listBatches(): Promise<BulkUploadBatchReportDTO> {
         const batches = await this.bulkUploadBatchRepository.listBatches();
 
-        return await Promise.all(
+        const batchesWithDetails = await Promise.all(
             batches.map(async (batch) => {
                 const items = await this.bulkUploadItemRepository.findBulkUploadItemByBatchId(batch.id);
 
@@ -76,6 +76,8 @@ export default class BulkUploadBatchService implements BulkUploadBatchServiceInt
                 };
             })
         );
+
+        return { batches: batchesWithDetails };
     };
 
     async getBatchDetail(batchId: string): Promise<BulkUploadBatchDetailDTO> {
