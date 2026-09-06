@@ -27,7 +27,20 @@ const createAdminUser = async (): Promise<void> => {
 
         const userEntity = UserFactory.create(email, password, UserType.admin);
 
-        const adminUser = await prisma.user.create(userEntity);
+        const adminUser = await prisma.user.create({
+            data: {
+                id: userEntity.id,
+                name: userEntity.name,
+                lastName: userEntity.lastName,
+                email: userEntity.email,
+                password: userEntity.password,
+                role: userEntity.role,
+                mobile: userEntity.mobile,
+                status: userEntity.status,
+                createdAt: userEntity.createdAt,
+                updatedAt: userEntity.updatedAt,
+            }
+        });
 
         console.log("✅ SUCCESS! Admin user created! 👑\n");
         console.log("Admin Credentials:");

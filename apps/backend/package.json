@@ -14,6 +14,7 @@
     "typecheck": "tsc --noEmit",
     "test": "jest",
     "seed:product": "tsx seedData/insertDemoData.ts",
+    "seed:createAdmin": "tsx infrastructure/substructure/adminManagementCLI/createAdminUser.ts mahansivandy@gmail.com Mahan2@!",
     "prisma:generate": "prisma generate",
     "prisma:clean": "pm2 kill && rimraf node_modules/.prisma && npx prisma generate"
   },
