@@ -8,26 +8,26 @@ export class UserFactory {
   /**
    * Creates a new User entity
    */
-  public static create(email: string, password: string, role: UserType): User {
-    // Add any domain logic or validation here before creating the entity
+  public static async create(email: string, password: string, role: UserType): Promise<User> {
+      // Add any domain logic or validation here before creating the entity
 
-    return User.create({
-        id : crypto.randomUUID(), // Generate ID if isn't provided
-        name: "Unknown",
-        lastName: "Unknown",
-        email: email,
-        password: password,
-        role: role || UserType.user,
-        mobile: "Unknown",
-        status: "Unknown",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-    });
+      return await User.create({
+          id: crypto.randomUUID(), // Generate ID if isn't provided
+          name: "Unknown",
+          lastName: "Unknown",
+          email: email,
+          password: password,
+          role: role || UserType.user,
+          mobile: "Unknown",
+          status: "Unknown",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+      });
   };
 
-  public static createCustomer(command: createCustomerCommand): User {
-      return User.create({
-          id : crypto.randomUUID(), // Generate ID if isn't provided
+  public static async createCustomer(command: createCustomerCommand): Promise<User> {
+      return await User.create({
+          id: crypto.randomUUID(), // Generate ID if isn't provided
           name: command.name,
           lastName: command.lastName,
           email: command.email,

@@ -41,7 +41,7 @@ export class OrderService implements OrderServiceInterface {
             ); // Returned Error
         }
 
-        const userEntity = UserFactory.createCustomer({
+        const userEntity = await UserFactory.createCustomer({
             name: command.name,
             lastName: command.lastname,
             email: command.email,

@@ -3,8 +3,8 @@ import {UserType} from "#domain/enums/userType.ts";
 import Order, {OrderSnapshotParams} from "#models/Order.ts";
 import Notification, {NotificationSnapshotParams} from "#models/Notification.ts";
 import WishList, {WishListSnapshotParams} from "#models/WishList.ts";
-import {encrypt} from "#substructure/utils/encryption.ts";
 import BulkUploadBatch, {BulkUploadBatchSnapshotParams} from "#models/BulkUploadBatch.ts";
+import bcrypt from "bcryptjs"
 
 export interface UserConstructorParams {
     id: string;
@@ -55,17 +55,17 @@ class User extends BaseModel {
         super();
     };
 
-    static create(params: UserConstructorParams) {
+    static async create(params: UserConstructorParams) {
         const user = new User();
 
-        if(params?.id){
+        if (params?.id) {
             user.id = params?.id
         }
 
         user.name = params.name;
         user.lastName = params.lastName;
         user.email = params.email;
-        user.password = encrypt(params.password);
+        user.password = await bcrypt.hash(params.password, 14);
         user.role = params.role;
         user.mobile = params.mobile;
         user.status = params.status;
