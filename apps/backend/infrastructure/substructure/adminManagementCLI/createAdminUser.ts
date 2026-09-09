@@ -25,18 +25,18 @@ const createAdminUser = async (): Promise<void> => {
             process.exit(1);
         }
 
-        const userEntity = UserFactory.create(email, password, UserType.admin);
+        const userEntity = await UserFactory.create(email, password, UserType.admin);
 
         const adminUser = await prisma.user.create({
             data: {
                 id: userEntity.id,
-                name: userEntity.name,
-                lastName: userEntity.lastName,
+                name: "Mahan",
+                lastName: "Sivandy",
                 email: userEntity.email,
                 password: userEntity.password,
                 role: userEntity.role,
                 mobile: userEntity.mobile,
-                status: userEntity.status,
+                status: "ACTIVE",
                 createdAt: userEntity.createdAt,
                 updatedAt: userEntity.updatedAt,
             }
