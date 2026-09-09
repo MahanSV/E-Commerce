@@ -7,6 +7,7 @@ import {
     getMerchantByIdSchema,
     updateMerchantSchema
 } from "#webhost/validators/mercahnt/merchant.ts";
+import normalizeBody from '#middlewares/normalizeBody.ts';
 
 const router = express.Router();
 
@@ -29,6 +30,7 @@ router.get(
 router.post(
     "/",
     // authenticate,
+    normalizeBody,
     validate(createMerchantSchema),
     MerchantController.createMerchant
 );
