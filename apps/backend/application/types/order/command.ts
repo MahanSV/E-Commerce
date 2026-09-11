@@ -15,7 +15,7 @@ export type createCustomerOrderCommand = {
     userId?: string;
 };
 
-export type updateCustomerOrderCommand = {
+export type updateCustomerOrderCommand = { // TODO: Need's to be sink with validation
     id: string;
     address: string;
     apartment: string;
