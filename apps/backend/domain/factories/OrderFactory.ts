@@ -1,7 +1,8 @@
 import Order from "#domain/models/Order.ts";
 import {createCustomerOrderCommand} from "#application/types/order/command.ts";
 import crypto from "crypto";
-import { addMonths } from 'date-fns';
+import { addDays } from 'date-fns'
+import env from "#substructure/env.ts";
 
 
 
@@ -25,7 +26,7 @@ export class OrderFactory {
             city: command.city,
             description: command.description,
             total: Number(command.total) || 0,
-            deliversAt: addMonths(new Date(), 1), // TODO: It should be day not month (use env)
+            deliversAt: addDays(new Date(), Number(env.productDeliveryDays)),
             createdAt: new Date(),
             updatedAt: new Date()
         });
