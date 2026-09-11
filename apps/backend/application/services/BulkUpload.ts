@@ -1,0 +1,341 @@
+import {BulkUploadBatchServiceInterface} from "#application/interfaces/BulkUploadBatchInterface.ts";
+import {BulkUploadBatchRepositoryInterface} from "#domain/interfaces/BulkUploadBatchRepository.ts";
+import BulkUploadBatchRepository from "#repositories/BulkUploadBatchRepository.ts";
+import {excelCsvBufferToJSON, normalizeXlsxToCsvRows} from "#substructure/utils/excel.ts";
+import ApiError from "#webhost/errors/apiError.ts";
+import httpStatus from "http-status";
+import {BulkUploadBatchDetailDTO, BulkUploadBatchReportDTO} from "#application/dto/BulkUploadBatchDTO.ts";
+import {BulkUploadItemRepositoryInterface} from "#domain/interfaces/BulkUploadItemRepository.ts";
+import BulkUploadItemRepository from "#repositories/BulkUploadItemRepository.ts";
+import {BulkUploadBatchMapper} from "#application/mappers/BulkUploadBatchMapper.ts";
+import {updateBatchItemsCommand} from "#application/types/bulkUpload/command.ts";
+import OrderItemRepository from "#repositories/OrderItemRepository.ts";
+import {OrderItemRepositoryInterface} from "#domain/interfaces/OrderItemRepository.ts";
+
+interface CleanRowData {
+    title: string;
+    slug: string;
+    price: number;
+    categoryId: string;
+    inStock: number;
+    manufacturer: string | null;
+    description: string | null;
+    mainImage: string | null;
+}
+
+interface ValidationResult {
+    ok: boolean;
+    data?: CleanRowData;
+    error?: string;
+}
+
+export default class BulkUploadBatchService implements BulkUploadBatchServiceInterface {
+    private bulkUploadBatchRepository: BulkUploadBatchRepositoryInterface;
+    private bulkUploadItemRepository: BulkUploadItemRepositoryInterface;
+    private orderItemRepository: OrderItemRepositoryInterface;
+
+    constructor(
+        bulkUploadBatchRepository: BulkUploadBatchRepositoryInterface = new BulkUploadBatchRepository(),
+        bulkUploadItemRepository: BulkUploadItemRepositoryInterface = new BulkUploadItemRepository(),
+        orderItemRepository: OrderItemRepositoryInterface = new OrderItemRepository(),
+    ) {
+        this.bulkUploadBatchRepository = bulkUploadBatchRepository;
+        this.bulkUploadItemRepository = bulkUploadItemRepository;
+        this.orderItemRepository = orderItemRepository;
+    };
+
+    async listBatches(): Promise<BulkUploadBatchReportDTO> {
+        const batches = await this.bulkUploadBatchRepository.listBatches();
+
+        const batchesWithDetails = await Promise.all(
+            batches.map(async (batch) => {
+                const items = await this.bulkUploadItemRepository.findBulkUploadItemByBatchId(batch.id);
+
+                const successfulRecords = items.filter(
+                    (item) => item.status === "CREATED" && item.productId !== null
+                ).length;
+                const failedRecords = items.filter(
+                    (item) => item.status === "ERROR" || item.error !== null
+                ).length;
+
+                // Collect error messages
+                const errors = items
+                    .filter((item) => item.error)
+                    .map((item) => item.error);
+
+                return {
+                    id: batch.id,
+                    fileName: batch.fileName || `batch-${batch.id.substring(0, 8)}.csv`,
+                    totalRecords: items.length,
+                    successfulRecords,
+                    failedRecords,
+                    status: batch.status,
+                    uploadedBy: "Admin", // You can get this from session if needed
+                    uploadedAt: batch.createdAt,
+                    errors: errors.length > 0 ? errors : undefined,
+                };
+            })
+        );
+
+        return { batches: batchesWithDetails };
+    };
+
+    async getBatchDetail(batchId: string): Promise<BulkUploadBatchDetailDTO> {
+        const batch = await this.bulkUploadBatchRepository.findById(batchId);
+
+        if (!batch) throw new ApiError(httpStatus.NOT_FOUND, "Batch not found", "Error");
+
+        const items = await this.bulkUploadItemRepository.findItemsByBatchIdWithProducts(batchId);
+
+        return BulkUploadBatchMapper.toDetailsDTO(batch, items);
+    };
+
+    async updateBatchItems(command: updateBatchItemsCommand): Promise<{updatedCount: number, items: {
+            error: string | null;
+            id: string;
+            status: string;
+            batchId: string;
+            productId: string | null;
+            title: string;
+            slug: string;
+            price: number;
+            manufacturer: string | null;
+            description: string | null;
+            mainImage: string | null;
+            categoryId: string;
+            inStock: number;
+        }[]
+    }>
+    {
+        const updated = await this.bulkUploadBatchRepository.updateBatchItems(command);
+
+        return { updatedCount: updated.length, items: updated };
+    };
+
+    async deleteBatch(batchId: string, deleteProducts: boolean): Promise<{
+        success: boolean;
+        message: string;
+        deletedProducts: boolean;
+    }> {
+        const batch = await this.bulkUploadBatchRepository.findById(batchId);
+
+        if (!batch) throw new ApiError(httpStatus.NOT_FOUND, "Batch not found", "Error");
+
+        if (deleteProducts) {
+            const check = await this.canDeleteProductsForBatch(batchId);
+
+            if (!check.canDelete) {
+                const errorMsg =
+                    check.blockedProductIds && check.blockedProductIds.length > 0
+                        ? `Cannot delete products: ${
+                            check.reason
+                        }. Products in orders: ${check.blockedProductIds.join(", ")}`
+                        : `Cannot delete products: ${check.reason || "Unknown error"}`;
+
+                throw new ApiError(httpStatus.CONFLICT, errorMsg, "Error");
+            }
+
+            return await this.bulkUploadBatchRepository.deleteBatchAndItemsAndProducts(batchId);
+        }
+        else {
+            return await this.bulkUploadBatchRepository.deleteBatchAndItems(batchId);
+        }
+    };
+
+    public async uploadCsvAndCreateBatch(csvFile: Express.Multer.File): Promise<any> {
+        // ۱. پارس کردن فایل
+        const parsedData = excelCsvBufferToJSON(csvFile.buffer);
+        const rows = normalizeXlsxToCsvRows(parsedData);
+
+        if (!rows || rows.length === 0) {
+            throw new ApiError(httpStatus.BAD_REQUEST, "CSV has no rows", "Error");
+        }
+
+        const valid: CleanRowData[] = [];
+        const errors: { index: number; error: string }[] = [];
+
+        for (let i = 0; i < rows.length; i++) {
+            const { ok, data, error } = this.validateRow(rows[i]);
+            if (ok && data) {
+                valid.push(data);
+            } else if (error) {
+                errors.push({ index: i + 1, error });
+            }
+        }
+
+        const result = await this.bulkUploadBatchRepository.executeTransaction(async (tx: any) => {
+            const createdBatch = await this.bulkUploadBatchRepository.createBatch(tx, {
+                fileName: csvFile.originalname,
+                status: "PENDING",
+                itemCount: rows.length,
+                errorCount: errors.length,
+            });
+
+            const { successCount, errorCount } = await this.createBatchWithItems(
+                tx,
+                createdBatch.id,
+                valid,
+                errors
+            );
+
+            const finalStatus = this.computeBatchStatus(successCount, errorCount);
+            return await this.bulkUploadBatchRepository.updateBatch(tx, createdBatch.id, {
+                status: finalStatus,
+                itemCount: successCount + errorCount,
+                errorCount,
+            });
+        });
+
+        const summary = await this.bulkUploadBatchRepository.getBatchSummary(result.id);
+
+        return {
+            batchId: result.id,
+            status: result.status,
+            ...summary,
+            validationErrors: errors,
+        };
+    };
+
+    // متد اعتبارسنجی
+    private validateRow(row: Record<string, string>): ValidationResult {
+        const errs: string[] = [];
+        const clean: Partial<CleanRowData> = {};
+
+        const title = String(row.title ?? "").trim();
+        const slug = String(row.slug ?? "").trim();
+        const price = Number(row.price);
+        const categoryId = String(row.categoryId ?? "").trim();
+        const inStock = Number(row.inStock ?? 0);
+
+        if (!title) errs.push("title is required");
+        if (!slug) errs.push("slug is required");
+        if (!Number.isFinite(price) || price < 0) errs.push("price must be a non-negative number");
+        if (!categoryId) errs.push("categoryId is required");
+        if (!Number.isFinite(inStock) || inStock < 0) errs.push("inStock must be a non-negative number");
+
+        if (errs.length) return { ok: false, error: errs.join(", ") };
+
+        clean.title = title;
+        clean.slug = slug;
+        clean.price = Math.round(price * 100) / 100;
+        clean.categoryId = categoryId;
+        clean.inStock = Math.floor(inStock);
+        clean.manufacturer = row.manufacturer ? String(row.manufacturer).trim() : null;
+        clean.description = row.description ? String(row.description).trim() : null;
+        clean.mainImage = row.mainImage ? String(row.mainImage).trim() : null;
+
+        return { ok: true, data: clean as CleanRowData };
+    };
+
+    // منطق بیزینسی ساخت آیتم‌ها (بدون کوئری مستقیم دیتابیس)
+    private async createBatchWithItems(
+        tx: any,
+        batchId: string,
+        validRows: CleanRowData[],
+        errorRows: { index: number; error: string }[]
+    ): Promise<{ successCount: number; errorCount: number }> {
+        const uniqueCategoryIds = [...new Set(validRows.map((r) => r.categoryId))];
+
+        // کوئری از طریق ریپازیتوری
+        const categories = await this.bulkUploadBatchRepository.findCategories(tx, uniqueCategoryIds);
+
+        const categoryMap = new Map<string, string>();
+        categories.forEach((cat: any) => {
+            categoryMap.set(cat.id, cat.id);
+            if (cat.name) categoryMap.set(cat.name.toLowerCase(), cat.id);
+        });
+
+        let success = 0;
+        let failed = 0;
+
+        // مدیریت ردیف‌های معتبر
+        for (const row of validRows) {
+            const resolvedCategoryId =
+                categoryMap.get(row.categoryId) ||
+                (row.categoryId ? categoryMap.get(row.categoryId.toLowerCase()) : undefined);
+
+            if (!resolvedCategoryId) {
+                await this.bulkUploadBatchRepository.createBulkUploadItem(tx, {
+                    batchId, title: row.title, slug: row.slug, price: row.price,
+                    manufacturer: row.manufacturer, description: row.description,
+                    mainImage: row.mainImage, categoryId: row.categoryId, inStock: row.inStock,
+                    status: "ERROR", error: `Category not found: ${row.categoryId}`,
+                });
+                failed++;
+                continue;
+            }
+
+            try {
+                const product = await this.bulkUploadBatchRepository.createProduct(tx, {
+                    title: row.title, slug: row.slug, price: row.price, rating: 5,
+                    description: row.description ?? "", manufacturer: row.manufacturer ?? "",
+                    mainImage: row.mainImage ?? "", categoryId: resolvedCategoryId, inStock: row.inStock,
+                });
+
+                await this.bulkUploadBatchRepository.createBulkUploadItem(tx, {
+                    batchId, productId: product.id, title: row.title, slug: row.slug, price: row.price,
+                    manufacturer: row.manufacturer, description: row.description, mainImage: row.mainImage,
+                    categoryId: resolvedCategoryId, inStock: row.inStock, status: "CREATED", error: null,
+                });
+                success++;
+            } catch (e: any) {
+                await this.bulkUploadBatchRepository.createBulkUploadItem(tx, {
+                    batchId, title: row.title, slug: row.slug, price: row.price,
+                    manufacturer: row.manufacturer, description: row.description, mainImage: row.mainImage,
+                    categoryId: resolvedCategoryId || row.categoryId, inStock: row.inStock,
+                    status: "ERROR", error: e?.message || "Create failed",
+                });
+                failed++;
+            }
+        }
+
+        // مدیریت ردیف‌های نامعتبر
+        for (const err of errorRows) {
+            await this.bulkUploadBatchRepository.createBulkUploadItem(tx, {
+                batchId, title: "", slug: "", price: 0, manufacturer: null,
+                description: null, mainImage: null, categoryId: "", inStock: 0,
+                status: "ERROR", error: `Row ${err.index}: ${err.error}`,
+            });
+            failed++;
+        }
+
+        return { successCount: success, errorCount: failed };
+    };
+
+    // منطق محاسبه وضعیت نهایی
+    private computeBatchStatus(successCount: number, errorCount: number): string {
+        if (successCount > 0 && errorCount === 0) return "COMPLETED";
+        if (successCount > 0 && errorCount > 0) return "PARTIAL";
+        if (successCount === 0 && errorCount > 0) return "FAILED";
+        return "PENDING";
+    };
+
+
+    private async canDeleteProductsForBatch(batchId: string): Promise<{
+        canDelete: boolean, blockedProductIds: string[], reason?: string,
+    }>
+    {
+        const items = await this.bulkUploadItemRepository.getNonNullProductIdsByBatchId(batchId);
+
+        const productIds = items.map((i) => i.productId).filter(Boolean);
+
+        if (productIds.length === 0) {
+            return { canDelete: true, blockedProductIds: [] };
+        }
+
+        const referenced = await this.orderItemRepository.findAllByProductIds(productIds);
+
+        const blocked = new Set(referenced.map((r) => r.productId));
+        const blockedList = productIds.filter((id) => blocked.has(id));
+
+        if (blockedList.length > 0) {
+            return {
+                canDelete: false,
+                blockedProductIds: blockedList,
+                reason: "Some products are in orders",
+            };
+        }
+
+        return { canDelete: true, blockedProductIds: [] };
+    };
+}

@@ -1,0 +1,32 @@
+model Category {
+  id   String  @id @default(uuid())
+  name String
+  icon String?
+
+  products Product[]
+}
+
+model Product {
+  id           String  @id @default(uuid())
+  categoryId   String
+  title        String
+  slug         String
+  mainImage    String
+  manufacturer String
+  photo        Json?
+  inStock      Int     @default(1)
+  price        Int     @default(0)
+  rating       Int     @default(0)
+  quantity     Int
+  SKU          String?
+  socialLink   String?
+  description  String?
+  information  String?
+
+  wishlists        WishList[]
+  merchantProducts MerchantProduct[]
+  category         Category          @relation(fields: [categoryId], references: [id])
+  orderItems       OrderItem[]
+  // Back relation for bulk upload items
+  bulkUploadItems bulkUploadItem[]      @relation("ProductBulkItems")
+}
