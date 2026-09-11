@@ -26,6 +26,7 @@ const envSchema = object({
 	TOKEN_ENCRYPTING_KEY: string().required(),
 	CORS_LOCAL_FRONTEND: string().required(),
 	CORS_DEV_FRONTEND: string().required(),
+	PRODUCT_DELIVERY_DAYS: number().required(),
 });
 
 const value: any = yupValidateSync(process.env, envSchema, {
@@ -45,4 +46,5 @@ export default {
 	tokenEncryptingKey: value.TOKEN_ENCRYPTING_KEY,
 	corsLocalFrontend: value.CORS_LOCAL_FRONTEND,
 	corsDevFrontend: value.CORS_DEV_FRONTEND,
+	productDeliveryDays: value.PRODUCT_DELIVERY_DAYS,
 };
