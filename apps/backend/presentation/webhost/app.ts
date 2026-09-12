@@ -13,25 +13,30 @@ import routes from '#routes/index.ts';
 import qs from 'qs';
 import xssSanitizer from '#middlewares/xssSanitizer.ts';
 import normalizeMiddleware from '#middlewares/normalizeMiddleware.ts';
+import swaggerUi from 'swagger-ui-express';
+import swaggerSpec from '#webhost/docs/swagger.ts';
 
 const app = express();
 
-// Set Content-Type and override res.json for bigint and status
-app.use((req, res, next) => {
-  res.setHeader('Content-Type', 'application/json');
-
-  const originalJson = res.json.bind(res);
-
-  res.json = ((data: any) => {
-    const replacer = (key: any, value: any): any => (typeof value === 'bigint' ? value.toString() : value);
-
-    const stringified = JSON.stringify(data, replacer);
-
-    res.send(stringified);
-  }) as unknown as typeof res.json;
-
-  next();
+// Express serves the Swagger HTML, CSS and JavaScript from these routes.
+// Mounting them before the application-wide API middleware keeps those assets
+// from being rewritten as JSON or rejected by API-only request handling.
+app.get('/docs.json', (req, res) => {
+  res.json(swaggerSpec);
 });
+app.use('/docs', helmet({ contentSecurityPolicy: false }), swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
+  customSiteTitle: 'E-Commerce API Documentation',
+  swaggerOptions: {
+    persistAuthorization: true,
+    displayRequestDuration: true,
+  },
+}));
+
+// Preserve BigInt JSON support without changing the Content-Type of non-API
+// responses such as Swagger UI assets.
+app.set('json replacer', (_key: string, value: unknown) => (
+  typeof value === 'bigint' ? value.toString() : value
+));
 
 
 // Header Security
