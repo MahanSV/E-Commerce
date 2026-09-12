@@ -6,6 +6,7 @@ import {
     createCustomerOrderSchema, deleteCustomerOrderSchema, getCustomerOrderSchema,
     updateCustomerOrderSchema
 } from "#webhost/validators/customer_orders/customer_orders.ts";
+import normalizeBody from "#middlewares/normalizeBody.ts";
 
 const router = express.Router();
 
@@ -28,6 +29,7 @@ router.get(
 router.put(
     '/:id',
     // authenticate,
+    normalizeBody,
     validate(updateCustomerOrderSchema),
     CustomerOrdersController.updateCustomerOrder
 );
