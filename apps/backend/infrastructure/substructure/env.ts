@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
-import { number, object, string } from 'yup';
-import { yupValidateSync } from '#substructure/utils/yupValidator.ts';
+import { z } from 'zod';
+import { zodValidateSync } from '#substructure/utils/zodValidator.ts';
 import path from "path";
 
 dotenv.config();
@@ -13,25 +13,23 @@ const envFilePath: string = path.resolve(dir, `.env.${env}`);
 
 dotenv.config({ path: envFilePath });
 
-const envSchema = object({
-	PRIVATE_ENCRYPTING_KEY: string().required(),
-	PORT: number().required().default(7005),
-	TOKEN_EXPIRATION_TIME: number().required().default(86400), // 1 day
-	COOKIE_DOMAIN: string().required(),
-	NODE_ENV: string().oneOf(['production', 'development', 'stage']).default('development').required(),
-	REDIS_PATH: string().required().default('redis://127.0.0.1:6379'),
-	TOOL_ACCESS_TOKEN: string().required(),
-	DEFAULT_PASSWORD: string().required(),
-	TOKEN_DECRYPTING_KEY: string().required(),
-	TOKEN_ENCRYPTING_KEY: string().required(),
-	CORS_LOCAL_FRONTEND: string().required(),
-	CORS_DEV_FRONTEND: string().required(),
-	PRODUCT_DELIVERY_DAYS: number().required(),
+const envSchema = z.object({
+	PRIVATE_ENCRYPTING_KEY: z.string().min(1),
+	PORT: z.coerce.number().default(7005),
+	TOKEN_EXPIRATION_TIME: z.coerce.number().default(86400), // 1 day
+	COOKIE_DOMAIN: z.string().min(1),
+	NODE_ENV: z.enum(['production', 'development', 'stage']).default('development'),
+	REDIS_PATH: z.string().min(1).default('redis://127.0.0.1:6379'),
+	TOOL_ACCESS_TOKEN: z.string().min(1),
+	DEFAULT_PASSWORD: z.string().min(1),
+	TOKEN_DECRYPTING_KEY: z.string().min(1),
+	TOKEN_ENCRYPTING_KEY: z.string().min(1),
+	CORS_LOCAL_FRONTEND: z.string().min(1),
+	CORS_DEV_FRONTEND: z.string().min(1),
+	PRODUCT_DELIVERY_DAYS: z.coerce.number(),
 });
 
-const value: any = yupValidateSync(process.env, envSchema, {
-	stripUnknown: true,
-}, 'Env Validation: ');
+const value: any = zodValidateSync(process.env, envSchema, {}, 'Env Validation: ');
 
 export default {
 	privateEncryptingKey: value.PRIVATE_ENCRYPTING_KEY,

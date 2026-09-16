@@ -1,7 +1,7 @@
-import yup from 'yup';
+import { z } from 'zod';
 
 
-const uploadMainImageSchema = yup.object({});
+const uploadMainImageSchema = z.object({});
 
 export {
     uploadMainImageSchema,

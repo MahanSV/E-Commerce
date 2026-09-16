@@ -1,8 +1,8 @@
-import yup from 'yup';
+import { z } from 'zod';
 
 
-const searchProductsSchema = yup.object({
-    query: yup.mixed().required(),
+const searchProductsSchema = z.object({
+    query: z.unknown().refine((value) => value !== undefined && value !== null, { message: 'query is a required field' }),
 });
 
 export {
