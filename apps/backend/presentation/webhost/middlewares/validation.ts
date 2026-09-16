@@ -1,6 +1,6 @@
 import httpStatus from 'http-status';
 import ApiError from '#webhost/errors/apiError.ts';
-import { yupValidateSync } from '#substructure/utils/yupValidator.ts';
+import { zodValidateSync } from '#substructure/utils/zodValidator.ts';
 
 const validate = (schema: any) => (req: any, res: any, next: any): any => {
   // const validSchema = pick(schema, ['params', 'query', 'body']);
@@ -11,7 +11,7 @@ const validate = (schema: any) => (req: any, res: any, next: any): any => {
       ...req.queryPolluted,
     };
 
-    const value = yupValidateSync(object, schema);
+    const value = zodValidateSync(object, schema);
 
     return next();
   } catch (error) {

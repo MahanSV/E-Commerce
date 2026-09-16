@@ -1,28 +1,28 @@
-import yup from 'yup';
+import { z } from 'zod';
 
-const createUserSchema = yup.object({
-    email: yup.string().required("email is required."),
-    password: yup.string().required("password is required."),
-    role: yup.string().required("role is required."),
+const createUserSchema = z.object({
+    email: z.string({ error: "email is required." }).min(1, { error: "email is required." }),
+    password: z.string({ error: "password is required." }).min(1, { error: "password is required." }),
+    role: z.string({ error: "role is required." }).min(1, { error: "role is required." }),
 });
 
-const getUserSchema = yup.object({
-    id: yup.string().required("id is required."),
+const getUserSchema = z.object({
+    id: z.string({ error: "id is required." }).min(1, { error: "id is required." }),
 });
 
-const updateUserSchema = yup.object({
-    id: yup.string(),
-    email: yup.string(),
-    password: yup.string(),
-    role: yup.string(),
+const updateUserSchema = z.object({
+    id: z.string().optional(),
+    email: z.string().optional(),
+    password: z.string().optional(),
+    role: z.string().optional(),
 });
 
-const deleteUserSchema = yup.object({
-    id: yup.string().required("id is required."),
+const deleteUserSchema = z.object({
+    id: z.string({ error: "id is required." }).min(1, { error: "id is required." }),
 });
 
-const getUserByEmailSchema = yup.object({
-    email: yup.string().required("email is required."),
+const getUserByEmailSchema = z.object({
+    email: z.string({ error: "email is required." }).min(1, { error: "email is required." }),
 });
 
 export {

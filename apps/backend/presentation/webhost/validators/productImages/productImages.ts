@@ -1,22 +1,22 @@
-import yup from 'yup';
+import { z } from 'zod';
 
-const getSingleProductImagesSchema = yup.object({
-    id: yup.string().required("id is required."),
+const getSingleProductImagesSchema = z.object({
+    id: z.string({ error: "id is required." }).min(1, { error: "id is required." }),
 });
 
-const createImageSchema = yup.object({
-    productID: yup.string().required("productID is required."),
-    image: yup.string().required("image is required."),
+const createImageSchema = z.object({
+    productID: z.string({ error: "productID is required." }).min(1, { error: "productID is required." }),
+    image: z.string({ error: "image is required." }).min(1, { error: "image is required." }),
 });
 
-const updateImageSchema = yup.object({
-    id: yup.string().required("id is required."),
-    productID: yup.string().required("productID is required."),
-    image: yup.string().required("image is required."),
+const updateImageSchema = z.object({
+    id: z.string({ error: "id is required." }).min(1, { error: "id is required." }),
+    productID: z.string({ error: "productID is required." }).min(1, { error: "productID is required." }),
+    image: z.string({ error: "image is required." }).min(1, { error: "image is required." }),
 });
 
-const deleteImageSchema = yup.object({
-    id: yup.string().required("id is required."),
+const deleteImageSchema = z.object({
+    id: z.string({ error: "id is required." }).min(1, { error: "id is required." }),
 });
 
 export {

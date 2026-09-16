@@ -1,21 +1,21 @@
-import yup from 'yup';
+import { z } from 'zod';
 
 
-const createCategorySchema = yup.object({
-    name: yup.string()
+const createCategorySchema = z.object({
+    name: z.string().optional()
 });
 
-const getCategorySchema = yup.object({
-    id: yup.string()
+const getCategorySchema = z.object({
+    id: z.string().optional()
 });
 
-const updateCategorySchema = yup.object({
-    id: yup.string(),
-    name: yup.string()
+const updateCategorySchema = z.object({
+    id: z.string().optional(),
+    name: z.string().optional()
 });
 
-const deleteCategorySchema = yup.object({
-    id: yup.string(),
+const deleteCategorySchema = z.object({
+    id: z.string().optional(),
 });
 
 export {

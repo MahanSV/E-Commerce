@@ -1,7 +1,7 @@
-import yup from 'yup';
+import { z } from 'zod';
 
-const getProductBySlugSchema = yup.object({
-    slug: yup.string().required("slug is required."),
+const getProductBySlugSchema = z.object({
+    slug: z.string({ error: "slug is required." }).min(1, { error: "slug is required." }),
 });
 
 export {
