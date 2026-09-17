@@ -25,6 +25,11 @@ export function createApiRouter(expressRouter: Router, basePath: string = '') {
             const fullPath = `${basePath}${path}`.replace(/\/+/g, '/');
             registry.registerPath({ method: 'put', path: toOpenApiPath(fullPath), ...config });
         },
+        patch: (path: string, config: RouteConfig, ...handlers: RequestHandler[]) => {
+            expressRouter.patch(path, ...handlers);
+            const fullPath = `${basePath}${path}`.replace(/\/+/g, '/');
+            registry.registerPath({ method: 'patch', path: toOpenApiPath(fullPath), ...config });
+        },
         delete: (path: string, config: RouteConfig, ...handlers: RequestHandler[]) => {
             expressRouter.delete(path, ...handlers);
             const fullPath = `${basePath}${path}`.replace(/\/+/g, '/');
