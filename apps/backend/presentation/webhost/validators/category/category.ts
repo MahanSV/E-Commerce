@@ -24,7 +24,7 @@ const deleteCategorySchema = z.object({
 const categoryDTOSchema = z.object({
     id: z.string(),
     name: z.string(),
-    products: z.array(productDTOSchema)
+    products: z.array(z.lazy((): z.ZodType => productDTOSchema))
         .nullable()
         .optional()
         .openapi({

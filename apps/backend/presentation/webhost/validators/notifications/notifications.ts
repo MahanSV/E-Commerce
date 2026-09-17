@@ -52,9 +52,9 @@ const notificationDTOSchema = z.object({
     metadata: z.unknown().optional().nullable(),
     createdAt: z.date(),
     updatedAt: z.date(),
-    user: userDTOSchema
-        .optional()
+    user: z.lazy((): z.ZodType => userDTOSchema)
         .nullable()
+        .optional()
         .openapi({
             type: 'object',
             nullable: true,

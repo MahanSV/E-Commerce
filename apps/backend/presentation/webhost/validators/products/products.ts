@@ -61,9 +61,9 @@ const productDTOSchema = z.object({
     information: z.string().optional().nullable(),
     // wishlists: // TODO: Need's implementation
     // merchantProducts // TODO: Need's implementation
-    category: categoryDTOSchema.optional().nullable(),
+    category: z.lazy((): z.ZodType => categoryDTOSchema).optional().nullable(),
     // orderItems // TODO: Need's implementation
-    bulkUploadItems: z.array(bulkUploadItemDTOSchema)
+    bulkUploadItems: z.array(z.lazy((): z.ZodType => bulkUploadItemDTOSchema))
         .optional()
         .nullable()
         .openapi({

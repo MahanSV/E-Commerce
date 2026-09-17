@@ -22,7 +22,7 @@ const bulkUploadItemDTOSchema = z.object({
     status: bulkUploadItemStatus,
     error: z.string().optional(),
 
-    batch: bulkUploadBatchDTOSchema
+    batch: z.lazy((): z.ZodType => bulkUploadBatchDTOSchema)
         .nullable()
         .optional()
         .openapi({
@@ -30,7 +30,7 @@ const bulkUploadItemDTOSchema = z.object({
             nullable: true,
         }),
 
-    product: productDTOSchema
+    product: z.lazy((): z.ZodType => productDTOSchema)
         .nullable()
         .optional()
         .openapi({

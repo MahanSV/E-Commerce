@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi';
+import {productDTOSchema} from "#webhost/validators/products/products.ts";
 
 extendZodWithOpenApi(z);
 
@@ -40,7 +41,7 @@ const merchantDTOSchema = z.object({
     status: z.string().optional().nullable(),
     createdAt: z.date(),
     updatedAt: z.date(),
-    products: z.array(productDTOSchema)
+    products: z.array(z.lazy((): z.ZodType => productDTOSchema))
         .optional()
         .nullable()
         .openapi({

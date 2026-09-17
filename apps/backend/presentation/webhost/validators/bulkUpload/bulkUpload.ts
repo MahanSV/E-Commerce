@@ -37,7 +37,7 @@ const bulkUploadBatchDTOSchema = z.object({
     errorCount: z.number(),
     userId: z.string().optional(),
 
-    items: z.array(bulkUploadItemDTOSchema)
+    items: z.array(z.lazy((): z.ZodType => bulkUploadItemDTOSchema))
         .nullable()
         .optional()
         .openapi({
@@ -45,7 +45,7 @@ const bulkUploadBatchDTOSchema = z.object({
             nullable: true,
         }),
 
-    user: userDTOSchema
+    user: z.lazy((): z.ZodType => userDTOSchema)
         .nullable()
         .optional()
         .openapi({

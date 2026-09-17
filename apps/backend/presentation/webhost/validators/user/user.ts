@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import {bulkUploadBatchDTOSchema} from "#webhost/validators/bulkUpload/bulkUpload.ts";
-import {customerOrderDTOSchema} from "#webhost/validators/customer_orders/customer_orders.js";
-import {notificationDTOSchema} from "#webhost/validators/notifications/notifications.js";
+import {customerOrderDTOSchema} from "#webhost/validators/customer_orders/customer_orders.ts";
+import {notificationDTOSchema} from "#webhost/validators/notifications/notifications.ts";
 
 const createUserSchema = z.object({
     email: z.string({ error: "email is required." }).min(1, { error: "email is required." }),
@@ -41,7 +41,7 @@ const userDTOSchema = z.object({
     createdAt: z.date().nullable(),
     updatedAt: z.date().nullable(),
 
-    orders: z.array(customerOrderDTOSchema)
+    orders: z.array(z.lazy((): z.ZodType => customerOrderDTOSchema))
         .nullable()
         .optional()
         .openapi({
@@ -49,7 +49,7 @@ const userDTOSchema = z.object({
             nullable: true,
         }),
 
-    notifications: z.array(notificationDTOSchema)
+    notifications: z.array(z.lazy((): z.ZodType => notificationDTOSchema))
         .nullable()
         .optional()
         .openapi({
@@ -61,12 +61,12 @@ const userDTOSchema = z.object({
     /*wishlists: z.array(wishlistDTOSchema)
         .nullable()
         .optional()
-        .openapi({
+        .docs({
             type: 'array',
             nullable: true,
         }),*/
 
-    bulkUploadBatches: z.array(bulkUploadBatchDTOSchema)
+    bulkUploadBatches: z.array(z.lazy((): z.ZodType => bulkUploadBatchDTOSchema))
         .nullable()
         .optional()
         .openapi({
