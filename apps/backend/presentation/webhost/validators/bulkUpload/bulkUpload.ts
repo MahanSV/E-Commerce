@@ -1,4 +1,7 @@
 import { z } from 'zod';
+import { extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi';
+import {bulkUploadItemDTOSchema} from "#webhost/validators/bulkUpload/bulkUploadItem.ts";
+import {userDTOSchema} from "#webhost/validators/user/user.ts";
 
 
 const uploadCsvAndCreateBatchSchema = z.object({
@@ -21,9 +24,41 @@ const deleteBatchSchema = z.object({
     deleteProducts: z.string({ error: "deleteProducts is required." }).min(1, { error: "deleteProducts is required." }),
 });
 
+extendZodWithOpenApi(z);
+
+const bulkUploadBatchStatus = z.enum(['PENDING', 'COMPLETED', 'PARTIAL', 'FAILED',])
+
+const bulkUploadBatchDTOSchema = z.object({
+    id: z.string(),
+    fileName: z.string(),
+    createdAt: z.date(),
+    status: bulkUploadBatchStatus,
+    itemCount: z.number(),
+    errorCount: z.number(),
+    userId: z.string().optional(),
+
+    items: z.array(bulkUploadItemDTOSchema)
+        .nullable()
+        .optional()
+        .openapi({
+            type: 'array',
+            nullable: true,
+        }),
+
+    user: userDTOSchema
+        .nullable()
+        .optional()
+        .openapi({
+            type: 'object',
+            nullable: true,
+        }),
+});
+
 export {
     uploadCsvAndCreateBatchSchema,
     getBatchDetailSchema,
     updateBatchItemsSchema,
     deleteBatchSchema,
+    bulkUploadBatchDTOSchema,
+
 }

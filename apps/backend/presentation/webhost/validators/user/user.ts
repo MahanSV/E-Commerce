@@ -1,4 +1,7 @@
 import { z } from 'zod';
+import {bulkUploadBatchDTOSchema} from "#webhost/validators/bulkUpload/bulkUpload.ts";
+import {customerOrderDTOSchema} from "#webhost/validators/customer_orders/customer_orders.js";
+import {notificationDTOSchema} from "#webhost/validators/notifications/notifications.js";
 
 const createUserSchema = z.object({
     email: z.string({ error: "email is required." }).min(1, { error: "email is required." }),
@@ -25,10 +28,58 @@ const getUserByEmailSchema = z.object({
     email: z.string({ error: "email is required." }).min(1, { error: "email is required." }),
 });
 
+const userType = z.enum(['admin', 'user', 'merchant']);
+
+const userDTOSchema = z.object({
+    id: z.string(),
+    name: z.string(),
+    lastName: z.string(),
+    email: z.string(),
+    role: userType,
+    mobile: z.string(),
+    status: z.string(),
+    createdAt: z.date().nullable(),
+    updatedAt: z.date().nullable(),
+
+    orders: z.array(customerOrderDTOSchema)
+        .nullable()
+        .optional()
+        .openapi({
+            type: 'array',
+            nullable: true,
+        }),
+
+    notifications: z.array(notificationDTOSchema)
+        .nullable()
+        .optional()
+        .openapi({
+            type: 'array',
+            nullable: true,
+        }),
+
+    // TODO: Need's implementation
+    /*wishlists: z.array(wishlistDTOSchema)
+        .nullable()
+        .optional()
+        .openapi({
+            type: 'array',
+            nullable: true,
+        }),*/
+
+    bulkUploadBatches: z.array(bulkUploadBatchDTOSchema)
+        .nullable()
+        .optional()
+        .openapi({
+            type: 'array',
+            nullable: true,
+        }),
+});
+
 export {
     createUserSchema,
     getUserSchema,
     updateUserSchema,
     deleteUserSchema,
     getUserByEmailSchema,
+    userDTOSchema,
 }

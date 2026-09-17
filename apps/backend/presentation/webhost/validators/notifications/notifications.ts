@@ -1,5 +1,8 @@
 import { z } from 'zod';
+import { extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi';
+import {userDTOSchema} from "#webhost/validators/user/user.ts";
 
+extendZodWithOpenApi(z);
 
 const getUnreadCountSchema = z.object({
     userId: z.string({ error: "userId is required." }).min(1, { error: "userId is required." }),
@@ -38,6 +41,26 @@ const deleteNotificationSchema = z.object({
     userId: z.string({ error: "userId is required." }).min(1, { error: "userId is required." }),
 });
 
+const notificationDTOSchema = z.object({
+    id: z.string(),
+    userId: z.string(),
+    title: z.string(),
+    message: z.string(),
+    isRead: z.boolean(),
+    priority: z.enum(["LOW", "NORMAL", "HIGH", "URGENT"]),
+    type: z.enum(["ORDER_UPDATE", "PAYMENT_STATUS", "PROMOTION", "SYSTEM_ALERT"]),
+    metadata: z.unknown().optional().nullable(),
+    createdAt: z.date(),
+    updatedAt: z.date(),
+    user: userDTOSchema
+        .optional()
+        .nullable()
+        .openapi({
+            type: 'object',
+            nullable: true,
+        }),
+});
+
 export {
     getUnreadCountSchema,
     getUserNotificationsSchema,
@@ -46,4 +69,5 @@ export {
     bulkDeleteNotificationsSchema,
     updateNotificationSchema,
     deleteNotificationSchema,
+    notificationDTOSchema,
 }

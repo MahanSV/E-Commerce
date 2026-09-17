@@ -1,4 +1,7 @@
 import { z } from 'zod';
+import { extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi';
+
+extendZodWithOpenApi(z);
 
 const getMerchantByIdSchema = z.object({
     id: z.string({ error: "id is required." }).min(1, { error: "id is required." }),
@@ -27,9 +30,29 @@ const deleteMerchantSchema = z.object({
     id: z.string({ error: "id is required." }).min(1, { error: "id is required." })
 });
 
+const merchantDTOSchema = z.object({
+    id: z.string(),
+    name: z.string(),
+    description: z.string().optional().nullable(),
+    email: z.string().optional().nullable(),
+    phone: z.string().optional().nullable(),
+    address: z.string().optional().nullable(),
+    status: z.string().optional().nullable(),
+    createdAt: z.date(),
+    updatedAt: z.date(),
+    products: z.array(productDTOSchema)
+        .optional()
+        .nullable()
+        .openapi({
+            type: 'array',
+            nullable: true,
+        }),
+});
+
 export {
     getMerchantByIdSchema,
     createMerchantSchema,
     updateMerchantSchema,
     deleteMerchantSchema,
+    merchantDTOSchema,
 }

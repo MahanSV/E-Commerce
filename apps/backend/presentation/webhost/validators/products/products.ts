@@ -1,4 +1,9 @@
 import { z } from 'zod';
+import {categoryDTOSchema} from "#webhost/validators/category/category.ts";
+import {bulkUploadItemDTOSchema} from "#webhost/validators/bulkUpload/bulkUploadItem.ts";
+import { extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi';
+
+extendZodWithOpenApi(z);
 
 const getAllProductsSchema = z.object({
     mode: z.string().optional(),
@@ -37,10 +42,41 @@ const deleteProductSchema = z.object({
     id: z.string({ error: "id is required." }).min(1, { error: "id is required." }),
 });
 
+const productDTOSchema = z.object({
+    id: z.string(),
+    slug: z.string(),
+    title: z.string(),
+    mainImage: z.string(),
+    price: z.number(),
+    rating: z.number(),
+    description: z.string().optional().nullable(),
+    manufacturer: z.string(),
+    inStock: z.number(),
+    photo: z.unknown().optional().nullable(),
+    merchantId: z.string().optional().nullable(),
+    categoryId: z.string(),
+    quantity: z.number(),
+    SKU: z.string().optional().nullable(),
+    socialLink: z.string().optional().nullable(),
+    information: z.string().optional().nullable(),
+    // wishlists: // TODO: Need's implementation
+    // merchantProducts // TODO: Need's implementation
+    category: categoryDTOSchema.optional().nullable(),
+    // orderItems // TODO: Need's implementation
+    bulkUploadItems: z.array(bulkUploadItemDTOSchema)
+        .optional()
+        .nullable()
+        .openapi({
+            type: 'array',
+            nullable: true,
+        }),
+});
+
 export {
     getAllProductsSchema,
     createProductSchema,
     getProductByIdSchema,
     updateProductSchema,
     deleteProductSchema,
+    productDTOSchema,
 }
