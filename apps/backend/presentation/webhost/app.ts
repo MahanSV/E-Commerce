@@ -13,8 +13,13 @@ import routes from '#routes/index.ts';
 import qs from 'qs';
 import xssSanitizer from '#middlewares/xssSanitizer.ts';
 import normalizeMiddleware from '#middlewares/normalizeMiddleware.ts';
+import {generateOpenApiDocument} from "#webhost/docs/openapiRegistry.ts";
+import swaggerUi from 'swagger-ui-express';
 
 const app = express();
+
+const openApiDocument = generateOpenApiDocument();
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(openApiDocument));
 
 // Set Content-Type and override res.json for bigint and status
 app.use((req, res, next) => {
