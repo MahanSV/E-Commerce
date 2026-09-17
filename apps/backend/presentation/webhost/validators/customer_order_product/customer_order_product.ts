@@ -1,4 +1,9 @@
 import { z } from 'zod';
+import { extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi';
+import {customerOrderDTOSchema} from "#webhost/validators/customer_orders/customer_orders.ts";
+import {productDTOSchema} from "#webhost/validators/products/products.ts";
+
+extendZodWithOpenApi(z);
 
 
 const createOrderProduct= z.object({
@@ -22,11 +27,72 @@ const getProductOrder= z.object({
     id: z.string({ error: "id is required." }).min(1, { error: "id is required." })
 });
 
-// TODO: Need's implementation
+const orderItemDTOSchema = z.object({
+    id: z.string(),
+    quantity: z.number().positive(),
+    price: z.number().positive(),
+    customerOrder: customerOrderDTOSchema
+        .openapi({
+        type: 'object',
+        nullable: false,
+        }),
+    products: productDTOSchema
+        .openapi({
+            type: 'object',
+            nullable: false,
+        }),
+});
+
+const createOrderProductDTOSchema = z.object({
+    id: z.string(),
+    customerOrderId: z.string(),
+    productId: z.string(),
+    quantity: z.number().positive(),
+});
+
+const orderProductDTOSchema = z.object({
+    id: z.string(),
+    customerOrderId: z.string(),
+    productId: z.string(),
+    products: productDTOSchema
+        .openapi({
+            type: 'object',
+            nullable: false,
+        }),
+});
+
+const orderProductSummaryDTOSchema = z.object({
+    id: z.string(),
+    title: z.string(),
+    mainImage: z.string(),
+    price: z.number().positive(),
+    slug: z.string(),
+    quantity: z.number().positive(),
+});
+
+const orderGroupedDTOSchema = z.object({
+    customerOrderId: z.string(),
+    customerOrder: customerOrderDTOSchema
+        .openapi({
+            type: 'object',
+            nullable: false,
+        }),
+    products: z.array(orderProductSummaryDTOSchema)
+        .openapi({
+            type: 'array',
+            nullable: false,
+        }),
+});
+
 
 export {
     createOrderProduct,
     updateProductOrder,
     deleteProductOrder,
     getProductOrder,
+    orderItemDTOSchema,
+    createOrderProductDTOSchema,
+    orderProductDTOSchema,
+    orderGroupedDTOSchema,
+    orderProductSummaryDTOSchema,
 }
