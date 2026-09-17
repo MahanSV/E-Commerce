@@ -1,6 +1,9 @@
 import { z } from 'zod';
 import {bulkUploadBatchDTOSchema} from "#webhost/validators/bulkUpload/bulkUpload.ts";
 import {productDTOSchema} from "#webhost/validators/products/products.ts";
+import { extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi';
+
+extendZodWithOpenApi(z);
 
 const bulkUploadItemStatus = z.enum((['CREATED', 'UPDATED', 'ERROR']));
 
