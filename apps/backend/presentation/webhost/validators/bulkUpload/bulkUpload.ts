@@ -82,6 +82,27 @@ const bulkUploadBatchDetailDTO = z.object({
         }),
 });
 
+const updateBatchItemsResponseSchema = z.object({
+    updatedCount: z.number(),
+    items: z.array(
+        z.object({
+            error: z.string().optional().nullable(),
+            id: z.string(),
+            status: z.string(),
+            batchId: z.string(),
+            productId: z.string().optional().nullable(),
+            title: z.string(),
+            slug: z.string(),
+            price: z.number(),
+            manufacturer: z.string().optional().nullable(),
+            description: z.string().optional().nullable(),
+            mainImage: z.string().optional().nullable(),
+            categoryId: z.string(),
+            inStock: z.number(),
+        })
+    )
+});
+
 export {
     uploadCsvAndCreateBatchSchema,
     getBatchDetailSchema,
@@ -90,4 +111,5 @@ export {
     bulkUploadBatchDTOSchema,
     bulkUploadBatchReportDTOSchema,
     bulkUploadBatchDetailDTO,
+    updateBatchItemsResponseSchema,
 }
