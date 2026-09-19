@@ -31,16 +31,8 @@ const orderItemDTOSchema = z.object({
     id: z.string(),
     quantity: z.number().positive(),
     price: z.number().positive(),
-    customerOrder: customerOrderDTOSchema
-        .openapi({
-        type: 'object',
-        nullable: false,
-        }),
-    products: productDTOSchema
-        .openapi({
-            type: 'object',
-            nullable: false,
-        }),
+    customerOrder: customerOrderDTOSchema,
+    products: productDTOSchema,
 });
 
 const createOrderProductDTOSchema = z.object({
@@ -55,10 +47,6 @@ const orderProductDTOSchema = z.object({
     customerOrderId: z.string(),
     productId: z.string(),
     products: productDTOSchema
-        .openapi({
-            type: 'object',
-            nullable: false,
-        }),
 });
 
 const orderProductSummaryDTOSchema = z.object({
@@ -72,16 +60,8 @@ const orderProductSummaryDTOSchema = z.object({
 
 const orderGroupedDTOSchema = z.object({
     customerOrderId: z.string(),
-    customerOrder: customerOrderDTOSchema
-        .openapi({
-            type: 'object',
-            nullable: false,
-        }),
+    customerOrder: customerOrderDTOSchema,
     products: z.array(orderProductSummaryDTOSchema)
-        .openapi({
-            type: 'array',
-            nullable: false,
-        }),
 });
 
 
