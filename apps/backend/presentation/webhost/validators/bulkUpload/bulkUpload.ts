@@ -54,11 +54,40 @@ const bulkUploadBatchDTOSchema = z.object({
         }),
 });
 
+
+const bulkUploadBatchReportDTOSchema = z.object({
+    batches: z.array(
+        z.object({
+            id: z.string(),
+            fileName: z.string(),
+            totalRecords: z.number(),
+            successfulRecords: z.number(),
+            failedRecords: z.number(),
+            status: bulkUploadBatchStatus,
+            uploadedBy: z.string(),
+            uploadedAt: z.date(),
+            errors: z.unknown()
+        })
+    )
+});
+
+const bulkUploadBatchDetailDTO = z.object({
+    batch: z.lazy((): z.ZodType => bulkUploadBatchDTOSchema),
+    items: z.array(z.lazy((): z.ZodType => bulkUploadItemDTOSchema))
+        .nullable()
+        .optional()
+        .openapi({
+            type: 'array',
+            nullable: true,
+        }),
+});
+
 export {
     uploadCsvAndCreateBatchSchema,
     getBatchDetailSchema,
     updateBatchItemsSchema,
     deleteBatchSchema,
     bulkUploadBatchDTOSchema,
-
+    bulkUploadBatchReportDTOSchema,
+    bulkUploadBatchDetailDTO,
 }
