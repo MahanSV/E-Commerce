@@ -55,10 +55,6 @@ const notificationDTOSchema = z.object({
     user: z.lazy((): z.ZodType => userDTOSchema)
         .nullable()
         .optional()
-        .openapi({
-            type: 'object',
-            nullable: true,
-        }),
 });
 
 export {
