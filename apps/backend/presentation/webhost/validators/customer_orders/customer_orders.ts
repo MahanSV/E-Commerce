@@ -66,13 +66,9 @@ const customerOrderDTOSchema = z.object({
     country: z.string(),
     orderNotice: z.string(),
     total: z.number(),
-    products: z.array(productDTOSchema)
+    products: z.array(z.lazy((): z.ZodType => productDTOSchema))
     .nullable()
     .optional()
-        .openapi({
-            type: 'array',
-            nullable: true,
-        }),
 });
 
 export {
