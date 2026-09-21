@@ -53,6 +53,12 @@ const userDTOSchema = z.object({
     bulkUploadBatches: z.array(z.lazy((): z.ZodType => bulkUploadBatchDTOSchema)).nullable().optional(),
 });
 
+const simpleUserDTO = z.object({
+    id: z.string(),
+    email: z.string(),
+    role: userType
+});
+
 export {
     createUserSchema,
     getUserSchema,
@@ -60,4 +66,5 @@ export {
     deleteUserSchema,
     getUserByEmailSchema,
     userDTOSchema,
+    simpleUserDTO
 }
