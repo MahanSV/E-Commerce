@@ -50,7 +50,7 @@ api.post(
             201: {
                 description: 'add user',
                 content: {
-                    'application/json': { schema: z.array(simpleUserDTO) }
+                    'application/json': { schema: simpleUserDTO }
                 }
             }
         }
@@ -135,9 +135,6 @@ api.delete(
         responses: {
             200: {
                 description: 'Delete user',
-                content: {
-                    'application/json': { schema: userDTOSchema }
-                }
             },
             400: {
                 description: 'Bad Request',
