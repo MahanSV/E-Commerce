@@ -2,6 +2,7 @@ import { z } from 'zod';
 import {bulkUploadBatchDTOSchema} from "#webhost/validators/bulkUpload/bulkUpload.ts";
 import {customerOrderDTOSchema} from "#webhost/validators/customer_orders/customer_orders.ts";
 import {notificationDTOSchema} from "#webhost/validators/notifications/notifications.ts";
+import {wishlistDTOSchema} from "#webhost/validators/wishlist/wishlist.ts";
 
 const createUserSchema = z.object({
     email: z.string({ error: "email is required." }).min(1, { error: "email is required." }),
@@ -45,22 +46,11 @@ const userDTOSchema = z.object({
         .nullable()
         .optional(),
 
-    notifications: z.array(z.lazy((): z.ZodType => notificationDTOSchema))
-        .nullable()
-        .optional(),
+    notifications: z.array(z.lazy((): z.ZodType => notificationDTOSchema)).nullable().optional(),
 
-    // TODO: Need's implementation
-    /*wishlists: z.array(wishlistDTOSchema)
-        .nullable()
-        .optional()
-        .docs({
-            type: 'array',
-            nullable: true,
-        }),*/
+    wishlists: z.array(z.lazy((): z.ZodType => wishlistDTOSchema)).nullable().optional(),
 
-    bulkUploadBatches: z.array(z.lazy((): z.ZodType => bulkUploadBatchDTOSchema))
-        .nullable()
-        .optional(),
+    bulkUploadBatches: z.array(z.lazy((): z.ZodType => bulkUploadBatchDTOSchema)).nullable().optional(),
 });
 
 export {
