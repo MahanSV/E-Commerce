@@ -31,8 +31,8 @@ const orderItemDTOSchema = z.object({
     id: z.string(),
     quantity: z.number().positive(),
     price: z.number().positive(),
-    customerOrder: customerOrderDTOSchema,
-    products: productDTOSchema,
+    customerOrder: z.lazy((): z.ZodType => customerOrderDTOSchema),
+    products: z.lazy((): z.ZodType => productDTOSchema),
 });
 
 const createOrderProductDTOSchema = z.object({
@@ -46,7 +46,7 @@ const orderProductDTOSchema = z.object({
     id: z.string(),
     customerOrderId: z.string(),
     productId: z.string(),
-    products: productDTOSchema
+    products: z.lazy((): z.ZodType => productDTOSchema)
 });
 
 const orderProductSummaryDTOSchema = z.object({
@@ -60,8 +60,8 @@ const orderProductSummaryDTOSchema = z.object({
 
 const orderGroupedDTOSchema = z.object({
     customerOrderId: z.string(),
-    customerOrder: customerOrderDTOSchema,
-    products: z.array(orderProductSummaryDTOSchema)
+    customerOrder: z.lazy((): z.ZodType => customerOrderDTOSchema),
+    products: z.array(z.lazy((): z.ZodType => orderProductSummaryDTOSchema))
 });
 
 
