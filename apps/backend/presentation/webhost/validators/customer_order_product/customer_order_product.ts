@@ -46,6 +46,7 @@ const orderProductDTOSchema = z.object({
     id: z.string(),
     customerOrderId: z.string(),
     productId: z.string(),
+    quantity: z.number().positive(),
     products: z.lazy((): z.ZodType => productDTOSchema)
 });
 
