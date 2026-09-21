@@ -9,7 +9,7 @@ import {productDTOSchema} from "#webhost/validators/products/products.ts";
 
 const router = express.Router();
 const api = createApiRouter(router, '/slugs');
-
+// TODO: Test openapi doc's
 api.get(
     '/:slug',
     {
