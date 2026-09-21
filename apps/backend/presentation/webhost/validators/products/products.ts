@@ -2,6 +2,9 @@ import { z } from 'zod';
 import {categoryDTOSchema} from "#webhost/validators/category/category.ts";
 import {bulkUploadItemDTOSchema} from "#webhost/validators/bulkUpload/bulkUploadItem.ts";
 import { extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi';
+import {merchantProductDTOSchema} from "#webhost/validators/mercahnt/merchantProduct.ts";
+import {orderItemDTOSchema} from "#webhost/validators/customer_orders/orderItems.ts";
+import {wishlistDTOSchema} from "#webhost/validators/wishlist/wishlist.ts";
 
 extendZodWithOpenApi(z);
 
@@ -59,17 +62,11 @@ const productDTOSchema = z.object({
     SKU: z.string().optional().nullable(),
     socialLink: z.string().optional().nullable(),
     information: z.string().optional().nullable(),
-    // wishlists: // TODO: Need's implementation
-    // merchantProducts // TODO: Need's implementation
+    wishlists: z.array(z.lazy((): z.ZodType => wishlistDTOSchema)).optional().nullable(),
+    merchantProducts: z.array(z.lazy((): z.ZodType => merchantProductDTOSchema)),
     category: z.lazy((): z.ZodType => categoryDTOSchema).optional().nullable(),
-    // orderItems // TODO: Need's implementation
-    bulkUploadItems: z.array(z.lazy((): z.ZodType => bulkUploadItemDTOSchema))
-        .optional()
-        .nullable()
-        .openapi({
-            type: 'array',
-            nullable: true,
-        }),
+    orderItems: z.array(z.lazy((): z.ZodType => orderItemDTOSchema)),
+    bulkUploadItems: z.array(z.lazy((): z.ZodType => bulkUploadItemDTOSchema)).optional().nullable()
 });
 
 export {
