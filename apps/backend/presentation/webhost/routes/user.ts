@@ -133,7 +133,7 @@ api.delete(
             params: deleteUserSchema
         },
         responses: {
-            200: {
+            204: {
                 description: 'Delete user',
             },
             400: {
