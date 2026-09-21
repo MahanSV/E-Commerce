@@ -39,19 +39,11 @@ const bulkUploadBatchDTOSchema = z.object({
 
     items: z.array(z.lazy((): z.ZodType => bulkUploadItemDTOSchema))
         .nullable()
-        .optional()
-        .openapi({
-            type: 'array',
-            nullable: true,
-        }),
+        .optional(),
 
     user: z.lazy((): z.ZodType => userDTOSchema)
         .nullable()
-        .optional()
-        .openapi({
-            type: 'object',
-            nullable: true,
-        }),
+        .optional(),
 });
 
 
@@ -75,11 +67,7 @@ const bulkUploadBatchDetailDTO = z.object({
     batch: z.lazy((): z.ZodType => bulkUploadBatchDTOSchema),
     items: z.array(z.lazy((): z.ZodType => bulkUploadItemDTOSchema))
         .nullable()
-        .optional()
-        .openapi({
-            type: 'array',
-            nullable: true,
-        }),
+        .optional(),
 });
 
 const updateBatchItemsResponseSchema = z.object({

@@ -24,19 +24,11 @@ const bulkUploadItemDTOSchema = z.object({
 
     batch: z.lazy((): z.ZodType => bulkUploadBatchDTOSchema)
         .nullable()
-        .optional()
-        .openapi({
-            type: 'object',
-            nullable: true,
-        }),
+        .optional(),
 
     product: z.lazy((): z.ZodType => productDTOSchema)
         .nullable()
-        .optional()
-        .openapi({
-            type: 'object',
-            nullable: true,
-        }),
+        .optional(),
 });
 
 export { bulkUploadItemDTOSchema };

@@ -43,19 +43,11 @@ const userDTOSchema = z.object({
 
     orders: z.array(z.lazy((): z.ZodType => customerOrderDTOSchema))
         .nullable()
-        .optional()
-        .openapi({
-            type: 'array',
-            nullable: true,
-        }),
+        .optional(),
 
     notifications: z.array(z.lazy((): z.ZodType => notificationDTOSchema))
         .nullable()
-        .optional()
-        .openapi({
-            type: 'array',
-            nullable: true,
-        }),
+        .optional(),
 
     // TODO: Need's implementation
     /*wishlists: z.array(wishlistDTOSchema)
@@ -68,11 +60,7 @@ const userDTOSchema = z.object({
 
     bulkUploadBatches: z.array(z.lazy((): z.ZodType => bulkUploadBatchDTOSchema))
         .nullable()
-        .optional()
-        .openapi({
-            type: 'array',
-            nullable: true,
-        }),
+        .optional(),
 });
 
 export {

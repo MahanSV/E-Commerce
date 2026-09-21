@@ -43,11 +43,7 @@ const merchantDTOSchema = z.object({
     updatedAt: z.date(),
     products: z.array(z.lazy((): z.ZodType => productDTOSchema))
         .optional()
-        .nullable()
-        .openapi({
-            type: 'array',
-            nullable: true,
-        }),
+        .nullable(),
 });
 
 export {
