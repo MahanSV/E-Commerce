@@ -40,7 +40,7 @@ export default class UserService implements UserServiceInterface {
 
         if (!user) throw new ApiError(httpStatus.NOT_FOUND, "Failed to get user.", "Error");
 
-        return UserMapper.toDTO(user);
+        return UserMapper.toSimpleUserDTO(user);
     };
 
     async updateUser(command: updateUserCommand): Promise<UserDTO> {
