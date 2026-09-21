@@ -72,7 +72,7 @@ api.post(
             }
         },
         responses: {
-            200: {
+            201: {
                 description: 'add Merchant',
                 content: {
                     'application/json': { schema: merchantDTOSchema }
