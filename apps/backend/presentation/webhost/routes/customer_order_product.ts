@@ -24,7 +24,7 @@ api.get(
         responses: {
             200: {
                 description: 'Group of product orders.',
-                content: { 'application/json': { schema: orderGroupedDTOSchema } }
+                content: { 'application/json': { schema: z.array(orderGroupedDTOSchema) } }
             }
         }
     },
@@ -67,7 +67,7 @@ api.get(
         responses: {
             200: {
                 description: 'Single product orders.',
-                content: { 'application/json': { schema: orderProductDTOSchema } }
+                content: { 'application/json': { schema: z.array(orderProductDTOSchema) } }
             }
         }
     },
