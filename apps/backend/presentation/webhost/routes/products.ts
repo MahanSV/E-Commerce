@@ -7,9 +7,9 @@ import {
     getAllProductsSchema,
     getProductByIdSchema, productDTOSchema, updateProductSchema
 } from "#webhost/validators/products/products.ts";
-import {createApiRouter} from "#webhost/docs/openApiRouter.js";
+import {createApiRouter} from "#webhost/docs/openApiRouter.ts";
 import {z} from "zod";
-import {errorSchema} from "#webhost/validators/errorSchema.js";
+import {errorSchema} from "#webhost/validators/errorSchema.ts";
 
 const router = express.Router();
 const api = createApiRouter(router, '/products');
