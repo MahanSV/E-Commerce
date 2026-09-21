@@ -58,7 +58,7 @@ api.post(
             }
         },
         responses: {
-            200: {
+            201: {
                 description: 'add product Image',
                 content: {
                     'application/json': { schema: z.array(productImageDTOSchema).nullable() }
