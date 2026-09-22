@@ -14,9 +14,9 @@ const createOrderProduct= z.object({
 
 const updateProductOrder= z.object({
     id: z.string().optional(),
-    customerOrderId: z.string().optional(),
-    productId: z.string().optional(),
-    quantity: z.string().optional(),
+    customerOrderId: z.string({ error: "customerOrderId is required." }).min(1, { error: "customerOrderId is required." }),
+    productId: z.string({ error: "productId is required." }).min(1, { error: "productId is required." }),
+    quantity: z.coerce.number({ error: "quantity is required." }).positive({ error: "quantity must be greater than 0." }),
 });
 
 const deleteProductOrder= z.object({
