@@ -5,7 +5,7 @@ import {productDTOSchema} from "#webhost/validators/products/products.ts";
 extendZodWithOpenApi(z);
 
 const createCategorySchema = z.object({
-    name: z.string().optional()
+    name: z.string({ error: "name is required." }).min(1, { error: "name is required." })
 });
 
 const getCategorySchema = z.object({
