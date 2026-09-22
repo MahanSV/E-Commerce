@@ -30,14 +30,14 @@ const getProductByIdSchema = z.object({
 
 const updateProductSchema = z.object({
     id: z.string().optional(),
-    merchantId: z.string().optional(),
-    slug: z.string().optional(),
-    title: z.string().optional(),
-    mainImage: z.string().optional(),
-    price: z.coerce.number().optional(),
-    description: z.string().optional(),
-    manufacturer: z.string().optional(),
-    categoryId: z.string().optional(),
+    merchantId: z.string({ error: "merchantId is required." }).min(1, { error: "merchantId is required." }),
+    slug: z.string({ error: "slug is required." }).min(1, { error: "slug is required." }),
+    title: z.string({ error: "title is required." }).min(1, { error: "title is required." }),
+    mainImage: z.string({ error: "mainImage is required." }).min(1, { error: "mainImage is required." }),
+    price: z.coerce.number({ error: "price is required." }),
+    description: z.string({ error: "description is required." }).min(1, { error: "description is required." }),
+    manufacturer: z.string({ error: "manufacturer is required." }).min(1, { error: "manufacturer is required." }),
+    categoryId: z.string({ error: "categoryId is required." }).min(1, { error: "categoryId is required." }),
     inStock: z.coerce.number().optional(),
 });
 
