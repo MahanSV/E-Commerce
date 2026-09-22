@@ -55,7 +55,7 @@ const notificationDTOSchema = z.object({
     user: z.lazy((): z.ZodType => userDTOSchema)
         .nullable()
         .optional()
-});
+}).openapi('notificationDTOSchema');
 
 export {
     getUnreadCountSchema,

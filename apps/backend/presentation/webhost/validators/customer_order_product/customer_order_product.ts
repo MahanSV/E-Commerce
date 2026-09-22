@@ -33,7 +33,7 @@ const orderItemDTOSchema = z.object({
     price: z.number().positive(),
     customerOrder: z.lazy((): z.ZodType => customerOrderDTOSchema),
     products: z.lazy((): z.ZodType => productDTOSchema),
-});
+}).openapi('orderItemDTOSchema');
 
 const createOrderProductDTOSchema = z.object({
     id: z.string(),
@@ -48,7 +48,7 @@ const orderProductDTOSchema = z.object({
     productId: z.string(),
     quantity: z.number().positive(),
     product: z.lazy((): z.ZodType => productDTOSchema)
-});
+}).openapi('orderProductDTOSchema');
 
 const orderProductSummaryDTOSchema = z.object({
     id: z.string(),
@@ -63,7 +63,7 @@ const orderGroupedDTOSchema = z.object({
     customerOrderId: z.string(),
     customerOrder: z.lazy((): z.ZodType => customerOrderDTOSchema),
     products: z.array(z.lazy((): z.ZodType => orderProductSummaryDTOSchema))
-});
+}).openapi('orderGroupedDTOSchema');
 
 
 export {

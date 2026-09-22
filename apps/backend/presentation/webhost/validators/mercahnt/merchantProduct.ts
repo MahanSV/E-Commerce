@@ -11,6 +11,6 @@ const merchantProductDTOSchema = z.object({
     productId: z.string(),
     merchant: z.lazy((): z.ZodType => merchantDTOSchema).optional().nullable(),
     product: z.lazy((): z.ZodType => productDTOSchema).optional().nullable(),
-});
+}).openapi('merchantProductDTOSchema');
 
 export { merchantProductDTOSchema };

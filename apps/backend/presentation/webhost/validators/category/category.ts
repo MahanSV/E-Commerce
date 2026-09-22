@@ -25,7 +25,7 @@ const categoryDTOSchema = z.object({
     id: z.string(),
     name: z.string(),
     products: z.array(z.lazy((): z.ZodType => productDTOSchema)).nullable().optional(),
-});
+}).openapi('categoryDTOSchema');
 
 export {
     createCategorySchema,

@@ -69,7 +69,7 @@ const customerOrderDTOSchema = z.object({
     products: z.array(z.lazy((): z.ZodType => productDTOSchema))
     .nullable()
     .optional()
-});
+}).openapi('customerOrderDTOSchema');
 
 export {
     createCustomerOrderSchema,

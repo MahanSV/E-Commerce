@@ -44,8 +44,7 @@ const bulkUploadBatchDTOSchema = z.object({
     user: z.lazy((): z.ZodType => userDTOSchema)
         .nullable()
         .optional(),
-});
-
+}).openapi('bulkUploadBatchDTOSchema');
 
 const bulkUploadBatchReportDTOSchema = z.object({
     batches: z.array(
@@ -61,14 +60,14 @@ const bulkUploadBatchReportDTOSchema = z.object({
             errors: z.unknown()
         })
     )
-});
+}).openapi('bulkUploadBatchReportDTOSchema');
 
 const bulkUploadBatchDetailDTO = z.object({
     batch: z.lazy((): z.ZodType => bulkUploadBatchDTOSchema),
     items: z.array(z.lazy((): z.ZodType => bulkUploadItemDTOSchema))
         .nullable()
         .optional(),
-});
+}).openapi('bulkUploadBatchDetailDTO');
 
 const updateBatchItemsResponseSchema = z.object({
     updatedCount: z.number(),

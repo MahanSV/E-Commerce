@@ -51,7 +51,7 @@ const userDTOSchema = z.object({
     wishlists: z.array(z.lazy((): z.ZodType => wishlistDTOSchema)).nullable().optional(),
 
     bulkUploadBatches: z.array(z.lazy((): z.ZodType => bulkUploadBatchDTOSchema)).nullable().optional(),
-});
+}).openapi('userDTOSchema');
 
 const simpleUserDTO = z.object({
     id: z.string(),

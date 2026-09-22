@@ -11,6 +11,6 @@ const wishlistDTOSchema = z.object({
     userId: z.string(),
     user: z.lazy((): z.ZodType => userDTOSchema).optional().nullable(),
     product: z.lazy((): z.ZodType => productDTOSchema).optional().nullable(),
-});
+}).openapi('wishlistDTOSchema');
 
 export { wishlistDTOSchema };

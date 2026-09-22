@@ -67,7 +67,7 @@ const productDTOSchema = z.object({
     category: z.lazy((): z.ZodType => categoryDTOSchema).optional().nullable(),
     orderItems: z.array(z.lazy((): z.ZodType => orderItemDTOSchema)),
     bulkUploadItems: z.array(z.lazy((): z.ZodType => bulkUploadItemDTOSchema)).optional().nullable()
-});
+}).openapi('productDTOSchema');
 
 export {
     getAllProductsSchema,

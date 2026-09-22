@@ -44,7 +44,7 @@ const merchantDTOSchema = z.object({
     products: z.array(z.lazy((): z.ZodType => productDTOSchema))
         .optional()
         .nullable(),
-});
+}).openapi('merchantDTOSchema');
 
 export {
     getMerchantByIdSchema,

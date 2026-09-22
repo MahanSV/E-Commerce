@@ -29,6 +29,6 @@ const bulkUploadItemDTOSchema = z.object({
     product: z.lazy((): z.ZodType => productDTOSchema)
         .nullable()
         .optional(),
-});
+}).openapi('bulkUploadItemDTOSchema');
 
 export { bulkUploadItemDTOSchema };
