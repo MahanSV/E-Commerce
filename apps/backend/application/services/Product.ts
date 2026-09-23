@@ -201,6 +201,13 @@ export class ProductService implements ProductServiceInterface {
             photo: photos
         };
 
+        // TODO: read below bug description
+        /**
+         * This API isn't correctly appending to the end of the array;
+         * instead, it completely wipes out the existing data and saves the new data.
+         * The new object needs to be added to the end of the array.
+         */
+
         const createdProductImage = await this.productRepository.updateProductImage(newCommand);
 
         return ProductMapper.toProductImageDTO(createdProductImage);
