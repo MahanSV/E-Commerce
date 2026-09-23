@@ -14,7 +14,7 @@ import {errorSchema} from "#webhost/validators/errorSchema.ts";
 
 const router = express.Router();
 const api  = createApiRouter(router, '/images');
-// TODO: Test openapi doc's
+
 api.get(
     '/:id',
     {
