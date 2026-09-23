@@ -1,41 +1,41 @@
-import yup from 'yup';
+import { z } from 'zod';
 
 
-const getUnreadCountSchema = yup.object({
-    userId: yup.string().required("userId is required."),
+const getUnreadCountSchema = z.object({
+    userId: z.string({ error: "userId is required." }).min(1, { error: "userId is required." }),
 });
 
-const getUserNotificationsSchema = yup.object({
-    userId: yup.string().required("userId is required."),
+const getUserNotificationsSchema = z.object({
+    userId: z.string({ error: "userId is required." }).min(1, { error: "userId is required." }),
 });
 
-const createNotificationSchema = yup.object({
-    userId: yup.string().required("userId is required."),
-    title: yup.string().required("title is required."),
-    message: yup.string().required("message is required."),
-    type: yup.string().required("type is required.").oneOf(["ORDER_UPDATE", "PAYMENT_STATUS", "PROMOTION", "SYSTEM_ALERT"]),
-    priority: yup.string().optional().oneOf(["LOW", "NORMAL", "HIGH", "URGENT"]),
-    metadata: yup.object().optional().nullable(),
+const createNotificationSchema = z.object({
+    userId: z.string({ error: "userId is required." }).min(1, { error: "userId is required." }),
+    title: z.string({ error: "title is required." }).min(1, { error: "title is required." }),
+    message: z.string({ error: "message is required." }).min(1, { error: "message is required." }),
+    type: z.enum(["ORDER_UPDATE", "PAYMENT_STATUS", "PROMOTION", "SYSTEM_ALERT"], { error: "type is required." }),
+    priority: z.enum(["LOW", "NORMAL", "HIGH", "URGENT"]).optional(),
+    metadata: z.object({}).nullable().optional(),
 });
 
-const bulkMarkAsReadSchema = yup.object({
-    userId: yup.string().required("userId is required."),
-    notificationIds: yup.array().required("notificationIds is required."),
+const bulkMarkAsReadSchema = z.object({
+    userId: z.string({ error: "userId is required." }).min(1, { error: "userId is required." }),
+    notificationIds: z.array(z.unknown(), { error: "notificationIds is required." }),
 });
 
-const bulkDeleteNotificationsSchema = yup.object({
-    userId: yup.string().required("userId is required."),
-    notificationIds: yup.array().required("notificationIds is required."),
+const bulkDeleteNotificationsSchema = z.object({
+    userId: z.string({ error: "userId is required." }).min(1, { error: "userId is required." }),
+    notificationIds: z.array(z.unknown(), { error: "notificationIds is required." }),
 });
 
-const updateNotificationSchema = yup.object({
-    id: yup.string().required("id is required."),
-    isRead: yup.boolean().required("isRead is required."),
+const updateNotificationSchema = z.object({
+    id: z.string({ error: "id is required." }).min(1, { error: "id is required." }),
+    isRead: z.boolean({ error: "isRead is required." }),
 });
 
-const deleteNotificationSchema = yup.object({
-    id: yup.string().required("id is required."),
-    userId: yup.string().required("userId is required."),
+const deleteNotificationSchema = z.object({
+    id: z.string({ error: "id is required." }).min(1, { error: "id is required." }),
+    userId: z.string({ error: "userId is required." }).min(1, { error: "userId is required." }),
 });
 
 export {

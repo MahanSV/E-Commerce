@@ -1,25 +1,25 @@
-import yup from 'yup';
+import { z } from 'zod';
 
 
-const createOrderProduct= yup.object({
-    customerOrderId: yup.string().required("customerOrderId is required."),
-    productId: yup.string().required("productId is required."),
-    quantity: yup.number().positive(),
+const createOrderProduct= z.object({
+    customerOrderId: z.string({ error: "customerOrderId is required." }).min(1, { error: "customerOrderId is required." }),
+    productId: z.string({ error: "productId is required." }).min(1, { error: "productId is required." }),
+    quantity: z.coerce.number().positive(),
 });
 
-const updateProductOrder= yup.object({
-    id: yup.string(),
-    customerOrderId: yup.string(),
-    productId: yup.string(),
-    quantity: yup.string(),
+const updateProductOrder= z.object({
+    id: z.string().optional(),
+    customerOrderId: z.string().optional(),
+    productId: z.string().optional(),
+    quantity: z.string().optional(),
 });
 
-const deleteProductOrder= yup.object({
-    id: yup.string().required("id is required.")
+const deleteProductOrder= z.object({
+    id: z.string({ error: "id is required." }).min(1, { error: "id is required." })
 });
 
-const getProductOrder= yup.object({
-    id: yup.string().required("id is required.")
+const getProductOrder= z.object({
+    id: z.string({ error: "id is required." }).min(1, { error: "id is required." })
 });
 
 export {
