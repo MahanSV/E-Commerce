@@ -11,7 +11,6 @@ import {productDTOSchema} from "#webhost/validators/products/products.ts";
 const router = express.Router();
 const api  = createApiRouter(router, '/search');
 
-// TODO: Test openapi doc's
 api.get(
     '/',
     {
