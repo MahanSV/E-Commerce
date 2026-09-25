@@ -60,7 +60,7 @@ class ProductController {
         }
     };
 
-    public async updateProduct(req: Request, res: Response): Promise<any> {
+    public updateProduct = async (req: Request, res: Response): Promise<any> => {
         try {
             const command = {
                 id: req.params.id,

@@ -174,6 +174,8 @@ export class ProductService implements ProductServiceInterface {
 
         if (!product) throw new ApiError(httpStatus.BAD_REQUEST, `productId: ${id} doesn't exist.`, "Error");
 
+        // TODO: It has relation so you need to delete "MerchantProduct" record before delete product
+
         const deletedProduct = await this.productRepository.deleteProduct(id);
 
         return ProductMapper.toDTO(deletedProduct);
@@ -200,6 +202,13 @@ export class ProductService implements ProductServiceInterface {
             id: command.id,
             photo: photos
         };
+
+        // TODO: read below bug description
+        /**
+         * This API isn't correctly appending to the end of the array;
+         * instead, it completely wipes out the existing data and saves the new data.
+         * The new object needs to be added to the end of the array.
+         */
 
         const createdProductImage = await this.productRepository.updateProductImage(newCommand);
 

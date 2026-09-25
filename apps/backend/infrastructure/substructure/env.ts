@@ -14,6 +14,7 @@ const envFilePath: string = path.resolve(dir, `.env.${env}`);
 dotenv.config({ path: envFilePath });
 
 const envSchema = z.object({
+	SERVER_URL: z.string().min(2),
 	PRIVATE_ENCRYPTING_KEY: z.string().min(1),
 	PORT: z.coerce.number().default(7005),
 	TOKEN_EXPIRATION_TIME: z.coerce.number().default(86400), // 1 day
@@ -27,11 +28,13 @@ const envSchema = z.object({
 	CORS_LOCAL_FRONTEND: z.string().min(1),
 	CORS_DEV_FRONTEND: z.string().min(1),
 	PRODUCT_DELIVERY_DAYS: z.coerce.number(),
+	API_DOC_BASE_PATH: z.string().default('http://localhost:3001'),
 });
 
 const value: any = zodValidateSync(process.env, envSchema, {}, 'Env Validation: ');
 
 export default {
+	serverURL: process.env.SERVER_URL,
 	privateEncryptingKey: value.PRIVATE_ENCRYPTING_KEY,
 	port: value.PORT,
 	tokenExpirationTime: value.TOKEN_EXPIRATION_TIME,
@@ -45,4 +48,5 @@ export default {
 	corsLocalFrontend: value.CORS_LOCAL_FRONTEND,
 	corsDevFrontend: value.CORS_DEV_FRONTEND,
 	productDeliveryDays: value.PRODUCT_DELIVERY_DAYS,
+	apiDocBasePath:  value.API_DOC_BASE_PATH,
 };
