@@ -13,7 +13,7 @@ import {errorSchema} from "#webhost/validators/errorSchema.ts";
 
 const router = express.Router();
 const api = createApiRouter(router, '/products');
-// TODO: Test openapi doc's
+
 api.get(
     '/',
     {
