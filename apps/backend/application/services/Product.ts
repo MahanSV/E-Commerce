@@ -174,8 +174,6 @@ export class ProductService implements ProductServiceInterface {
 
         if (!product) throw new ApiError(httpStatus.BAD_REQUEST, `productId: ${id} doesn't exist.`, "Error");
 
-        // TODO: It has relation so you need to delete "MerchantProduct" record before delete product
-
         const deletedProduct = await this.productRepository.deleteProduct(id);
 
         return ProductMapper.toDTO(deletedProduct);
