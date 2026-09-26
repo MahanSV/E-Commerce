@@ -219,10 +219,9 @@ export default class ProductRepository extends BaseRepository<Product> implement
                 id: id
             },
             data: {
-                photo: undefined,
+                photo: null,
             }
         });
-        // TODO: undefined value doesn't work might be use array instead
 
         return dataModel && Product.createFromSnapshot(dataModel);
     };
