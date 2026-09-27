@@ -19,3 +19,8 @@ export type createCustomerCommand = {
     email: string;
     mobile: string;
 };
+
+export type loginUserCommand = {
+    email: string;
+    password: string;
+};

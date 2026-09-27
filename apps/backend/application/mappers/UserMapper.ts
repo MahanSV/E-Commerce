@@ -1,9 +1,12 @@
-import {SimpleUserDTO, UserDTO} from "#application/dto/UserDTO.ts";
+import {SimpleUserDTO, UserDTO, UserLoginDTO} from "#application/dto/UserDTO.ts";
 import User from "#domain/models/User.ts";
 import {OrderMapper} from "#application/mappers/OrderMapper.ts";
 import {NotificationMapper} from "#application/mappers/NotificationMapper.ts";
 import {WishlistMapper} from "#application/mappers/WishlistMapper.ts";
 import {BulkUploadBatchMapper} from "#application/mappers/BulkUploadBatchMapper.ts";
+import {generateJWSToken} from "#application/services/TokenService.ts";
+import {add} from "date-fns";
+import env from "#substructure/env.ts";
 
 
 export class UserMapper {
@@ -49,6 +52,28 @@ export class UserMapper {
         public static toSimpleUserDTOList(entities: User[]): SimpleUserDTO[] {
                 return entities.map(entity => this.toSimpleUserDTO(entity));
         };
+
+        /**
+         * for only login
+        */
+        public static async toLoginUserDTO(entity: User): Promise<UserLoginDTO> {
+            return {
+                token: await generateJWSToken({
+                    id: entity.id,
+                    email: entity.email,
+                    role: entity.role,
+                    tokenCreatedAt: new Date(),
+                    tokenExpireAt: add(new Date(), { seconds: env.tokenExpirationTime }),
+                }),
+                userInfo: {
+                    id: entity.id,
+                    name: entity.name,
+                    lastName: entity.lastName,
+                    email: entity.email,
+                    role: entity.role,
+                }
+            };
+        }
 }
 
 

@@ -1,5 +1,5 @@
-import {SimpleUserDTO, UserDTO} from "#application/dto/UserDTO.ts";
-import {createUserCommand, updateUserCommand} from "#application/types/user/command.ts";
+import {SimpleUserDTO, UserDTO, UserLoginDTO} from "#application/dto/UserDTO.ts";
+import {createUserCommand, loginUserCommand, updateUserCommand} from "#application/types/user/command.ts";
 
 
 export interface UserServiceInterface {
@@ -9,4 +9,5 @@ export interface UserServiceInterface {
     updateUser(command: updateUserCommand): Promise<UserDTO>;
     deleteUser(id: string): Promise<UserDTO>;
     getUserByEmail(email: string): Promise<UserDTO | null>;
+    loginUser(command: loginUserCommand): Promise<UserLoginDTO>
 }

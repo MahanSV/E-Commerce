@@ -28,3 +28,14 @@ export interface SimpleUserDTO {
     email: string;
     role: UserType;
 }
+
+export interface UserLoginDTO {
+    token: string;
+    userInfo: {
+        id: string;
+        name: string;
+        lastName: string;
+        email: string;
+        role: UserType;
+    };
+}

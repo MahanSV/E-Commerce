@@ -29,6 +29,11 @@ const getUserByEmailSchema = z.object({
     email: z.string({ error: "email is required." }).min(1, { error: "email is required." }),
 });
 
+const loginUserSchema = z.object({
+    email: z.string({ error: "email is required." }).min(1, { error: "email is required." }),
+    password: z.string({ error: "password is required." }).min(1, { error: "password is required." }),
+});
+
 const userType = z.enum(['admin', 'user', 'merchant']);
 
 const userDTOSchema = z.object({
@@ -59,6 +64,17 @@ const simpleUserDTO = z.object({
     role: userType
 });
 
+const userLoginDTOSchema = z.object({
+    token: z.string(),
+    userInfo: z.object({
+        id: z.string(),
+        name: z.string(),
+        lastName: z.string(),
+        email: z.string(),
+        role: userType
+    })
+}).openapi('userLoginDTOSchema');
+
 export {
     createUserSchema,
     getUserSchema,
@@ -66,5 +82,7 @@ export {
     deleteUserSchema,
     getUserByEmailSchema,
     userDTOSchema,
-    simpleUserDTO
+    simpleUserDTO,
+    loginUserSchema,
+    userLoginDTOSchema,
 }

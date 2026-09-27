@@ -1,5 +1,6 @@
 import type { Request, Response } from 'express';
 import UserService from '#application/services/UserService.ts';
+import env from "#substructure/env.ts";
 
 
 class UserController {
@@ -89,6 +90,39 @@ class UserController {
             const user = await this.userService.getUserByEmail(email);
 
             res.json(user);
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    public loginUser = async (req: Request, res: Response): Promise<any> => {
+        try {
+            const command = {
+                email: req.body.email,
+                password: req.body.password,
+            };
+
+            const user = await this.userService.loginUser(command);
+
+            res.cookie('AccessToken', user.token, {
+                maxAge: env.tokenExpirationTime * 1000,
+                path: '/',
+                domain: env.cookieDomain,
+                secure: true,
+                httpOnly: true,
+                sameSite: 'lax',
+            });
+
+            res.cookie('Role', user.userInfo.role, {
+                maxAge: env.tokenExpirationTime * 1000,
+                path: '/',
+                domain: env.cookieDomain,
+                secure: true,
+                httpOnly: true,
+                sameSite: 'lax',
+            });
+
+            res.status(201).json(user);
         } catch (error) {
             throw error;
         }

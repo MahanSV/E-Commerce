@@ -4,9 +4,13 @@ import UserRepository from '#repositories/UserRepository.ts';
 import type { UserRepositoryInterface } from '#domain/interfaces/UserRepository.ts';
 import type {UserServiceInterface} from '#application/interfaces/UserServiceInterface.ts';
 import {UserMapper} from "#application/mappers/UserMapper.ts";
-import {SimpleUserDTO, UserDTO} from "#application/dto/UserDTO.ts";
-import {createUserCommand, updateUserCommand} from "#application/types/user/command.ts";
+import {SimpleUserDTO, UserDTO, UserLoginDTO} from "#application/dto/UserDTO.ts";
+import {createUserCommand, loginUserCommand, updateUserCommand} from "#application/types/user/command.ts";
 import {UserFactory} from "#domain/factories/UserFactory.ts";
+import bcrypt from "bcryptjs";
+import {tokenKeyStructure} from "#context/dbContext/redis/redisStrcuture/userStructures.ts";
+import RedisDataModel from "#context/dbContext/redis/dataModel/redisDataModel.ts";
+import {redisSet} from "#context/dbContext/redis/redis.ts";
 
 export default class UserService implements UserServiceInterface {
     private userRepository: UserRepositoryInterface;
@@ -69,5 +73,26 @@ export default class UserService implements UserServiceInterface {
         if (!user) throw new ApiError(httpStatus.NOT_FOUND, "User doesn't exist", "Error");
 
         return UserMapper.toDTO(user);
+    };
+
+    async loginUser(command: loginUserCommand): Promise<UserLoginDTO> {
+        const user = await this.userRepository.getUserByEmail(command.email);
+
+        if (!user) throw new ApiError(httpStatus.NOT_FOUND, "Email or password is incorrect", "Error");
+
+        const isPasswordCorrect = await bcrypt.compare(
+              command.password,
+              user.password
+        );
+
+        if (!isPasswordCorrect)
+            throw new ApiError(httpStatus.NOT_FOUND, "Email or password is incorrect", "Error");
+
+        const loginDTO = await UserMapper.toLoginUserDTO(user);
+
+        const tokenDataModel = RedisDataModel.create(loginDTO.token, tokenKeyStructure(user.email));
+        await redisSet(tokenDataModel);
+
+        return loginDTO;
     };
 };

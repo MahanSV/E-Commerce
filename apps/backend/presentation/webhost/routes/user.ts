@@ -8,7 +8,7 @@ import {
     getUserSchema,
     updateUserSchema,
     simpleUserDTO,
-    userDTOSchema,
+    userDTOSchema, loginUserSchema, userLoginDTOSchema,
 } from "#webhost/validators/user/user.ts";
 import validate from "#middlewares/validation.ts";
 import { createApiRouter } from '#webhost/docs/openApiRouter.ts';
@@ -58,6 +58,39 @@ api.post(
     // authenticate,
     validate(createUserSchema),
     UserController.createUser
+);
+
+api.post(
+    '/login',
+    {
+        tags: ['Users'],
+        request: {
+            body: {
+                content: {
+                    'application/json': { schema: loginUserSchema }
+                }
+            }
+        },
+        responses: {
+            201: {
+                description: 'add user',
+                content: {
+                    'application/json': { schema: userLoginDTOSchema }
+                }
+            },
+            404: {
+                description: 'Not Found',
+                content: {
+                    'application/json': {
+                        schema: errorSchema
+                    }
+                },
+            },
+        }
+    },
+    // authenticate,
+    validate(loginUserSchema),
+    UserController.loginUser
 );
 
 api.get(
