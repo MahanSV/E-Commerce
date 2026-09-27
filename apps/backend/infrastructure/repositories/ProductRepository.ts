@@ -185,10 +185,16 @@ export default class ProductRepository extends BaseRepository<Product> implement
 
 
     async deleteProduct(id: string): Promise<Product> {
-        const dataModel = await prisma.product.delete({
-            where: {
-                id
-            }
+        const dataModel = await prisma.$transaction(async (tx) => {
+            await tx.merchantProduct.deleteMany({
+                where: {
+                    productId: id
+                }
+            });
+
+            return await tx.product.delete({
+                where: { id }
+            });
         });
 
         return dataModel && Product.createFromSnapshot(dataModel);
@@ -213,7 +219,7 @@ export default class ProductRepository extends BaseRepository<Product> implement
                 id: id
             },
             data: {
-                photo: undefined,
+                photo: null,
             }
         });
 

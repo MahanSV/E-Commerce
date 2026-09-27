@@ -1,4 +1,8 @@
 import { z } from 'zod';
+import { extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi';
+import {productDTOSchema} from "#webhost/validators/products/products.ts";
+
+extendZodWithOpenApi(z);
 
 const orderStatuses = ["pending", "processing", "shipped", "delivered", "cancelled"] as const;
 
@@ -45,9 +49,32 @@ const getCustomerOrderSchema = z.object({
     id: z.string({ error: "id is required." }).min(1, { error: "id is required." }),
 });
 
+
+const customerOrderDTOSchema = z.object({
+    id: z.string(),
+    name: z.string(),
+    lastname: z.string(),
+    phone: z.string(),
+    email: z.string(),
+    company: z.string(),
+    adress: z.string(),
+    apartment: z.string(),
+    postalCode: z.string(),
+    dateTime: z.date().optional(),
+    status: z.string(),
+    city: z.string(),
+    country: z.string(),
+    orderNotice: z.string(),
+    total: z.number(),
+    products: z.array(z.lazy((): z.ZodType => productDTOSchema))
+    .nullable()
+    .optional()
+}).openapi('customerOrderDTOSchema');
+
 export {
     createCustomerOrderSchema,
     updateCustomerOrderSchema,
     deleteCustomerOrderSchema,
     getCustomerOrderSchema,
+    customerOrderDTOSchema,
 };

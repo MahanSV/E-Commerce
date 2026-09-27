@@ -1,4 +1,7 @@
 import { z } from 'zod';
+import { extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi';
+
+extendZodWithOpenApi(z);
 
 const getSingleProductImagesSchema = z.object({
     id: z.string({ error: "id is required." }).min(1, { error: "id is required." }),
@@ -19,9 +22,16 @@ const deleteImageSchema = z.object({
     id: z.string({ error: "id is required." }).min(1, { error: "id is required." }),
 });
 
+const productImageDTOSchema = z.object({
+    productID: z.string(),
+    imageID: z.string(),
+    image: z.string(),
+});
+
 export {
     getSingleProductImagesSchema,
     createImageSchema,
     updateImageSchema,
     deleteImageSchema,
+    productImageDTOSchema,
 }

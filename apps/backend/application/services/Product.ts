@@ -194,6 +194,8 @@ export class ProductService implements ProductServiceInterface {
 
         const photos: Array<{imageID: string, image: string}> = [];
 
+        if (Array.isArray(product.photo)) photos.push(product.photo);
+
         photos.push(ImageFactory.create(command.photo));
 
         const newCommand = {
@@ -209,20 +211,26 @@ export class ProductService implements ProductServiceInterface {
     async updateImage(command:updateProductImageCommand): Promise<ProductImageDTO[] | undefined> {
         const product = await this.productRepository.getProductById(command.id);
 
-        if (!product) throw new ApiError(httpStatus.BAD_REQUEST, `productId: ${command.id} doesn't exist.`, "Error");
+        if (!product)
+            throw new ApiError(httpStatus.BAD_REQUEST, `productId: ${command.id} doesn't exist.`, "Error");
 
-        if (!product.photo) throw new ApiError(httpStatus.NOT_FOUND, `productId: ${command.id} doesn't have any image.`, "Error");
+        if (!Array.isArray(product.photo))
+            throw new ApiError(httpStatus.NOT_FOUND, `productId: ${command.id} doesn't have any image.`, "Error");
 
-        const updatedPhoto = product.photo.map(item => {
-            return {
-                imageID: item.imageID,
-                image: command.image,
-            };
+        const photoLength = product.photo.length;
+
+        if (photoLength <= 0)
+            throw new ApiError(httpStatus.NOT_FOUND, `productId: ${command.id} doesn't have any image.`, "Error");
+
+        product.photo.forEach((item, index, arr ): void => {
+            if (photoLength-1 === index) {
+                arr[index] = { imageID: item.imageID, image: command.image };
+            }
         });
 
         const newCommand = {
             id: command.id,
-            photo: updatedPhoto
+            photo: product.photo
         };
 
         const updatedProductImage = await this.productRepository.updateProductImage(newCommand);
