@@ -11,6 +11,9 @@ import bcrypt from "bcryptjs";
 import {tokenKeyStructure} from "#context/dbContext/redis/redisStrcuture/userStructures.ts";
 import RedisDataModel from "#context/dbContext/redis/dataModel/redisDataModel.ts";
 import {redisSet} from "#context/dbContext/redis/redis.ts";
+import {generateJWSToken} from "#application/services/TokenService.ts";
+import {add} from "date-fns";
+import env from "#substructure/env.ts";
 
 export default class UserService implements UserServiceInterface {
     private userRepository: UserRepositoryInterface;
@@ -88,7 +91,15 @@ export default class UserService implements UserServiceInterface {
         if (!isPasswordCorrect)
             throw new ApiError(httpStatus.NOT_FOUND, "Email or password is incorrect", "Error");
 
-        const loginDTO = await UserMapper.toLoginUserDTO(user);
+        const token = await generateJWSToken({
+            id: user.id,
+            email: user.email,
+            role: user.role,
+            tokenCreatedAt: new Date(),
+            tokenExpireAt: add(new Date(), { seconds: env.tokenExpirationTime }),
+        });
+
+        const loginDTO = UserMapper.toLoginUserDTO(user, token);
 
         const tokenDataModel = RedisDataModel.create(loginDTO.token, tokenKeyStructure(user.email));
         await redisSet(tokenDataModel);

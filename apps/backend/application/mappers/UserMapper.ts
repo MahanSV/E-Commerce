@@ -4,9 +4,6 @@ import {OrderMapper} from "#application/mappers/OrderMapper.ts";
 import {NotificationMapper} from "#application/mappers/NotificationMapper.ts";
 import {WishlistMapper} from "#application/mappers/WishlistMapper.ts";
 import {BulkUploadBatchMapper} from "#application/mappers/BulkUploadBatchMapper.ts";
-import {generateJWSToken} from "#application/services/TokenService.ts";
-import {add} from "date-fns";
-import env from "#substructure/env.ts";
 
 
 export class UserMapper {
@@ -56,15 +53,9 @@ export class UserMapper {
         /**
          * for only login
         */
-        public static async toLoginUserDTO(entity: User): Promise<UserLoginDTO> {
+        public static toLoginUserDTO(entity: User, userToken: string): UserLoginDTO {
             return {
-                token: await generateJWSToken({
-                    id: entity.id,
-                    email: entity.email,
-                    role: entity.role,
-                    tokenCreatedAt: new Date(),
-                    tokenExpireAt: add(new Date(), { seconds: env.tokenExpirationTime }),
-                }),
+                token: userToken,
                 userInfo: {
                     id: entity.id,
                     name: entity.name,
